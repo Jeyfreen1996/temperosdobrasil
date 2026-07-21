@@ -5,8 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "npx -y serve .",
-    "start": "npx -y serve .",
-    "build": "echo 'Build estático pronto para o Vercel'"
+    "start": "npx -y serve ."
   },
   "keywords": ["food-delivery", "marmitas", "vercel", "tailwindcss"],
   "author": "Temperos do Brasil",

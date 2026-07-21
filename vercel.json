@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "temperos-do-brasil",
+  "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
