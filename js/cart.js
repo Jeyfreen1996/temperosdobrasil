@@ -1,15 +1,43 @@
 /**
- * Temperos do Brasil - Shared Cart, Weekly Menu, Orders, WhatsApp & SaaS Admin Controller
+ * Temperos do Brasil - Shared Cart, Weekly Menu, Configs, Orders, WhatsApp & SaaS POS Admin
  */
 
 const CART_STORAGE_KEY = 'temperos_cart_v1';
 const ORDER_STORAGE_KEY = 'temperos_order_v1';
 const ORDERS_LIST_KEY = 'temperos_all_orders_v1';
 const WEEKLY_MENU_KEY = 'temperos_weekly_menu_v1';
+const CONFIG_STORAGE_KEY = 'temperos_config_v1';
 const SELECTED_DAY_KEY = 'temperos_selected_day_v1';
 
-// Restaurant WhatsApp Number
+// Restaurant WhatsApp Number (Formatted for API)
 const RESTAURANT_WHATSAPP = '5548988781598';
+
+// Default App Settings
+const DEFAULT_CONFIG = {
+  whatsappNumber: '5548988781598',
+  restaurantName: 'Temperos do Brasil',
+  deliveryCity: 'Tubarão e região',
+  marmitaPrices: {
+    M: 15.00,
+    G: 20.00,
+    Executiva: 30.00
+  },
+  accompaniments: ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada']
+};
+
+function getConfig() {
+  try {
+    const raw = localStorage.getItem(CONFIG_STORAGE_KEY);
+    if (raw) return { ...DEFAULT_CONFIG, ...JSON.parse(raw) };
+  } catch(e) {}
+  return DEFAULT_CONFIG;
+}
+
+function saveConfig(config) {
+  try {
+    localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(config));
+  } catch(e) {}
+}
 
 // Default Weekly Menu Data
 const DEFAULT_WEEKLY_MENU = {
@@ -116,7 +144,7 @@ const DEFAULT_CART = [
 ];
 
 function formatBRL(value) {
-  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
 }
 
 function getCart() {
@@ -222,45 +250,46 @@ function getAllOrders() {
   ];
 }
 
-// Format WhatsApp Message String
+// Format WhatsApp Message String Exactly for Restaurant (+5548988781598)
 function buildWhatsAppMessage(order) {
   let msg = `*NOVO PEDIDO #${order.id}* 🍱\n`;
   msg += `*Temperos do Brasil*\n`;
-  msg += `------------------------------------\n`;
+  msg += `====================================\n`;
   msg += `👤 *Cliente:* ${order.name}\n`;
   msg += `📍 *Endereço:* ${order.address}\n`;
-  msg += `💳 *Forma de Pagamento:* ${order.paymentMethod}\n`;
+  msg += `💳 *Pagamento:* ${order.paymentMethod}\n`;
   if (order.notes) {
     msg += `📝 *Observações:* ${order.notes}\n`;
   }
-  msg += `------------------------------------\n`;
+  msg += `====================================\n`;
   msg += `📋 *ITENS DO PEDIDO:*\n`;
   
   order.items.forEach(item => {
-    msg += `• ${item.quantity}x ${item.name} (${formatBRL(item.price * item.quantity)})\n`;
+    msg += `• *${item.quantity}x* ${item.name} (${formatBRL(item.price * item.quantity)})\n`;
     if (item.detail) {
       msg += `   _${item.detail}_\n`;
     }
   });
   
-  msg += `------------------------------------\n`;
+  msg += `====================================\n`;
   msg += `🚚 *Entrega:* Grátis (Tubarão e região)\n`;
-  msg += `💰 *TOTAL DO PEDIDO:* *${formatBRL(order.total)}*\n`;
-  msg += `------------------------------------\n`;
+  msg += `💰 *VALOR TOTAL:* *${formatBRL(order.total)}*\n`;
+  msg += `====================================\n`;
   msg += `Seu almoço com carinho e sabor! ♡`;
 
   return msg;
 }
 
-// Save Order & Generate WhatsApp Dispatch Link
+// Save Order & Generate Direct WhatsApp URL for +5548988781598
 function saveOrder(orderData) {
   const currentCart = getCart();
   const summary = getCartSummary();
+  const config = getConfig();
 
   const order = {
     id: 'TB-' + Math.floor(100000 + Math.random() * 900000),
     timestamp: new Date().toISOString(),
-    status: 'recebido', // 'recebido', 'preparando', 'saiu', 'entregue'
+    status: 'recebido',
     items: orderData.items || currentCart,
     address: orderData.address || 'Av. Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC',
     name: orderData.name || 'Cliente Especial',
@@ -269,21 +298,18 @@ function saveOrder(orderData) {
     notes: orderData.notes || ''
   };
 
-  // Save active order for tracker
   localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(order));
   
-  // Register order in Admin Panel list
   const ordersList = getAllOrders();
   ordersList.unshift(order);
   localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
 
-  // Build WhatsApp URL
+  // Build direct WhatsApp URL for +5548988781598
+  const phone = config.whatsappNumber || RESTAURANT_WHATSAPP;
   const waText = encodeURIComponent(buildWhatsAppMessage(order));
-  order.whatsappUrl = `https://wa.me/${RESTAURANT_WHATSAPP}?text=${waText}`;
+  order.whatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${waText}`;
 
-  // Clear current cart
   clearCart();
-
   return order;
 }
 
@@ -300,6 +326,12 @@ function updateOrderStatus(orderId, newStatus) {
       localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(active));
     }
   }
+}
+
+function deleteOrderAdmin(orderId) {
+  let ordersList = getAllOrders();
+  ordersList = ordersList.filter(o => o.id !== orderId);
+  localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
 }
 
 function getOrder() {

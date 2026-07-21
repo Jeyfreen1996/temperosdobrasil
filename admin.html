@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Painel Gestor Pro - Temperos do Brasil</title>
+  <title>Painel Gestor POS Pro - Temperos do Brasil</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,9 +59,12 @@
       </div>
     </div>
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2">
+      <a href="https://wa.me/5548988781598" target="_blank" class="hidden sm:flex items-center gap-1 text-[11px] font-bold text-secondary bg-secondary-container px-2.5 py-1 rounded-lg">
+        <span class="material-symbols-outlined text-sm">call</span> WhatsApp: (48) 98878-1598
+      </a>
       <a href="index.html" target="_blank" class="h-8 px-3 bg-surface-container text-on-surface hover:bg-surface-container-highest rounded-lg font-bold text-xs transition-colors flex items-center gap-1">
-        <span class="material-symbols-outlined text-sm">open_in_new</span> Ver Loja
+        <span class="material-symbols-outlined text-sm">storefront</span> Ver Loja
       </a>
     </div>
   </header>
@@ -70,17 +73,15 @@
     
     <!-- Top KPI Metrics Widgets -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <!-- Widget 1: Revenue -->
       <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
         <div class="flex justify-between items-center text-on-surface-variant">
           <span class="text-[11px] font-bold uppercase tracking-wider">Faturamento Hoje</span>
           <span class="material-symbols-outlined text-secondary text-base">payments</span>
         </div>
         <p id="kpi-revenue" class="text-xl font-extrabold text-primary">R$ 0,00</p>
-        <span class="text-[10px] text-secondary font-semibold">Vendas em tempo real</span>
+        <span class="text-[10px] text-secondary font-semibold">Vendas registradas</span>
       </div>
 
-      <!-- Widget 2: Total Orders -->
       <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
         <div class="flex justify-between items-center text-on-surface-variant">
           <span class="text-[11px] font-bold uppercase tracking-wider">Total Pedidos</span>
@@ -90,17 +91,15 @@
         <span class="text-[10px] text-on-surface-variant">Pedidos recebidos</span>
       </div>
 
-      <!-- Widget 3: Active Kitchen -->
       <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
         <div class="flex justify-between items-center text-on-surface-variant">
           <span class="text-[11px] font-bold uppercase tracking-wider">Na Cozinha (No Fogo)</span>
           <span class="material-symbols-outlined text-amber-600 text-base">skillet</span>
         </div>
         <p id="kpi-pending" class="text-xl font-extrabold text-amber-600">0</p>
-        <span class="text-[10px] text-amber-700 font-semibold">Aguardando preparo</span>
+        <span class="text-[10px] text-amber-700 font-semibold">Em preparação</span>
       </div>
 
-      <!-- Widget 4: Delivered -->
       <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
         <div class="flex justify-between items-center text-on-surface-variant">
           <span class="text-[11px] font-bold uppercase tracking-wider">Concluídos</span>
@@ -119,14 +118,18 @@
       </button>
       <button id="tab-btn-menu" onclick="switchAdminTab('menu')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5">
         <span class="material-symbols-outlined text-base">restaurant_menu</span>
-        Gerenciar Cardápio Semanal
+        Gerenciar Cardápio Semanal & Marmitas
+      </button>
+      <button id="tab-btn-config" onclick="switchAdminTab('config')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-base">settings</span>
+        Configurações do Restaurante
       </button>
     </div>
 
-    <!-- TAB 1: ORDERS MANAGEMENT (Default active) -->
+    <!-- TAB 1: ORDERS MANAGEMENT (Default Active) -->
     <section id="section-admin-orders" class="space-y-4">
       
-      <!-- Filter Bar -->
+      <!-- Filter Bar & Search -->
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-surface border border-outline-variant/60 p-3 rounded-xl shadow-xs">
         
         <div class="flex flex-wrap gap-1.5" id="order-filter-buttons">
@@ -147,20 +150,20 @@
           </button>
         </div>
 
-        <div class="relative w-full sm:w-56">
+        <div class="relative w-full sm:w-60">
           <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span>
-          <input id="order-search-input" onkeyup="searchOrders(this.value)" type="text" placeholder="Buscar pedido ou cliente..." class="w-full h-8 pl-8 pr-3 bg-surface-container-low border border-outline-variant/60 rounded-lg text-xs outline-none focus:ring-1 focus:ring-primary"/>
+          <input id="order-search-input" onkeyup="searchOrders(this.value)" type="text" placeholder="Buscar por pedido, cliente ou endereço..." class="w-full h-8 pl-8 pr-3 bg-surface-container-low border border-outline-variant/60 rounded-lg text-xs outline-none focus:ring-1 focus:ring-primary"/>
         </div>
 
       </div>
 
-      <!-- Orders List Container -->
+      <!-- Orders List -->
       <div id="admin-orders-list" class="space-y-3.5">
         <!-- Dynamic Orders Rendered Here -->
       </div>
     </section>
 
-    <!-- TAB 2: MENU MANAGEMENT -->
+    <!-- TAB 2: MENU & MARMITAS MANAGEMENT -->
     <section id="section-admin-menu" class="space-y-4 hidden">
       
       <!-- Day Selector (Segunda a Sexta) -->
@@ -171,7 +174,7 @@
             Selecione o Dia para Editar o Cardápio
           </h3>
           <button onclick="resetMenuToDefault()" class="text-xs text-error font-semibold hover:underline flex items-center gap-0.5">
-            <span class="material-symbols-outlined text-sm">restart_alt</span> Restaurar Padrão
+            <span class="material-symbols-outlined text-sm">restart_alt</span> Restaurar Cardápio Padrão
           </button>
         </div>
 
@@ -185,7 +188,7 @@
         <div class="flex justify-between items-center">
           <div>
             <h4 id="admin-day-title" class="font-bold text-sm text-on-surface">Cardápio de Terça-feira</h4>
-            <p class="text-xs text-on-surface-variant">Edite pratos, preços, fotos e disponibilidade em tempo real</p>
+            <p class="text-xs text-on-surface-variant">Edite nomes, preços, descrições e fotos dos pratos do dia</p>
           </div>
           <button onclick="addNewDishAdmin()" class="h-8 px-3.5 bg-secondary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-secondary/90 transition-all flex items-center gap-1">
             <span class="material-symbols-outlined text-sm">add</span> Novo Prato
@@ -198,7 +201,41 @@
 
         <div class="pt-3 border-t border-outline-variant/40 flex justify-end">
           <button onclick="saveAdminMenuChanges()" class="h-10 px-6 bg-primary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-sm">save</span> Salvar no Sistema
+            <span class="material-symbols-outlined text-sm">save</span> Salvar Alterações no Sistema
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: RESTAURANT CONFIG -->
+    <section id="section-admin-config" class="space-y-4 hidden">
+      <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-4 max-w-xl">
+        <h3 class="font-bold text-sm text-on-surface flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-primary text-base">store</span>
+          Dados e WhatsApp do Restaurante
+        </h3>
+
+        <div class="space-y-3">
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-on-surface-variant" for="config-wa">Número do WhatsApp (Receber Pedidos)</label>
+            <input id="config-wa" type="text" value="5548988781598" class="w-full h-9 px-3 bg-surface-container-low border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            <span class="text-[10px] text-on-surface-variant">Formato internacional com código de área (Ex: 5548988781598)</span>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-on-surface-variant" for="config-name">Nome do Restaurante</label>
+            <input id="config-name" type="text" value="Temperos do Brasil" class="w-full h-9 px-3 bg-surface-container-low border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-on-surface-variant" for="config-city">Cidade / Região de Entrega</label>
+            <input id="config-city" type="text" value="Tubarão e região" class="w-full h-9 px-3 bg-surface-container-low border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button onclick="saveAdminConfig()" class="h-9 px-5 bg-primary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">save</span> Salvar Configurações
           </button>
         </div>
       </div>
@@ -223,25 +260,35 @@
     function switchAdminTab(tab) {
       const menuBtn = document.getElementById('tab-btn-menu');
       const ordersBtn = document.getElementById('tab-btn-orders');
+      const configBtn = document.getElementById('tab-btn-config');
+      
       const menuSec = document.getElementById('section-admin-menu');
       const ordersSec = document.getElementById('section-admin-orders');
+      const configSec = document.getElementById('section-admin-config');
+
+      menuBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
+      ordersBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
+      configBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
+
+      menuSec.classList.add('hidden');
+      ordersSec.classList.add('hidden');
+      configSec.classList.add('hidden');
 
       if (tab === 'menu') {
         menuBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5';
-        ordersBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
         menuSec.classList.remove('hidden');
-        ordersSec.classList.add('hidden');
         renderAdminDayTabs();
+      } else if (tab === 'config') {
+        configBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5';
+        configSec.classList.remove('hidden');
+        loadConfigForm();
       } else {
         ordersBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5';
-        menuBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
         ordersSec.classList.remove('hidden');
-        menuSec.classList.add('hidden');
         renderAdminOrders();
       }
     }
 
-    // Filter & Search Orders
     function filterOrders(status) {
       activeFilter = status;
       const btns = document.querySelectorAll('.filter-btn');
@@ -275,7 +322,7 @@
       }
 
       if (!filtered || filtered.length === 0) {
-        container.innerHTML = `<div class="bg-surface border border-outline-variant/60 p-8 text-center rounded-xl"><p class="text-xs text-on-surface-variant">Nenhum pedido encontrado.</p></div>`;
+        container.innerHTML = `<div class="bg-surface border border-outline-variant/60 p-8 text-center rounded-xl"><p class="text-xs text-on-surface-variant">Nenhum pedido registrado no momento.</p></div>`;
         return;
       }
 
@@ -340,10 +387,15 @@
           </div>
 
           <div class="flex justify-between items-center pt-1">
-            <span class="text-[10px] text-on-surface-variant">Data/Hora: ${new Date(order.timestamp).toLocaleString('pt-BR')}</span>
-            <button onclick="contactCustomerWhatsApp('${order.name}', '${order.id}')" class="h-7 px-3 bg-[#25D366] text-white font-bold text-xs rounded-md shadow-xs flex items-center gap-1 hover:brightness-105">
-              <span class="material-symbols-outlined text-sm">chat</span> WhatsApp Cliente
-            </button>
+            <span class="text-[10px] text-on-surface-variant">${new Date(order.timestamp).toLocaleString('pt-BR')}</span>
+            <div class="flex items-center gap-2">
+              <button onclick="deleteOrderConfirm('${order.id}')" class="text-xs text-error font-semibold hover:underline">
+                Excluir
+              </button>
+              <button onclick="contactCustomerWhatsApp('${order.name}', '${order.id}')" class="h-7 px-3 bg-[#25D366] text-white font-bold text-xs rounded-md shadow-xs flex items-center gap-1 hover:brightness-105">
+                <span class="material-symbols-outlined text-sm">chat</span> WhatsApp Cliente
+              </button>
+            </div>
           </div>
         </div>
       `).join('');
@@ -352,16 +404,25 @@
     function changeOrderStatusAdmin(orderId, status) {
       updateOrderStatus(orderId, status);
       renderAdminOrders();
-      showToast(`Pedido #${orderId} atualizado para "${status}"!`);
+      showToast(`Status do Pedido #${orderId} alterado!`);
+    }
+
+    function deleteOrderConfirm(orderId) {
+      if (confirm(`Tem certeza que deseja excluir o pedido #${orderId}?`)) {
+        deleteOrderAdmin(orderId);
+        renderAdminOrders();
+        showToast(`Pedido #${orderId} excluído.`);
+      }
     }
 
     function contactCustomerWhatsApp(name, orderId) {
-      const phoneNumber = "5548988781598";
-      const message = `Olá ${name}, referente ao seu pedido #${orderId} do Temperos do Brasil!`;
-      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+      const config = getConfig();
+      const phone = config.whatsappNumber || RESTAURANT_WHATSAPP;
+      const message = `Olá ${name}, referente ao seu pedido #${orderId} no Temperos do Brasil!`;
+      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`, '_blank');
     }
 
-    // MENU EDITOR
+    // MENU & DISH EDITOR
     function renderAdminDayTabs() {
       const container = document.getElementById('admin-day-tabs');
       container.innerHTML = [1, 2, 3, 4, 5].map(dayNum => {
@@ -434,6 +495,7 @@
         name: 'Novo Prato Especial',
         price: 15.00,
         desc: 'Descrição do novo prato...',
+        available: true,
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc'
       });
       renderAdminDishesEditor();
@@ -456,6 +518,23 @@
         renderAdminDayTabs();
         showToast('Cardápio padrão restaurado!');
       }
+    }
+
+    // CONFIG FORM
+    function loadConfigForm() {
+      const config = getConfig();
+      document.getElementById('config-wa').value = config.whatsappNumber;
+      document.getElementById('config-name').value = config.restaurantName;
+      document.getElementById('config-city').value = config.deliveryCity;
+    }
+
+    function saveAdminConfig() {
+      const config = getConfig();
+      config.whatsappNumber = document.getElementById('config-wa').value.replace(/\D/g, '');
+      config.restaurantName = document.getElementById('config-name').value;
+      config.deliveryCity = document.getElementById('config-city').value;
+      saveConfig(config);
+      showToast('Configurações salvas!');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
