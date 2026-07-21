@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Temperos do Brasil - Cardápio Interativo</title>
+  <title>Temperos do Brasil - Cardápio Semanal</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +47,7 @@
 </head>
 <body class="bg-background text-on-surface font-sans text-sm selection:bg-primary-container">
 
-  <!-- TopAppBar (Slim) -->
+  <!-- TopAppBar -->
   <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-14 bg-surface/95 backdrop-blur-md border-b border-outline-variant/60 shadow-xs">
     <div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
       <span class="material-symbols-outlined text-primary text-base">location_on</span>
@@ -64,26 +64,50 @@
     </div>
   </header>
 
-  <main class="pt-16 pb-24 max-w-3xl mx-auto px-4">
+  <main class="pt-16 pb-24 max-w-3xl mx-auto px-4 space-y-4">
     
-    <!-- Header Banner (Compact) -->
-    <section class="mb-4">
-      <div class="relative h-36 md:h-44 w-full rounded-xl overflow-hidden shadow-xs border border-outline-variant/40">
-        <img class="w-full h-full object-cover" alt="Monte sua Marmita" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD2Q7D8wBnvJ_qZYJ1spQsmuqf6neMhlr6GvW5QMDw6NfUS-CxWKV7-xX6DTmCAQ27CL3KncTVAZu6uqJXS-QGxdOgFSbT5-jpUdx7aR93Y7T4ujZWZbmqU0wMb2dEHna_P87drCdMzPyQqx8V1_DwmYePYnE1_38DrGUNdTs8O81j4qXKssoshW3lI8OaidlE3Dcr_r9kg-PYYYu_xMyd5lxGnrhRcVdQNfLUYsT562wiDtL6QwAp"/>
-        <div class="absolute inset-0 hero-gradient"></div>
-        <div class="absolute bottom-3 left-3 right-3">
-          <span class="bg-secondary text-white px-2 py-0.5 rounded text-[10px] font-semibold mb-1 inline-block">
-            Monte do Seu Jeito
+    <!-- Header Banner -->
+    <section class="relative h-32 md:h-40 w-full rounded-xl overflow-hidden shadow-xs border border-outline-variant/40">
+      <img id="cardapio-banner-img" class="w-full h-full object-cover" alt="Cardápio Semanal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD2Q7D8wBnvJ_qZYJ1spQsmuqf6neMhlr6GvW5QMDw6NfUS-CxWKV7-xX6DTmCAQ27CL3KncTVAZu6uqJXS-QGxdOgFSbT5-jpUdx7aR93Y7T4ujZWZbmqU0wMb2dEHna_P87drCdMzPyQqx8V1_DwmYePYnE1_38DrGUNdTs8O81j4qXKssoshW3lI8OaidlE3Dcr_r9kg-PYYYu_xMyd5lxGnrhRcVdQNfLUYsT562wiDtL6QwAp"/>
+      <div class="absolute inset-0 hero-gradient"></div>
+      <div class="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+        <div>
+          <span id="banner-day-badge" class="bg-secondary text-white px-2 py-0.5 rounded text-[10px] font-bold mb-1 inline-block">
+            HOJE • Terça-feira
           </span>
-          <h2 class="text-lg md:text-xl font-bold text-on-surface">Monte sua Marmita</h2>
-          <p class="text-on-surface-variant text-xs">Escolha o tamanho, a proteína e os acompanhamentos.</p>
+          <h2 id="banner-day-title" class="text-base md:text-lg font-bold text-on-surface">Cardápio de Terça-feira</h2>
+          <p id="banner-day-sub" class="text-on-surface-variant text-xs line-clamp-1">Bife à Parmegiana & Strogonoff de Frango</p>
         </div>
       </div>
     </section>
 
-    <!-- Customizer Grid -->
-    <div class="space-y-4">
-      
+    <!-- Weekly Schedule Navigator Tabs (Segunda a Sexta) -->
+    <section class="space-y-2">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-sm text-on-surface flex items-center gap-1">
+          <span class="material-symbols-outlined text-primary text-base">calendar_view_week</span>
+          Selecione o Dia da Semana
+        </h3>
+        <span class="text-xs text-on-surface-variant font-medium">Segunda a Sexta</span>
+      </div>
+
+      <div class="grid grid-cols-5 gap-1.5" id="cardapio-day-tabs">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- Daily Special Dishes -->
+    <section class="space-y-2">
+      <h4 class="font-bold text-xs text-on-surface-variant uppercase tracking-wider">Pratos Especiais do Dia Escolhido</h4>
+      <div id="cardapio-dishes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- STEP-BY-STEP Customizer -->
+    <div class="space-y-3 pt-2">
+      <h4 class="font-bold text-xs text-on-surface-variant uppercase tracking-wider">Ou Monte Sua Marmita Customizada</h4>
+
       <!-- STEP 1: Size Selector -->
       <section class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
         <div class="flex items-center gap-1.5">
@@ -212,7 +236,7 @@
         </div>
       </section>
 
-      <!-- Action Bar (Sleek Minimalist Bar) -->
+      <!-- Action Bar -->
       <div class="flex items-center justify-between p-4 bg-surface border border-outline-variant/80 rounded-xl shadow-xs">
         <div>
           <span class="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider block">Total da Marmita</span>
@@ -228,11 +252,10 @@
           </a>
         </div>
       </div>
-
     </div>
   </main>
 
-  <!-- BottomNavBar (Slim) -->
+  <!-- BottomNavBar -->
   <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-14 bg-surface/95 backdrop-blur-md border-t border-outline-variant/50">
     <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors" href="index.html">
       <span class="material-symbols-outlined text-base">home</span>
@@ -255,23 +278,90 @@
 
   <script src="js/cart.js"></script>
   <script>
+    const todayIdx = getTodayDayIndex();
+    let selectedDayIdx = getSelectedDayIndex();
+
+    function renderCardapioPage() {
+      // Render Day Selector Tabs
+      const tabsEl = document.getElementById('cardapio-day-tabs');
+      tabsEl.innerHTML = [1, 2, 3, 4, 5].map(dayNum => {
+        const day = WEEKLY_MENU[dayNum];
+        const isToday = dayNum === todayIdx;
+        const isSelected = dayNum === selectedDayIdx;
+
+        return `
+          <button onclick="selectCardapioDay(${dayNum})" class="flex flex-col items-center justify-center p-2 rounded-xl border transition-all text-center ${
+            isSelected 
+              ? 'bg-primary text-white border-primary shadow-xs' 
+              : 'bg-surface border-outline-variant/50 hover:bg-surface-container text-on-surface'
+          }">
+            <span class="text-[10px] font-bold tracking-wider uppercase ${isSelected ? 'text-white/80' : 'text-on-surface-variant'}">
+              ${day.shortDay}
+            </span>
+            <span class="text-xs font-extrabold ${isSelected ? 'text-white' : 'text-on-surface'}">
+              ${isToday ? 'HOJE' : day.dayName.split('-')[0].substring(0,3)}
+            </span>
+          </button>
+        `;
+      }).join('');
+
+      // Update Banner
+      const currentDay = WEEKLY_MENU[selectedDayIdx];
+      const isToday = selectedDayIdx === todayIdx;
+
+      document.getElementById('banner-day-badge').className = `px-2 py-0.5 rounded text-[10px] font-bold mb-1 inline-block ${isToday ? 'bg-secondary text-white' : 'bg-primary text-white'}`;
+      document.getElementById('banner-day-badge').textContent = isToday ? `HOJE • ${currentDay.dayName}` : `ENCOMENDA • ${currentDay.dayName}`;
+      document.getElementById('banner-day-title').textContent = `Cardápio de ${currentDay.dayName}`;
+      document.getElementById('banner-day-sub').textContent = currentDay.specialName;
+
+      if (currentDay.dishes[0]) {
+        document.getElementById('cardapio-banner-img').src = currentDay.dishes[0].image;
+      }
+
+      // Render Dishes
+      const grid = document.getElementById('cardapio-dishes-grid');
+      grid.innerHTML = currentDay.dishes.map(dish => `
+        <div class="bg-surface border border-outline-variant/60 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between p-3 space-y-2">
+          <div class="flex gap-3">
+            <img class="w-20 h-20 rounded-lg object-cover flex-shrink-0" alt="${dish.name}" src="${dish.image}"/>
+            <div class="flex-1 min-w-0">
+              <h5 class="font-bold text-sm text-on-surface truncate">${dish.name}</h5>
+              <p class="text-on-surface-variant text-xs line-clamp-2 mt-0.5">${dish.desc}</p>
+              <span class="inline-block text-[10px] font-semibold text-secondary mt-1">${isToday ? 'Disponível Hoje' : 'Encomenda p/ ' + currentDay.dayName}</span>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center pt-1 border-t border-outline-variant/30">
+            <span class="font-bold text-sm text-primary">${formatBRL(dish.price)}</span>
+            <button onclick="addToCart({ id: '${dish.id}', name: '${dish.name}', price: ${dish.price}, detail: '${currentDay.dayName} • ${dish.desc}', targetDay: '${currentDay.dayName}', image: '${dish.image}' })" class="px-3 h-7 bg-primary text-white font-semibold text-xs rounded-md shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">add</span>
+              ${isToday ? 'Adicionar' : 'Encomendar'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectCardapioDay(dayNum) {
+      selectedDayIdx = dayNum;
+      setSelectedDayIndex(dayNum);
+      renderCardapioPage();
+    }
+
     const sizeRadios = document.querySelectorAll('input[name="size"]');
     const customTotal = document.getElementById('custom-total');
-
     sizeRadios.forEach(radio => {
       radio.addEventListener('change', (e) => {
-        const price = parseFloat(e.target.value);
-        customTotal.textContent = formatBRL(price);
+        customTotal.textContent = formatBRL(parseFloat(e.target.value));
       });
     });
 
     const accChecks = document.querySelectorAll('.acc-check');
     accChecks.forEach(cb => {
       cb.addEventListener('change', function() {
-        const checkedCount = document.querySelectorAll('.acc-check:checked').length;
-        if (checkedCount > 4) {
+        if (document.querySelectorAll('.acc-check:checked').length > 4) {
           this.checked = false;
-          alert("Você pode escolher até 4 acompanhamentos por marmita.");
+          alert("Você pode escolher até 4 acompanhamentos.");
         }
       });
     });
@@ -280,11 +370,13 @@
       const selectedSize = document.querySelector('input[name="size"]:checked');
       const selectedProtein = document.querySelector('input[name="protein"]:checked');
       const selectedAccs = Array.from(document.querySelectorAll('.acc-check:checked')).map(cb => cb.value);
+      const currentDay = WEEKLY_MENU[selectedDayIdx];
 
       const item = {
         id: 'marmita-custom-' + Date.now(),
         name: selectedSize.getAttribute('data-name'),
-        detail: `${selectedProtein.value} • ${selectedAccs.join(', ')}`,
+        detail: `${currentDay.dayName} • ${selectedProtein.value} • ${selectedAccs.join(', ')}`,
+        targetDay: currentDay.dayName,
         price: parseFloat(selectedSize.value),
         quantity: 1,
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCD2Q7D8wBnvJ_qZYJ1spQsmuqf6neMhlr6GvW5QMDw6NfUS-CxWKV7-xX6DTmCAQ27CL3KncTVAZu6uqJXS-QGxdOgFSbT5-jpUdx7aR93Y7T4ujZWZbmqU0wMb2dEHna_P87drCdMzPyQqx8V1_DwmYePYnE1_38DrGUNdTs8O81j4qXKssoshW3lI8OaidlE3Dcr_r9kg-PYYYu_xMyd5lxGnrhRcVdQNfLUYsT562wiDtL6QwAp'
@@ -292,6 +384,8 @@
 
       addToCart(item);
     }
+
+    document.addEventListener('DOMContentLoaded', renderCardapioPage);
   </script>
 </body>
 </html>
