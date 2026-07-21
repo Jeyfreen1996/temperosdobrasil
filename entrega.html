@@ -349,7 +349,7 @@
     document.getElementById('checkout-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const btn = document.getElementById('submit-btn');
-      btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-xs">progress_activity</span> Enviando pedido para o WhatsApp...`;
+      btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-xs">progress_activity</span> Abrindo WhatsApp...`;
       btn.disabled = true;
 
       const newOrder = saveOrder({
@@ -359,13 +359,11 @@
         paymentMethod: document.querySelector('input[name="payment"]:checked').value
       });
 
-      // Direct WhatsApp API Dispatch to +5548988781598
+      // Bulletproof direct location change to WhatsApp (No pop-up blocker issues)
       const waUrl = newOrder.whatsappUrl || `https://api.whatsapp.com/send?phone=5548988781598&text=${encodeURIComponent(buildWhatsAppMessage(newOrder))}`;
-      window.open(waUrl, '_blank');
-
-      setTimeout(() => {
-        window.location.href = 'pedido.html';
-      }, 300);
+      
+      // Navigate directly to WhatsApp
+      window.location.href = waUrl;
     });
 
     document.addEventListener('DOMContentLoaded', () => {

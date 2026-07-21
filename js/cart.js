@@ -9,7 +9,7 @@ const WEEKLY_MENU_KEY = 'temperos_weekly_menu_v1';
 const CONFIG_STORAGE_KEY = 'temperos_config_v1';
 const SELECTED_DAY_KEY = 'temperos_selected_day_v1';
 
-// Restaurant WhatsApp Number (Formatted for API)
+// Restaurant WhatsApp Number (48 98878-1598)
 const RESTAURANT_WHATSAPP = '5548988781598';
 
 // Default App Settings
@@ -226,7 +226,6 @@ function updateCartBadges() {
   });
 }
 
-// All Orders Management (Persistent in localStorage)
 function getAllOrders() {
   try {
     const raw = localStorage.getItem(ORDERS_LIST_KEY);
@@ -250,7 +249,7 @@ function getAllOrders() {
   ];
 }
 
-// Format WhatsApp Message String Exactly for Restaurant (+5548988781598)
+// Build Clean WhatsApp Message
 function buildWhatsAppMessage(order) {
   let msg = `*NOVO PEDIDO #${order.id}* 🍱\n`;
   msg += `*Temperos do Brasil*\n`;
@@ -304,9 +303,11 @@ function saveOrder(orderData) {
   ordersList.unshift(order);
   localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
 
-  // Build direct WhatsApp URL for +5548988781598
-  const phone = config.whatsappNumber || RESTAURANT_WHATSAPP;
+  // Sanitize phone number (5548988781598)
+  const phone = (config.whatsappNumber || RESTAURANT_WHATSAPP).replace(/\D/g, '');
   const waText = encodeURIComponent(buildWhatsAppMessage(order));
+  
+  // Use api.whatsapp.com for 100% universal compatibility
   order.whatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${waText}`;
 
   clearCart();
@@ -342,7 +343,6 @@ function getOrder() {
   return getAllOrders()[0];
 }
 
-// Metrics for Admin Dashboard
 function getAdminMetrics() {
   const orders = getAllOrders();
   const revenue = orders.reduce((acc, o) => acc + (o.total || 0), 0);
