@@ -170,7 +170,7 @@
             <span class="material-symbols-outlined text-primary text-base">calendar_view_week</span>
             Selecione o Dia para Editar o Cardápio
           </h3>
-          <button onclick="resetMenuToDefault()" class="text-xs text-error font-semibold hover:underline flex items-center gap-0.5">
+          <button type="button" onclick="resetMenuToDefault()" class="text-xs text-error font-semibold hover:underline flex items-center gap-0.5">
             <span class="material-symbols-outlined text-sm">restart_alt</span> Restaurar Cardápio Padrão
           </button>
         </div>
@@ -182,13 +182,16 @@
 
       <!-- Dish List & Editor Form -->
       <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-4">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <h4 id="admin-day-title" class="font-bold text-sm text-on-surface">Cardápio do Dia</h4>
-            <p class="text-xs text-on-surface-variant">Edite pratos, preços, fotos e disponibilidade em tempo real</p>
+            <h4 id="admin-day-title" class="font-bold text-base text-on-surface">Cardápio do Dia</h4>
+            <p class="text-xs text-on-surface-variant">Edite pratos, preços, fotos e adicione novas opções para este dia</p>
           </div>
-          <button type="button" onclick="addNewDishAdmin()" class="h-9 px-4 bg-secondary text-white font-extrabold text-xs rounded-lg shadow-xs hover:bg-secondary/90 transition-all flex items-center gap-1">
-            <span class="material-symbols-outlined text-sm">add_circle</span> + Adicionar Novo Prato
+          
+          <!-- BIG GREEN BUTTON FOR NEW DISH -->
+          <button type="button" onclick="addNewDishAdmin()" class="h-10 px-4 bg-secondary text-white font-extrabold text-xs rounded-xl shadow-md hover:bg-secondary/90 transition-all flex items-center gap-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-base">add_circle</span>
+            + Adicionar Novo Prato
           </button>
         </div>
 
@@ -243,11 +246,16 @@
   <script src="js/cart.js"></script>
   <script>
     let adminCurrentDay = getSelectedDayIndex();
-    if (![1, 2, 3, 4, 5].includes(adminCurrentDay)) {
-      adminCurrentDay = 2; // Sanitize to Terça-feira if invalid
+    if (typeof adminCurrentDay !== 'number' || ![1, 2, 3, 4, 5].includes(adminCurrentDay)) {
+      adminCurrentDay = 2; // Default Terça-feira
     }
-    
-    let localMenuCopy = JSON.parse(JSON.stringify(WEEKLY_MENU));
+
+    // Ensure valid menu data copy
+    let localMenuCopy = getWeeklyMenu();
+    if (!localMenuCopy || !localMenuCopy[1]) {
+      localMenuCopy = JSON.parse(JSON.stringify(DEFAULT_WEEKLY_MENU));
+    }
+
     let activeFilter = 'all';
 
     function updateKPIs() {
@@ -424,14 +432,17 @@
     // MENU & DISH EDITOR
     function renderAdminDayTabs() {
       const container = document.getElementById('admin-day-tabs');
-      container.innerHTML = [1, 2, 3, 4, 5].map(dayNum => {
-        const day = localMenuCopy[dayNum] || localMenuCopy[2];
+      if (!container) return;
+
+      const daysList = [1, 2, 3, 4, 5];
+      container.innerHTML = daysList.map(dayNum => {
+        const day = localMenuCopy[dayNum] || DEFAULT_WEEKLY_MENU[dayNum];
         const isSelected = dayNum === adminCurrentDay;
 
         return `
-          <button onclick="selectAdminDay(${dayNum})" class="flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${
+          <button type="button" onclick="selectAdminDay(${dayNum})" class="flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${
             isSelected 
-              ? 'bg-primary text-white border-primary shadow-xs' 
+              ? 'bg-primary text-white border-primary shadow-xs font-bold' 
               : 'bg-surface-container-low border-outline-variant/40 hover:bg-surface-container text-on-surface'
           }">
             <span class="text-[10px] font-bold uppercase ${isSelected ? 'text-white/80' : 'text-on-surface-variant'}">${day.shortDay}</span>
@@ -449,12 +460,19 @@
     }
 
     function renderAdminDishesEditor() {
-      const day = localMenuCopy[adminCurrentDay] || localMenuCopy[2];
+      const day = localMenuCopy[adminCurrentDay] || DEFAULT_WEEKLY_MENU[adminCurrentDay] || DEFAULT_WEEKLY_MENU[2];
       document.getElementById('admin-day-title').textContent = `Cardápio de ${day.dayName} (${day.dateLabel})`;
 
       const editor = document.getElementById('admin-dishes-editor');
       if (!day.dishes || day.dishes.length === 0) {
-        editor.innerHTML = `<p class="text-xs text-on-surface-variant text-center py-4 col-span-2">Nenhum prato cadastrado para este dia. Clique em "+ Adicionar Novo Prato".</p>`;
+        editor.innerHTML = `
+          <div class="col-span-1 md:col-span-2 bg-surface-container-low p-6 text-center rounded-xl border border-dashed border-outline-variant/80">
+            <p class="text-xs text-on-surface-variant font-medium mb-3">Nenhum prato cadastrado para este dia.</p>
+            <button type="button" onclick="addNewDishAdmin()" class="px-4 h-9 bg-secondary text-white font-extrabold text-xs rounded-lg shadow-xs hover:bg-secondary/90 transition-all inline-flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">add_circle</span> + Adicionar Primeiro Prato
+            </button>
+          </div>
+        `;
         return;
       }
 
@@ -462,7 +480,7 @@
         <div class="bg-surface-container-low p-3.5 rounded-xl border border-outline-variant/40 space-y-2.5 relative">
           <div class="flex justify-between items-center">
             <span class="text-xs font-bold text-primary">Prato #${idx + 1}</span>
-            <button onclick="removeDishAdmin(${idx})" class="text-xs text-error font-semibold hover:underline flex items-center gap-0.5">
+            <button type="button" onclick="removeDishAdmin(${idx})" class="text-xs text-error font-semibold hover:underline flex items-center gap-0.5">
               <span class="material-symbols-outlined text-sm">delete</span> Excluir
             </button>
           </div>
@@ -470,7 +488,7 @@
           <div class="flex gap-2">
             <img class="w-14 h-14 rounded-lg object-cover flex-shrink-0" alt="${dish.name}" src="${dish.image}"/>
             <div class="flex-1 space-y-1">
-              <input type="text" value="${dish.name}" onchange="updateDishField(${idx}, 'name', this.value)" placeholder="Nome do Prato" class="w-full h-7 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+              <input id="dish-input-${idx}" type="text" value="${dish.name}" onchange="updateDishField(${idx}, 'name', this.value)" placeholder="Nome do Prato" class="w-full h-7 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
               <input type="number" step="0.50" value="${dish.price}" onchange="updateDishField(${idx}, 'price', parseFloat(this.value))" placeholder="Preço (R$)" class="w-full h-7 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
             </div>
           </div>
@@ -484,29 +502,51 @@
     }
 
     function updateDishField(idx, field, value) {
-      if (!localMenuCopy[adminCurrentDay]) adminCurrentDay = 2;
+      if (!localMenuCopy[adminCurrentDay]) {
+        localMenuCopy[adminCurrentDay] = DEFAULT_WEEKLY_MENU[adminCurrentDay] || DEFAULT_WEEKLY_MENU[2];
+      }
       localMenuCopy[adminCurrentDay].dishes[idx][field] = value;
     }
 
     function addNewDishAdmin() {
-      if (!localMenuCopy[adminCurrentDay]) {
+      // 1. Ensure valid day key
+      if (![1, 2, 3, 4, 5].includes(adminCurrentDay)) {
         adminCurrentDay = 2;
       }
+
+      // 2. Ensure day object structure exists
+      if (!localMenuCopy[adminCurrentDay]) {
+        localMenuCopy[adminCurrentDay] = JSON.parse(JSON.stringify(DEFAULT_WEEKLY_MENU[adminCurrentDay] || DEFAULT_WEEKLY_MENU[2]));
+      }
+
       if (!localMenuCopy[adminCurrentDay].dishes) {
         localMenuCopy[adminCurrentDay].dishes = [];
       }
 
-      localMenuCopy[adminCurrentDay].dishes.push({
-        id: 'custom-' + Date.now(),
-        name: 'Novo Prato Especial',
+      // 3. Push new dish
+      const newDish = {
+        id: 'dish-' + Date.now(),
+        name: 'Novo Prato do Dia',
         price: 15.00,
-        desc: 'Descrição saborosa do novo prato...',
+        desc: 'Descrição deliciosa do novo prato...',
         available: true,
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc'
-      });
+      };
 
+      localMenuCopy[adminCurrentDay].dishes.push(newDish);
+
+      // 4. Re-render UI & focus on new input
       renderAdminDishesEditor();
-      showToast('Novo prato adicionado! Altere os campos e clique em "Salvar no Sistema".');
+      showToast('Novo prato adicionado! Altere os dados e clique em "Salvar no Sistema".');
+
+      const lastIdx = localMenuCopy[adminCurrentDay].dishes.length - 1;
+      setTimeout(() => {
+        const inp = document.getElementById(`dish-input-${lastIdx}`);
+        if (inp) {
+          inp.focus();
+          inp.select();
+        }
+      }, 100);
     }
 
     function removeDishAdmin(idx) {
@@ -518,7 +558,7 @@
 
     function saveAdminMenuChanges() {
       saveWeeklyMenu(localMenuCopy);
-      showToast('Cardápio atualizado no sistema!');
+      showToast('Cardápio atualizado no sistema com sucesso!');
     }
 
     function resetMenuToDefault() {

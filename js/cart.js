@@ -39,7 +39,7 @@ function saveConfig(config) {
   } catch(e) {}
 }
 
-// Default Weekly Menu Data
+// Default Weekly Menu Data (Official July 21st Flyer Integrated)
 const DEFAULT_WEEKLY_MENU = {
   1: {
     dayName: 'Segunda-feira',
@@ -95,11 +95,20 @@ const DEFAULT_WEEKLY_MENU = {
   }
 };
 
+// Bulletproof Weekly Menu Fetching
 function getWeeklyMenu() {
   try {
     const raw = localStorage.getItem(WEEKLY_MENU_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object' && parsed[1] && parsed[2] && parsed[3]) {
+        return parsed;
+      }
+    }
   } catch(e) {}
+
+  // Fallback and re-save valid menu
+  localStorage.setItem(WEEKLY_MENU_KEY, JSON.stringify(DEFAULT_WEEKLY_MENU));
   return DEFAULT_WEEKLY_MENU;
 }
 
@@ -120,7 +129,10 @@ function getTodayDayIndex() {
 function getSelectedDayIndex() {
   try {
     const saved = localStorage.getItem(SELECTED_DAY_KEY);
-    if (saved && WEEKLY_MENU[saved]) return parseInt(saved, 10);
+    if (saved) {
+      const parsedInt = parseInt(saved, 10);
+      if ([1, 2, 3, 4, 5].includes(parsedInt)) return parsedInt;
+    }
   } catch(e) {}
   return getTodayDayIndex();
 }
@@ -303,11 +315,9 @@ function saveOrder(orderData) {
   ordersList.unshift(order);
   localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
 
-  // Sanitize phone number (5548988781598)
   const phone = (config.whatsappNumber || RESTAURANT_WHATSAPP).replace(/\D/g, '');
   const waText = encodeURIComponent(buildWhatsAppMessage(order));
   
-  // Use api.whatsapp.com for 100% universal compatibility
   order.whatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${waText}`;
 
   clearCart();
