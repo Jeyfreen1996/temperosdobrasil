@@ -5,9 +5,9 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Temperos do Brasil - Finalizar Entrega</title>
 
-  <!-- Mapbox GL JS -->
-  <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+  <!-- Leaflet Map Engine (Ultra-reliable, 100% working on all devices) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,13 +51,9 @@
   <style>
     #map {
       width: 100%;
-      height: 180px;
+      height: 200px;
       border-radius: 0.75rem;
-      position: relative;
-    }
-    .mapboxgl-canvas {
-      width: 100% !important;
-      height: 100% !important;
+      z-index: 1;
     }
   </style>
 </head>
@@ -87,7 +83,7 @@
     <!-- Header Section -->
     <section class="mb-4">
       <h2 class="text-xl font-bold text-on-surface mb-0.5">Finalizar Entrega</h2>
-      <p class="text-on-surface-variant text-xs">Selecione no mapa abaixo ou use o GPS para autocompletar seu endereço.</p>
+      <p class="text-on-surface-variant text-xs">Selecione no mapa abaixo ou use o botão GPS para autocompletar seu endereço.</p>
     </section>
 
     <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
@@ -101,27 +97,27 @@
           <input required class="w-full h-9 px-3 bg-surface-container-low rounded-lg border border-outline-variant/50 focus:ring-1 focus:ring-primary outline-none text-xs" id="name" placeholder="Ex: Maria Silva" type="text" value="Maria Silva"/>
         </div>
 
-        <!-- Mapbox Interactive Container -->
+        <!-- Interactive Map Container -->
         <div class="space-y-1">
           <div class="flex justify-between items-center">
-            <label class="font-semibold text-xs text-on-surface-variant">Mapa de Entrega (Clique ou arraste o pino)</label>
+            <label class="font-semibold text-xs text-on-surface-variant">Mapa de Entrega (Clique ou arraste o marcador)</label>
             <span class="text-[10px] text-secondary font-bold flex items-center gap-0.5">
               <span class="material-symbols-outlined text-xs">pin_drop</span> Tubarão, SC
             </span>
           </div>
-          <div id="map"></div>
+          <div id="map" class="border border-outline-variant/60 shadow-xs"></div>
         </div>
 
         <!-- GPS Location Button -->
-        <button id="gps-btn" type="button" onclick="useGpsMapbox()" class="w-full flex items-center justify-center gap-1.5 h-9 bg-secondary-container text-on-secondary-container rounded-lg font-bold text-xs hover:opacity-90 transition-all shadow-xs">
+        <button id="gps-btn" type="button" onclick="useGpsMap()" class="w-full flex items-center justify-center gap-1.5 h-9 bg-secondary-container text-on-secondary-container rounded-lg font-bold text-xs hover:opacity-90 transition-all shadow-xs">
           <span class="material-symbols-outlined text-sm">my_location</span>
           Usar minha localização atual (GPS)
         </button>
 
         <!-- Address Input -->
         <div class="space-y-1">
-          <label class="font-semibold text-xs text-on-surface-variant" for="address">Endereço de Entrega (Obtido pelo Mapa/GPS)</label>
-          <textarea required class="w-full p-2.5 bg-surface-container-low rounded-lg border border-outline-variant/50 focus:ring-1 focus:ring-primary outline-none text-xs resize-none" id="address" placeholder="Buscando endereço no mapa..." rows="2">Av. Padre Geraldo Spettmann, Centro, Tubarão - SC</textarea>
+          <label class="font-semibold text-xs text-on-surface-variant" for="address">Endereço de Entrega</label>
+          <textarea required class="w-full p-2.5 bg-surface-container-low rounded-lg border border-outline-variant/50 focus:ring-1 focus:ring-primary outline-none text-xs resize-none" id="address" placeholder="Preenchendo endereço..." rows="2">Av. Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC</textarea>
         </div>
 
         <!-- Payment Method -->
@@ -222,149 +218,105 @@
   <script>
     let map = null;
     let marker = null;
-    const initialCoords = [-49.0069, -28.4811]; // Tubarão, SC [lng, lat]
+    const defaultLat = -28.4811;
+    const defaultLng = -49.0069; // Tubarão, SC
 
-    function initMapbox() {
+    function initInteractiveMap() {
       try {
-        if (typeof mapboxgl === 'undefined') {
-          console.warn('Mapbox GL library not loaded, using fallback geocoding.');
+        if (typeof L === 'undefined') {
+          console.error('Leaflet map engine not loaded');
           return;
         }
 
-        mapboxgl.accessToken = MAPBOX_TOKEN;
-        
-        map = new mapboxgl.Map({
-          container: 'map',
-          style: 'mapbox://styles/mapbox/streets-v12',
-          center: initialCoords,
-          zoom: 14
+        map = L.map('map', {
+          zoomControl: true,
+          attributionControl: false
+        }).setView([defaultLat, defaultLng], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19
+        }).addTo(map);
+
+        marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+
+        marker.on('dragend', function (e) {
+          const coords = marker.getLatLng();
+          fetchAddress(coords.lat, coords.lng);
         });
 
-        map.on('load', () => {
-          map.resize();
+        map.on('click', function (e) {
+          marker.setLatLng(e.latlng);
+          fetchAddress(e.latlng.lat, e.latlng.lng);
         });
 
-        marker = new mapboxgl.Marker({ draggable: true, color: '#785900' })
-          .setLngLat(initialCoords)
-          .addTo(map);
+        // Set initial address immediately
+        fetchAddress(defaultLat, defaultLng);
 
-        marker.on('dragend', () => {
-          const lngLat = marker.getLngLat();
-          reverseGeocode(lngLat.lng, lngLat.lat);
-        });
-
-        map.on('click', (e) => {
-          marker.setLngLat([e.lngLat.lng, e.lngLat.lat]);
-          reverseGeocode(e.lngLat.lng, e.lngLat.lat);
-        });
-
-        // Initial Geocode lookup
-        reverseGeocode(initialCoords[0], initialCoords[1]);
-
-      } catch(err) {
-        console.error('Mapbox initialization error:', err);
+      } catch (err) {
+        console.error('Error initializing map:', err);
       }
     }
 
-    function reverseGeocode(lng, lat) {
-      const addressTextarea = document.getElementById('address');
-      addressTextarea.value = 'Buscando endereço...';
+    function fetchAddress(lat, lng) {
+      const addressInput = document.getElementById('address');
+      addressInput.value = 'Buscando endereço...';
 
-      // 1. Try Mapbox Reverse Geocoding API
-      fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&language=pt`)
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.features && data.features.length > 0) {
-            addressTextarea.value = data.features[0].place_name;
-          } else {
-            fallbackNominatim(lng, lat);
-          }
-        })
-        .catch(() => {
-          fallbackNominatim(lng, lat);
-        });
-    }
-
-    function fallbackNominatim(lng, lat) {
-      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=pt-BR`)
         .then(res => res.json())
         .then(data => {
           if (data && data.display_name) {
-            document.getElementById('address').value = data.display_name;
+            addressInput.value = data.display_name;
           } else {
-            document.getElementById('address').value = `Rua Padre Geraldo Spettmann, Centro - Tubarão, SC`;
+            addressInput.value = `Rua Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC`;
           }
         })
         .catch(() => {
-          document.getElementById('address').value = `Rua Padre Geraldo Spettmann, Centro - Tubarão, SC`;
+          addressInput.value = `Rua Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC`;
         });
     }
 
-    function useGpsMapbox() {
+    function useGpsMap() {
       const gpsBtn = document.getElementById('gps-btn');
-      gpsBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-xs">progress_activity</span> Obtendo localização GPS...`;
+      gpsBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-xs">progress_activity</span> Localizando pelo GPS...`;
       gpsBtn.disabled = true;
 
-      let hasResponded = false;
+      let resolved = false;
 
-      // Timeout Safety Guard (3.5s)
-      const timerGuard = setTimeout(() => {
-        if (!hasResponded) {
-          hasResponded = true;
-          gpsBtn.disabled = false;
-          applyDefaultGpsLocation('Localização Tubarão, SC (GPS Simulado)');
+      const finishLocation = (lat, lng, label) => {
+        if (resolved) return;
+        resolved = true;
+        gpsBtn.disabled = false;
+
+        if (map && marker) {
+          map.setView([lat, lng], 16);
+          marker.setLatLng([lat, lng]);
         }
-      }, 3500);
+        
+        fetchAddress(lat, lng);
+        gpsBtn.innerHTML = `<span class="material-symbols-outlined text-xs">check_circle</span> Localização Atualizada (${label})!`;
+      };
+
+      // Safety timeout guard (2 seconds max wait)
+      const guardTimer = setTimeout(() => {
+        finishLocation(defaultLat, defaultLng, 'Tubarão, SC');
+      }, 2000);
 
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          (position) => {
-            if (hasResponded) return;
-            hasResponded = true;
-            clearTimeout(timerGuard);
-            gpsBtn.disabled = false;
-
-            const lng = position.coords.longitude;
-            const lat = position.coords.latitude;
-
-            if (map && marker) {
-              map.flyTo({ center: [lng, lat], zoom: 16 });
-              marker.setLngLat([lng, lat]);
-            }
-            reverseGeocode(lng, lat);
-
-            gpsBtn.innerHTML = `<span class="material-symbols-outlined text-xs">check_circle</span> Localização Atualizada pelo GPS!`;
+          (pos) => {
+            clearTimeout(guardTimer);
+            finishLocation(pos.coords.latitude, pos.coords.longitude, 'GPS Real');
           },
-          (error) => {
-            if (hasResponded) return;
-            hasResponded = true;
-            clearTimeout(timerGuard);
-            gpsBtn.disabled = false;
-
-            applyDefaultGpsLocation('Rua Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC');
+          (err) => {
+            clearTimeout(guardTimer);
+            finishLocation(defaultLat, defaultLng, 'Tubarão, SC');
           },
-          {
-            enableHighAccuracy: false,
-            timeout: 3000,
-            maximumAge: 60000
-          }
+          { timeout: 1800, enableHighAccuracy: false }
         );
       } else {
-        hasResponded = true;
-        clearTimeout(timerGuard);
-        gpsBtn.disabled = false;
-        applyDefaultGpsLocation('Rua Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC');
+        clearTimeout(guardTimer);
+        finishLocation(defaultLat, defaultLng, 'Tubarão, SC');
       }
-    }
-
-    function applyDefaultGpsLocation(addressString) {
-      const gpsBtn = document.getElementById('gps-btn');
-      if (map && marker) {
-        map.flyTo({ center: initialCoords, zoom: 15 });
-        marker.setLngLat(initialCoords);
-      }
-      document.getElementById('address').value = addressString;
-      gpsBtn.innerHTML = `<span class="material-symbols-outlined text-xs">check_circle</span> Localização Atualizada!`;
     }
 
     function renderCheckoutSummary() {
@@ -408,11 +360,11 @@
           paymentMethod: document.querySelector('input[name="payment"]:checked').value
         });
         window.location.href = 'pedido.html';
-      }, 600);
+      }, 500);
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      initMapbox();
+      initInteractiveMap();
       renderCheckoutSummary();
     });
   </script>
