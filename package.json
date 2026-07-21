@@ -1,0 +1,14 @@
+{
+  "name": "temperos-do-brasil",
+  "version": "1.0.0",
+  "description": "Aplicação Web Temperos do Brasil - Sabor que abraça",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y serve .",
+    "start": "npx -y serve .",
+    "build": "echo 'Build estático pronto para o Vercel'"
+  },
+  "keywords": ["food-delivery", "marmitas", "vercel", "tailwindcss"],
+  "author": "Temperos do Brasil",
+  "license": "MIT"
+}

@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "name": "temperos-do-brasil",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/css/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/js/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/cardapio", "destination": "/cardapio.html" },
+    { "source": "/entrega", "destination": "/entrega.html" },
+    { "source": "/pedido", "destination": "/pedido.html" }
+  ]
+}

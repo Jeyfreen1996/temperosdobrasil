@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Temperos do Brasil - Cardápio Interativo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed": "#261a00",
+            "secondary": "#006e1c",
+            "tertiary-container": "#ebc2b6",
+            "background": "#fbf9f6",
+            "tertiary": "#77574d",
+            "error": "#ba1a1a",
+            "surface-container-low": "#f7f5f2",
+            "surface-container": "#f0eee9",
+            "surface-container-highest": "#e5e3de",
+            "on-surface": "#1c1b18",
+            "primary": "#785900",
+            "on-surface-variant": "#504635",
+            "surface": "#fbf9f6",
+            "on-primary": "#ffffff",
+            "primary-container": "#ffc107",
+            "secondary-container": "#e8f5e9",
+            "on-secondary-container": "#1b5e20",
+            "outline-variant": "#e2ded7"
+          },
+          "fontFamily": {
+            "sans": ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-background text-on-surface font-sans text-sm selection:bg-primary-container">
+
+  <!-- TopAppBar (Slim) -->
+  <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-14 bg-surface/95 backdrop-blur-md border-b border-outline-variant/60 shadow-xs">
+    <div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+      <span class="material-symbols-outlined text-primary text-base">location_on</span>
+      <span class="font-medium">Tubarão, SC</span>
+    </div>
+    <a href="index.html" class="font-bold text-base text-primary absolute left-1/2 -translate-x-1/2 tracking-tight">
+      Temperos do Brasil
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="entrega.html" class="relative p-1.5 rounded-lg hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant">shopping_basket</span>
+        <span class="cart-badge absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="pt-16 pb-24 max-w-3xl mx-auto px-4">
+    
+    <!-- Header Banner (Compact) -->
+    <section class="mb-4">
+      <div class="relative h-36 md:h-44 w-full rounded-xl overflow-hidden shadow-xs border border-outline-variant/40">
+        <img class="w-full h-full object-cover" alt="Monte sua Marmita" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD2Q7D8wBnvJ_qZYJ1spQsmuqf6neMhlr6GvW5QMDw6NfUS-CxWKV7-xX6DTmCAQ27CL3KncTVAZu6uqJXS-QGxdOgFSbT5-jpUdx7aR93Y7T4ujZWZbmqU0wMb2dEHna_P87drCdMzPyQqx8V1_DwmYePYnE1_38DrGUNdTs8O81j4qXKssoshW3lI8OaidlE3Dcr_r9kg-PYYYu_xMyd5lxGnrhRcVdQNfLUYsT562wiDtL6QwAp"/>
+        <div class="absolute inset-0 hero-gradient"></div>
+        <div class="absolute bottom-3 left-3 right-3">
+          <span class="bg-secondary text-white px-2 py-0.5 rounded text-[10px] font-semibold mb-1 inline-block">
+            Monte do Seu Jeito
+          </span>
+          <h2 class="text-lg md:text-xl font-bold text-on-surface">Monte sua Marmita</h2>
+          <p class="text-on-surface-variant text-xs">Escolha o tamanho, a proteína e os acompanhamentos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customizer Grid -->
+    <div class="space-y-4">
+      
+      <!-- STEP 1: Size Selector -->
+      <section class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
+        <div class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-primary text-base">straighten</span>
+          <h3 class="font-bold text-sm text-on-surface">1. Tamanho da Marmita</h3>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <label class="option-card relative flex items-center justify-between p-3 bg-surface-container-low border border-primary/30 rounded-lg cursor-pointer hover:border-primary transition-all">
+            <input checked name="size" type="radio" value="15.00" data-name="Marmita Média (500g)" class="w-3.5 h-3.5 text-primary focus:ring-primary"/>
+            <div class="flex flex-col ml-2 flex-1">
+              <span class="font-semibold text-xs text-on-surface">Média (500g)</span>
+              <span class="text-[11px] text-on-surface-variant">Para 1 pessoa</span>
+            </div>
+            <span class="font-bold text-xs text-primary">R$ 15,00</span>
+          </label>
+
+          <label class="option-card relative flex items-center justify-between p-3 bg-surface-container-low border border-transparent rounded-lg cursor-pointer hover:border-primary transition-all">
+            <input name="size" type="radio" value="20.00" data-name="Marmita Grande (750g)" class="w-3.5 h-3.5 text-primary focus:ring-primary"/>
+            <div class="flex flex-col ml-2 flex-1">
+              <span class="font-semibold text-xs text-on-surface">Grande (750g)</span>
+              <span class="text-[11px] text-on-surface-variant">Fome reforçada</span>
+            </div>
+            <span class="font-bold text-xs text-primary">R$ 20,00</span>
+          </label>
+
+          <label class="option-card relative flex items-center justify-between p-3 bg-surface-container-low border border-transparent rounded-lg cursor-pointer hover:border-primary transition-all">
+            <input name="size" type="radio" value="30.00" data-name="Executiva Premium" class="w-3.5 h-3.5 text-primary focus:ring-primary"/>
+            <div class="flex flex-col ml-2 flex-1">
+              <span class="font-semibold text-xs text-on-surface">Executiva</span>
+              <span class="text-[11px] text-on-surface-variant">Com sobremesa</span>
+            </div>
+            <span class="font-bold text-xs text-primary">R$ 30,00</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 2: Protein Selector -->
+      <section class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
+        <div class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-secondary text-base">restaurant</span>
+          <h3 class="font-bold text-sm text-on-surface">2. Proteína Principal</h3>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-2.5">
+          <label class="relative cursor-pointer group">
+            <input checked name="protein" type="radio" value="Carne Assada" class="hidden peer"/>
+            <div class="flex flex-col bg-surface-container-low rounded-lg overflow-hidden border border-transparent peer-checked:border-secondary peer-checked:bg-white transition-all">
+              <div class="h-16 w-full overflow-hidden">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="Carne Assada" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc"/>
+              </div>
+              <div class="p-1.5 text-center">
+                <span class="font-semibold text-xs text-on-surface block truncate">Carne Assada</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="relative cursor-pointer group">
+            <input name="protein" type="radio" value="Linguiça Grelhada" class="hidden peer"/>
+            <div class="flex flex-col bg-surface-container-low rounded-lg overflow-hidden border border-transparent peer-checked:border-secondary peer-checked:bg-white transition-all">
+              <div class="h-16 w-full overflow-hidden">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="Linguiça" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnGlS76inrAx6drJUD7E5D4JOw7uKG8Ns9-ZkaRVRx0TA5CvhrR9tG-ms04G3gAl0ZsmS5vLDTFEPPzOWyc0gVkSZL5YcmiHlH4u0lC04SwRomJtnUqKKcZdwmyt6GgvatcDLvCbcEmMAP3KQV8RaMVURN-4O4u_J1qsKOJJFvytKf0JSagnbFt46p5tvwaKIeWEjt6-9xTp6C8UmUzPwgJRPyqeBaF56lg_DnoR6k51vNsBxJ75Kc"/>
+              </div>
+              <div class="p-1.5 text-center">
+                <span class="font-semibold text-xs text-on-surface block truncate">Linguiça</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="relative cursor-pointer group">
+            <input name="protein" type="radio" value="Frango Ensopado" class="hidden peer"/>
+            <div class="flex flex-col bg-surface-container-low rounded-lg overflow-hidden border border-transparent peer-checked:border-secondary peer-checked:bg-white transition-all">
+              <div class="h-16 w-full overflow-hidden">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="Frango" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1PkwMJc_VcrN2ulOzWk2n4Wj8e-PZgSFC50u20-60ruWFUkrNIpZRgT0rJ5Vbk5xlisCJ_UxdYnl8NrmKGZitN2dOhlJdQ-dSIKyRuxzCfn_y-VneMqqrlzBEVdo9rOokkNPiwcwnqArD_Yhk5dEbDJKHRXYYI1tosoxa1mw-czyOHNB-UlcwKc3zJlcNavwnT7zQBWAXnCyvso3PTPit--pRajlg3DsLS2SgHVNqpplfNFHmXl1a"/>
+              </div>
+              <div class="p-1.5 text-center">
+                <span class="font-semibold text-xs text-on-surface block truncate">Frango</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 3: Accompaniments -->
+      <section class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-tertiary text-base">skillet</span>
+            <h3 class="font-bold text-sm text-on-surface">3. Acompanhamentos</h3>
+          </div>
+          <span class="text-[10px] font-semibold bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">
+            Até 4 escolhas
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input checked value="Arroz Branco" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-medium text-on-surface">Arroz Branco</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input checked value="Feijão Carioca" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-medium text-on-surface">Feijão Carioca</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input value="Macarrão" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-medium text-on-surface">Macarrão</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input value="Polenta" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-medium text-on-surface">Polenta Frita</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input checked value="Farofa Caseira" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-medium text-on-surface">Farofa Caseira</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input value="Salada Mista" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-medium text-on-surface">Salada Mista</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Action Bar (Sleek Minimalist Bar) -->
+      <div class="flex items-center justify-between p-4 bg-surface border border-outline-variant/80 rounded-xl shadow-xs">
+        <div>
+          <span class="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider block">Total da Marmita</span>
+          <span id="custom-total" class="text-xl font-bold text-primary">R$ 15,00</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="addCustomMarmita()" class="px-4 h-9 bg-primary text-white font-semibold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">shopping_basket</span>
+            Adicionar
+          </button>
+          <a href="entrega.html" class="px-3.5 h-9 bg-secondary text-white font-semibold text-xs rounded-lg shadow-xs hover:bg-secondary/90 transition-all flex items-center gap-1">
+            Ir para Entrega <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- BottomNavBar (Slim) -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-14 bg-surface/95 backdrop-blur-md border-t border-outline-variant/50">
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors" href="index.html">
+      <span class="material-symbols-outlined text-base">home</span>
+      Início
+    </a>
+    <a class="flex flex-col items-center justify-center text-primary font-semibold text-[11px]" href="cardapio.html">
+      <span class="material-symbols-outlined text-base">restaurant_menu</span>
+      Cardápio
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors" href="entrega.html">
+      <span class="material-symbols-outlined text-base">local_shipping</span>
+      Entrega
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors relative" href="pedido.html">
+      <span class="material-symbols-outlined text-base">shopping_basket</span>
+      Pedido
+      <span class="cart-badge absolute -top-1 right-2 bg-primary text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full font-bold">0</span>
+    </a>
+  </nav>
+
+  <script src="js/cart.js"></script>
+  <script>
+    const sizeRadios = document.querySelectorAll('input[name="size"]');
+    const customTotal = document.getElementById('custom-total');
+
+    sizeRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        const price = parseFloat(e.target.value);
+        customTotal.textContent = formatBRL(price);
+      });
+    });
+
+    const accChecks = document.querySelectorAll('.acc-check');
+    accChecks.forEach(cb => {
+      cb.addEventListener('change', function() {
+        const checkedCount = document.querySelectorAll('.acc-check:checked').length;
+        if (checkedCount > 4) {
+          this.checked = false;
+          alert("Você pode escolher até 4 acompanhamentos por marmita.");
+        }
+      });
+    });
+
+    function addCustomMarmita() {
+      const selectedSize = document.querySelector('input[name="size"]:checked');
+      const selectedProtein = document.querySelector('input[name="protein"]:checked');
+      const selectedAccs = Array.from(document.querySelectorAll('.acc-check:checked')).map(cb => cb.value);
+
+      const item = {
+        id: 'marmita-custom-' + Date.now(),
+        name: selectedSize.getAttribute('data-name'),
+        detail: `${selectedProtein.value} • ${selectedAccs.join(', ')}`,
+        price: parseFloat(selectedSize.value),
+        quantity: 1,
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCD2Q7D8wBnvJ_qZYJ1spQsmuqf6neMhlr6GvW5QMDw6NfUS-CxWKV7-xX6DTmCAQ27CL3KncTVAZu6uqJXS-QGxdOgFSbT5-jpUdx7aR93Y7T4ujZWZbmqU0wMb2dEHna_P87drCdMzPyQqx8V1_DwmYePYnE1_38DrGUNdTs8O81j4qXKssoshW3lI8OaidlE3Dcr_r9kg-PYYYu_xMyd5lxGnrhRcVdQNfLUYsT562wiDtL6QwAp'
+      };
+
+      addToCart(item);
+    }
+  </script>
+</body>
+</html>

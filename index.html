@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Temperos do Brasil | Sabor que abraça</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed": "#261a00",
+            "secondary": "#006e1c",
+            "tertiary-container": "#ebc2b6",
+            "background": "#fbf9f6",
+            "tertiary": "#77574d",
+            "error": "#ba1a1a",
+            "surface-container-low": "#f7f5f2",
+            "surface-container": "#f0eee9",
+            "surface-container-highest": "#e5e3de",
+            "on-surface": "#1c1b18",
+            "primary": "#785900",
+            "on-surface-variant": "#504635",
+            "surface": "#fbf9f6",
+            "on-primary": "#ffffff",
+            "primary-container": "#ffc107",
+            "secondary-container": "#e8f5e9",
+            "on-secondary-container": "#1b5e20",
+            "outline-variant": "#e2ded7"
+          },
+          "fontFamily": {
+            "sans": ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-background text-on-surface font-sans text-sm selection:bg-primary-container">
+
+  <!-- TopAppBar (Minimalist Slim) -->
+  <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-14 bg-surface/95 backdrop-blur-md border-b border-outline-variant/60 shadow-xs">
+    <div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+      <span class="material-symbols-outlined text-primary text-base">location_on</span>
+      <span class="font-medium">Tubarão, SC</span>
+    </div>
+    
+    <a href="index.html" class="font-bold text-base text-primary absolute left-1/2 -translate-x-1/2 tracking-tight">
+      Temperos do Brasil
+    </a>
+
+    <div class="flex items-center gap-2">
+      <a href="cardapio.html" class="relative p-1.5 rounded-lg hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant">shopping_basket</span>
+        <span class="cart-badge absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="pt-14 pb-20">
+    
+    <!-- Hero Section (Compact & Clean) -->
+    <section class="relative h-64 md:h-72 flex flex-col justify-end overflow-hidden">
+      <div class="absolute inset-0 z-0">
+        <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAc75N10iEoCK__hlLjm3jZFa2BIGnMs_8B_A4VqFfxV9DDXlg-mq1rpd4cgPWs_Il21on4GjYif6xr8fIWJkdWM5uD_c-GxA7KjNID1aEERoBzKbhEkxTwyHUXRKgI0i4eNmPMSdQ3IUlQoziXbJDWxB3VDuSfYeTfhHmDxaiTMpcqMeO1LWLwg8UVn--_Baukm5wjOMLFMT-CySBSTxXLQlWGyF9aELnV2EQd6I8ehgajKP6BgiLg')"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
+      </div>
+
+      <div class="relative z-10 max-w-3xl mx-auto px-4 pb-4 w-full space-y-3">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-secondary-container text-on-secondary-container rounded-full text-xs font-semibold">
+          <span class="material-symbols-outlined text-xs">auto_awesome</span>
+          Comida caseira fresquinha
+        </span>
+
+        <h2 class="text-xl md:text-2xl font-bold text-on-surface leading-snug">
+          O verdadeiro sabor brasileiro entregue na sua porta
+        </h2>
+
+        <div class="bg-surface/90 backdrop-blur-md p-3.5 rounded-xl border border-outline-variant/80 shadow-xs flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-lg">local_shipping</span>
+            <span class="text-xs font-semibold text-on-surface-variant">Entrega Grátis na região</span>
+          </div>
+          <a href="cardapio.html" class="h-9 px-4 bg-primary text-white font-semibold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1">
+            Ver Cardápio
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Grid (Minimalist Compact Cards) -->
+    <section class="max-w-3xl mx-auto px-4 py-5 space-y-3">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-base text-on-surface">Explorar Categorias</h3>
+        <a href="cardapio.html" class="text-primary font-medium text-xs hover:underline flex items-center gap-0.5">
+          Ver tudo <span class="material-symbols-outlined text-xs">chevron_right</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <a href="cardapio.html" class="relative h-28 rounded-xl overflow-hidden group shadow-xs border border-outline-variant/40">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Feijoada" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQU1RjBmF5UfWAhVRTJqtt-FUElVR3_JUYuylRjb1EVgFl97bbiOmfIwwTAoWuRRlGizmpqyOIb1aMga1PcQouApHX3s77xy_hkzcXZVWBrjbz2KCNUSPvFT53w7UiLH-luhNRWYoO9AvD978GD4eRao1AdqgZvEXbpz6iK81-5yqsW8TuA8O7tn0Xa_CRjjINeJWTlxJXuPxIJiw4HUaT51A5ZLjv_Ext1JwPp_9c_WZlFT75KkN2"/>
+          <div class="absolute inset-0 rustic-overlay flex flex-col justify-end p-2.5">
+            <span class="text-white font-bold text-xs">Feijoada</span>
+          </div>
+        </a>
+
+        <a href="cardapio.html" class="relative h-28 rounded-xl overflow-hidden group shadow-xs border border-outline-variant/40">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Carnes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNElcq-0UBqJGWP1aEvfvNSVp-O7PVm4IlNUQy1P_R7sLMvKhG39KsA-J0FOGKktwk4qVpmNs5wOKAJ7TncSygMy_gYfR9VW3IdlRLosiXountFima8ZqZSN-0S-vX8Ex1PTPSOoWu5SYTkLvlmjtp_st74yqToHZPXtcDOXrzxeRieX9uNyIczQ0gjiLHX39ipsAAcxrnpBDJf4xBwLCiXRzXiZXTBN49OchoAJ7WJJUuMPxZTeht"/>
+          <div class="absolute inset-0 rustic-overlay flex flex-col justify-end p-2.5">
+            <span class="text-white font-bold text-xs">Grelhados</span>
+          </div>
+        </a>
+
+        <a href="cardapio.html" class="relative h-28 rounded-xl overflow-hidden group shadow-xs border border-outline-variant/40">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="Saladas" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPI5JqHfiEOqOaB4nRAd2Bn3QhBHjDeZtWDaxI4BCtpTGp4cI0D_kTy23EuB0x78-ZbGo1LL0RAIhrWNTaV3YotFLO_xZpeir30tkW0QQCCkYYHTSYGSN7OuOBGpq1N5mdxGomOCg7TVRHDI75RHWAc_fs8bCXuJk-SU1DfoitFqfmmgeMsSkUhQ1eCHSKaQlNeD_3SJU0E5LQ3FpXFI6osNyr50UlSIuoJCrHJMUANikVrFbN4ZMK"/>
+          <div class="absolute inset-0 rustic-overlay flex flex-col justify-end p-2.5">
+            <span class="text-white font-bold text-xs">Saladas</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Destaques (Compact Horizontal Slider) -->
+    <section class="max-w-3xl mx-auto py-4 space-y-3">
+      <div class="flex justify-between items-center px-4">
+        <h3 class="font-bold text-base text-on-surface">Mais Pedidos</h3>
+        <a class="text-secondary font-medium text-xs flex items-center gap-0.5 hover:underline" href="cardapio.html">
+          Ver cardápio <span class="material-symbols-outlined text-xs">chevron_right</span>
+        </a>
+      </div>
+
+      <div class="flex gap-3 overflow-x-auto px-4 pb-2 no-scrollbar">
+        <!-- Item 1 -->
+        <div class="flex-none w-56 bg-surface border border-outline-variant/50 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="h-32 relative">
+              <img class="w-full h-full object-cover" alt="Moqueca Baiana" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHhdBFMyj61NEiIxLepFLbnS615uRmW4535mcRfuO1tzk6dEwATlxyhi6NrxrbMgC5WCu4LHxWdeZ-9t_c9rHq37Qj_Unyxj1i5irFCi99LCd21DrrImbLb4cdfCCDYpwl9YQPjih3WHeAq7UgzYtUhD0VhDjOzlEKRrFlyLf09MgFepnrNalDjJ_OvHHCPU-d4A8N5J2ij3nb2x8eW5qxszHJjIo695bvA0NVdPx6w6bt6mka0efA"/>
+              <span class="absolute top-2 right-2 px-2 py-0.5 bg-secondary text-white rounded text-[10px] font-semibold">Destaque</span>
+            </div>
+            <div class="p-3 space-y-1">
+              <h4 class="font-bold text-sm text-on-surface">Moqueca Baiana</h4>
+              <p class="text-on-surface-variant text-xs line-clamp-2">Peixe fresco, leite de coco artesanal e azeite de dendê.</p>
+            </div>
+          </div>
+          <div class="p-3 pt-0 flex justify-between items-center">
+            <span class="font-bold text-sm text-primary">R$ 48,90</span>
+            <button onclick="addToCart({ id: 'moqueca-1', name: 'Moqueca Baiana', price: 48.90, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHhdBFMyj61NEiIxLepFLbnS615uRmW4535mcRfuO1tzk6dEwATlxyhi6NrxrbMgC5WCu4LHxWdeZ-9t_c9rHq37Qj_Unyxj1i5irFCi99LCd21DrrImbLb4cdfCCDYpwl9YQPjih3WHeAq7UgzYtUhD0VhDjOzlEKRrFlyLf09MgFepnrNalDjJ_OvHHCPU-d4A8N5J2ij3nb2x8eW5qxszHJjIo695bvA0NVdPx6w6bt6mka0efA' })" class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center hover:scale-105 active:scale-95 transition-transform">
+              <span class="material-symbols-outlined text-sm">add</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="flex-none w-56 bg-surface border border-outline-variant/50 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="h-32 relative">
+              <img class="w-full h-full object-cover" alt="Baião de Dois" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHWYuPra0qtDl9CXxI8oPdUWNGDiCdBUrHEnS5ZRSzcUj3JKWSN4ik0wBjkPgddljee3kq8_FI85ypkVNYeAal86_QGTGi8-IEOnO9CPWfW4iCT0eHzG4OU25XEy0Wnoj4cF4sVDOEXwFpOIwk379-Ku7TOSRTz5LOPKPLzYCl_qHDt-PrxxsfmFw52xkY8mbcpzdXG4QJT9A22suVbsaHPT6LMquNIgjcj9lNcmX35ipz2w1KTEEn"/>
+            </div>
+            <div class="p-3 space-y-1">
+              <h4 class="font-bold text-sm text-on-surface">Baião de Dois</h4>
+              <p class="text-on-surface-variant text-xs line-clamp-2">Arroz, feijão fradinho, queijo coalho e carne de sol.</p>
+            </div>
+          </div>
+          <div class="p-3 pt-0 flex justify-between items-center">
+            <span class="font-bold text-sm text-primary">R$ 42,00</span>
+            <button onclick="addToCart({ id: 'baiao-1', name: 'Baião de Dois', price: 42.00, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCHWYuPra0qtDl9CXxI8oPdUWNGDiCdBUrHEnS5ZRSzcUj3JKWSN4ik0wBjkPgddljee3kq8_FI85ypkVNYeAal86_QGTGi8-IEOnO9CPWfW4iCT0eHzG4OU25XEy0Wnoj4cF4sVDOEXwFpOIwk379-Ku7TOSRTz5LOPKPLzYCl_qHDt-PrxxsfmFw52xkY8mbcpzdXG4QJT9A22suVbsaHPT6LMquNIgjcj9lNcmX35ipz2w1KTEEn' })" class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center hover:scale-105 active:scale-95 transition-transform">
+              <span class="material-symbols-outlined text-sm">add</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="flex-none w-56 bg-surface border border-outline-variant/50 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="h-32 relative">
+              <img class="w-full h-full object-cover" alt="Picanha" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNElcq-0UBqJGWP1aEvfvNSVp-O7PVm4IlNUQy1P_R7sLMvKhG39KsA-J0FOGKktwk4qVpmNs5wOKAJ7TncSygMy_gYfR9VW3IdlRLosiXountFima8ZqZSN-0S-vX8Ex1PTPSOoWu5SYTkLvlmjtp_st74yqToHZPXtcDOXrzxeRieX9uNyIczQ0gjiLHX39ipsAAcxrnpBDJf4xBwLCiXRzXiZXTBN49OchoAJ7WJJUuMPxZTeht"/>
+            </div>
+            <div class="p-3 space-y-1">
+              <h4 class="font-bold text-sm text-on-surface">Picanha Grelhada</h4>
+              <p class="text-on-surface-variant text-xs line-clamp-2">Picanha suculenta com farofa de alho e vinagrete.</p>
+            </div>
+          </div>
+          <div class="p-3 pt-0 flex justify-between items-center">
+            <span class="font-bold text-sm text-primary">R$ 38,90</span>
+            <button onclick="addToCart({ id: 'picanha-1', name: 'Picanha Grelhada', price: 38.90, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNElcq-0UBqJGWP1aEvfvNSVp-O7PVm4IlNUQy1P_R7sLMvKhG39KsA-J0FOGKktwk4qVpmNs5wOKAJ7TncSygMy_gYfR9VW3IdlRLosiXountFima8ZqZSN-0S-vX8Ex1PTPSOoWu5SYTkLvlmjtp_st74yqToHZPXtcDOXrzxeRieX9uNyIczQ0gjiLHX39ipsAAcxrnpBDJf4xBwLCiXRzXiZXTBN49OchoAJ7WJJUuMPxZTeht' })" class="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center hover:scale-105 active:scale-95 transition-transform">
+              <span class="material-symbols-outlined text-sm">add</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- BottomNavBar (Minimalist & Compact) -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-14 bg-surface/95 backdrop-blur-md border-t border-outline-variant/50">
+    <a class="flex flex-col items-center justify-center text-primary font-semibold text-[11px]" href="index.html">
+      <span class="material-symbols-outlined text-base">home</span>
+      Início
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors" href="cardapio.html">
+      <span class="material-symbols-outlined text-base">restaurant_menu</span>
+      Cardápio
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors" href="entrega.html">
+      <span class="material-symbols-outlined text-base">local_shipping</span>
+      Entrega
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors relative" href="pedido.html">
+      <span class="material-symbols-outlined text-base">shopping_basket</span>
+      Pedido
+      <span class="cart-badge absolute -top-1 right-2 bg-primary text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full font-bold">0</span>
+    </a>
+  </nav>
+
+  <script src="js/cart.js"></script>
+</body>
+</html>
