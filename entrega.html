@@ -5,7 +5,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Temperos do Brasil - Finalizar Entrega</title>
 
-  <!-- Leaflet Map Engine (Ultra-reliable, 100% working on all devices) -->
+  <!-- Leaflet Map Engine -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -149,7 +149,7 @@
         </div>
 
         <button id="submit-btn" class="w-full h-10 bg-primary text-white rounded-lg font-bold text-xs shadow-xs hover:bg-primary/90 transition-all flex items-center justify-center gap-1 mt-2" type="submit">
-          Confirmar e Acompanhar Pedido
+          Confirmar e Enviar para o WhatsApp
           <span class="material-symbols-outlined text-sm">chevron_right</span>
         </button>
       </form>
@@ -223,10 +223,7 @@
 
     function initInteractiveMap() {
       try {
-        if (typeof L === 'undefined') {
-          console.error('Leaflet map engine not loaded');
-          return;
-        }
+        if (typeof L === 'undefined') return;
 
         map = L.map('map', {
           zoomControl: true,
@@ -239,7 +236,7 @@
 
         marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
 
-        marker.on('dragend', function (e) {
+        marker.on('dragend', function () {
           const coords = marker.getLatLng();
           fetchAddress(coords.lat, coords.lng);
         });
@@ -249,7 +246,6 @@
           fetchAddress(e.latlng.lat, e.latlng.lng);
         });
 
-        // Set initial address immediately
         fetchAddress(defaultLat, defaultLng);
 
       } catch (err) {
@@ -277,7 +273,7 @@
 
     function useGpsMap() {
       const gpsBtn = document.getElementById('gps-btn');
-      gpsBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-xs">progress_activity</span> Localizando pelo GPS...`;
+      gpsBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-xs">progress_activity</span> Localizando...`;
       gpsBtn.disabled = true;
 
       let resolved = false;
@@ -296,7 +292,6 @@
         gpsBtn.innerHTML = `<span class="material-symbols-outlined text-xs">check_circle</span> Localização Atualizada (${label})!`;
       };
 
-      // Safety timeout guard (2 seconds max wait)
       const guardTimer = setTimeout(() => {
         finishLocation(defaultLat, defaultLng, 'Tubarão, SC');
       }, 2000);
@@ -346,24 +341,33 @@
       totalEl.textContent = formatBRL(summary.total);
     }
 
+    // 100% FAILSAFE FORM SUBMISSION & WHATSAPP DISPATCH
     document.getElementById('checkout-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const btn = document.getElementById('submit-btn');
-      btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-xs">progress_activity</span> Abrindo WhatsApp...`;
-      btn.disabled = true;
+      
+      const nameInput = document.getElementById('name');
+      const addressInput = document.getElementById('address');
+      const notesInput = document.getElementById('notes');
+      const paymentInput = document.querySelector('input[name="payment"]:checked');
 
+      // 1. Save order into database (localStorage & Admin Panel)
       const newOrder = saveOrder({
-        name: document.getElementById('name').value,
-        address: document.getElementById('address').value,
-        notes: document.getElementById('notes').value,
-        paymentMethod: document.querySelector('input[name="payment"]:checked').value
+        name: nameInput ? nameInput.value : 'Cliente',
+        address: addressInput ? addressInput.value : 'Tubarão, SC',
+        notes: notesInput ? notesInput.value : '',
+        paymentMethod: paymentInput ? paymentInput.value : 'PIX'
       });
 
-      // Bulletproof direct location change to WhatsApp (No pop-up blocker issues)
-      const waUrl = newOrder.whatsappUrl || `https://api.whatsapp.com/send?phone=5548988781598&text=${encodeURIComponent(buildWhatsAppMessage(newOrder))}`;
-      
-      // Navigate directly to WhatsApp
-      window.location.href = waUrl;
+      // 2. Build WhatsApp URL for +5548988781598
+      const phone = '5548988781598';
+      const messageText = buildWhatsAppMessage(newOrder);
+      const waUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(messageText)}`;
+
+      // 3. Store URL in sessionStorage for auto-launch on tracker page
+      sessionStorage.setItem('pending_wa_url', waUrl);
+
+      // 4. Navigate immediately to Order Tracker Page
+      window.location.href = 'pedido.html?autoWa=1';
     });
 
     document.addEventListener('DOMContentLoaded', () => {
