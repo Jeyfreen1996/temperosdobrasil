@@ -62,68 +62,54 @@
       <a href="https://wa.me/5548988781598" target="_blank" class="hidden sm:flex items-center gap-1 text-[11px] font-bold text-secondary bg-secondary-container px-2.5 py-1 rounded-lg">
         <span class="material-symbols-outlined text-sm">call</span> 48 98878-1598
       </a>
-      <a href="cardapio.html" class="relative p-1.5 rounded-lg hover:bg-surface-container transition-colors">
+      <a href="entrega.html" class="relative p-1.5 rounded-lg hover:bg-surface-container transition-colors">
         <span class="material-symbols-outlined text-on-surface-variant">shopping_basket</span>
         <span class="cart-badge absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
       </a>
     </div>
   </header>
 
-  <main class="pt-14 pb-20">
+  <main class="pt-14 pb-20 space-y-4 max-w-3xl mx-auto px-4">
     
-    <!-- Hero Section (Official Flyer Highlight) -->
-    <section class="relative h-64 md:h-72 flex flex-col justify-end overflow-hidden">
+    <!-- Hero Banner (Official July 21st Cardápio) -->
+    <section class="mt-3 relative h-40 md:h-48 w-full rounded-xl overflow-hidden shadow-xs border border-outline-variant/40">
       <div class="absolute inset-0 z-0">
         <div id="hero-bg-img" class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc')"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
       </div>
 
-      <div class="relative z-10 max-w-3xl mx-auto px-4 pb-4 w-full space-y-2">
+      <div class="relative z-10 p-3 flex flex-col justify-end h-full space-y-1">
         <div class="flex items-center gap-2">
-          <span class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-primary text-white rounded-full text-xs font-extrabold shadow-xs">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-primary text-white rounded text-[10px] font-extrabold shadow-xs">
             <span class="material-symbols-outlined text-xs">local_fire_department</span>
-            CARDÁPIO DE HOJE • 21 DE JULHO
+            CARDÁPIO 21 DE JULHO
           </span>
-          <span class="text-xs text-secondary font-bold hidden sm:inline flex items-center gap-1">
+          <span class="text-[11px] text-secondary font-bold flex items-center gap-0.5">
             <span class="material-symbols-outlined text-xs">moped</span> Tele Entrega Grátis
           </span>
         </div>
 
-        <h2 id="today-special-title" class="text-xl md:text-2xl font-extrabold text-on-surface leading-snug">
-          Carne Assada, Linguiça Assada & Frango Ensopado
+        <h2 class="text-lg md:text-xl font-extrabold text-on-surface leading-tight">
+          Carne Assada • Linguiça Assada • Frango Ensopado
         </h2>
 
         <!-- Pricing Chips -->
-        <div class="flex gap-2 text-xs font-bold text-on-surface pt-0.5">
-          <span class="bg-surface-container px-2.5 py-1 rounded-md border border-outline-variant/50">M (1 Proteína): <strong class="text-primary">R$ 15,00</strong></span>
-          <span class="bg-surface-container px-2.5 py-1 rounded-md border border-outline-variant/50">G (2 Proteínas): <strong class="text-primary">R$ 20,00</strong></span>
-          <span class="bg-surface-container px-2.5 py-1 rounded-md border border-outline-variant/50 hidden sm:inline">EXECUTIVA: <strong class="text-primary">R$ 30,00</strong></span>
-        </div>
-
-        <div class="bg-surface/90 backdrop-blur-md p-3 rounded-xl border border-outline-variant/80 shadow-xs flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-secondary text-lg">check_circle</span>
-            <div>
-              <p class="text-xs font-bold text-on-surface">Acompanhamentos do Dia</p>
-              <p id="today-special-sub" class="text-[11px] text-on-surface-variant line-clamp-1">Arroz • Feijão • Macarrão • Polenta • Farofa • Salada</p>
-            </div>
-          </div>
-          <a href="cardapio.html" class="h-8 px-3.5 bg-primary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1 whitespace-nowrap">
-            Fazer Pedido
-            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-          </a>
+        <div class="flex gap-2 text-[11px] font-bold text-on-surface pt-0.5">
+          <span class="bg-surface/90 px-2 py-0.5 rounded border border-outline-variant/60">M (1 Proteína): <strong class="text-primary">R$ 15,00</strong></span>
+          <span class="bg-surface/90 px-2 py-0.5 rounded border border-outline-variant/60">G (2 Proteínas): <strong class="text-primary">R$ 20,00</strong></span>
+          <span class="bg-surface/90 px-2 py-0.5 rounded border border-outline-variant/60">EXECUTIVA: <strong class="text-primary">R$ 30,00</strong></span>
         </div>
       </div>
     </section>
 
-    <!-- Weekly Schedule Navigator (Segunda a Sexta) -->
-    <section class="max-w-3xl mx-auto px-4 py-4 space-y-3">
+    <!-- Weekly Day Selector (Segunda a Sexta) -->
+    <section class="space-y-2">
       <div class="flex justify-between items-center">
-        <h3 class="font-bold text-base text-on-surface flex items-center gap-1.5">
+        <h3 class="font-bold text-sm text-on-surface flex items-center gap-1.5">
           <span class="material-symbols-outlined text-primary text-base">calendar_month</span>
-          Cardápio Semanal (Seg a Sex)
+          Cardápio da Semana
         </h3>
-        <span class="text-xs text-on-surface-variant">Escolha o dia e encomende</span>
+        <span class="text-xs text-on-surface-variant font-medium">Segunda a Sexta</span>
       </div>
 
       <div class="grid grid-cols-5 gap-1.5" id="week-day-tabs">
@@ -131,20 +117,180 @@
       </div>
     </section>
 
-    <!-- Display Selected Day Menu Cards -->
-    <section class="max-w-3xl mx-auto px-4 py-1 space-y-3">
+    <!-- Today's Special Dishes (Full Menu List on Index) -->
+    <section class="space-y-2">
       <div class="flex justify-between items-center">
-        <h4 id="selected-day-menu-title" class="font-bold text-sm text-on-surface">Pratos de Hoje</h4>
-        <a href="cardapio.html" class="text-primary font-medium text-xs hover:underline flex items-center gap-0.5">
-          Monte sua Marmita <span class="material-symbols-outlined text-xs">chevron_right</span>
+        <h4 id="selected-day-menu-title" class="font-bold text-sm text-on-surface">Pratos Disponíveis para Hoje</h4>
+        <a href="https://wa.me/5548988781598" target="_blank" class="text-secondary font-bold text-xs flex items-center gap-0.5 hover:underline">
+          <span class="material-symbols-outlined text-xs">call</span> Pedir no WhatsApp
         </a>
       </div>
 
       <div id="day-dishes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <!-- Dynamic Dishes for selected day -->
+        <!-- Dynamic Dishes -->
       </div>
     </section>
 
+    <!-- Full Interactive Customizer directly on Index -->
+    <div class="space-y-3 pt-2">
+      <div class="flex justify-between items-center">
+        <h4 class="font-bold text-sm text-on-surface flex items-center gap-1">
+          <span class="material-symbols-outlined text-primary text-base">tune</span>
+          Monte sua Marmita Agora
+        </h4>
+        <span class="text-xs text-secondary font-bold">Tele entrega grátis</span>
+      </div>
+
+      <!-- STEP 1: Size Selector -->
+      <section class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-2.5">
+        <div class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-primary text-base">straighten</span>
+          <h3 class="font-bold text-xs uppercase tracking-wider text-on-surface-variant">1. Escolha o Tamanho</h3>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <label class="option-card relative flex items-center justify-between p-2.5 bg-surface-container-low border border-primary/40 rounded-lg cursor-pointer hover:border-primary transition-all">
+            <input checked name="size" type="radio" value="15.00" data-name="Marmita M (1 Proteína)" class="w-3.5 h-3.5 text-primary focus:ring-primary"/>
+            <div class="flex flex-col ml-2 flex-1">
+              <span class="font-bold text-xs text-on-surface">Marmita M</span>
+              <span class="text-[10px] text-on-surface-variant">1 Proteína à escolha</span>
+            </div>
+            <span class="font-bold text-xs text-primary">R$ 15,00</span>
+          </label>
+
+          <label class="option-card relative flex items-center justify-between p-2.5 bg-surface-container-low border border-transparent rounded-lg cursor-pointer hover:border-primary transition-all">
+            <input name="size" type="radio" value="20.00" data-name="Marmita G (2 Proteínas)" class="w-3.5 h-3.5 text-primary focus:ring-primary"/>
+            <div class="flex flex-col ml-2 flex-1">
+              <span class="font-bold text-xs text-on-surface">Marmita G</span>
+              <span class="text-[10px] text-on-surface-variant">2 Proteínas à escolha</span>
+            </div>
+            <span class="font-bold text-xs text-primary">R$ 20,00</span>
+          </label>
+
+          <label class="option-card relative flex items-center justify-between p-2.5 bg-surface-container-low border border-transparent rounded-lg cursor-pointer hover:border-primary transition-all">
+            <input name="size" type="radio" value="30.00" data-name="Marmita Executiva" class="w-3.5 h-3.5 text-primary focus:ring-primary"/>
+            <div class="flex flex-col ml-2 flex-1">
+              <span class="font-bold text-xs text-on-surface">EXECUTIVA</span>
+              <span class="text-[10px] text-on-surface-variant">Premium + Sobremesa</span>
+            </div>
+            <span class="font-bold text-xs text-primary">R$ 30,00</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 2: Proteínas (Cardápio 21 de Julho) -->
+      <section class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-secondary text-base">restaurant</span>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-on-surface-variant">2. Proteína de Hoje</h3>
+          </div>
+          <span class="text-[10px] font-semibold bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded">
+            Cardápio 21 de Julho
+          </span>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-2">
+          <label class="relative cursor-pointer group">
+            <input checked name="protein" type="radio" value="Carne assada no forno" class="hidden peer"/>
+            <div class="flex flex-col bg-surface-container-low rounded-lg overflow-hidden border border-transparent peer-checked:border-secondary peer-checked:bg-white transition-all">
+              <div class="h-14 w-full overflow-hidden">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="Carne assada no forno" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc"/>
+              </div>
+              <div class="p-1 text-center">
+                <span class="font-bold text-[11px] text-on-surface block truncate">Carne assada</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="relative cursor-pointer group">
+            <input name="protein" type="radio" value="Linguiça assada" class="hidden peer"/>
+            <div class="flex flex-col bg-surface-container-low rounded-lg overflow-hidden border border-transparent peer-checked:border-secondary peer-checked:bg-white transition-all">
+              <div class="h-14 w-full overflow-hidden">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="Linguiça assada" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnGlS76inrAx6drJUD7E5D4JOw7uKG8Ns9-ZkaRVRx0TA5CvhrR9tG-ms04G3gAl0ZsmS5vLDTFEPPzOWyc0gVkSZL5YcmiHlH4u0lC04SwRomJtnUqKKcZdwmyt6GgvatcDLvCbcEmMAP3KQV8RaMVURN-4O4u_J1qsKOJJFvytKf0JSagnbFt46p5tvwaKIeWEjt6-9xTp6C8UmUzPwgJRPyqeBaF56lg_DnoR6k51vNsBxJ75Kc"/>
+              </div>
+              <div class="p-1 text-center">
+                <span class="font-bold text-[11px] text-on-surface block truncate">Linguiça assada</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="relative cursor-pointer group">
+            <input name="protein" type="radio" value="Frango ensopado" class="hidden peer"/>
+            <div class="flex flex-col bg-surface-container-low rounded-lg overflow-hidden border border-transparent peer-checked:border-secondary peer-checked:bg-white transition-all">
+              <div class="h-14 w-full overflow-hidden">
+                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform" alt="Frango ensopado" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1PkwMJc_VcrN2ulOzWk2n4Wj8e-PZgSFC50u20-60ruWFUkrNIpZRgT0rJ5Vbk5xlisCJ_UxdYnl8NrmKGZitN2dOhlJdQ-dSIKyRuxzCfn_y-VneMqqrlzBEVdo9rOokkNPiwcwnqArD_Yhk5dEbDJKHRXYYI1tosoxa1mw-czyOHNB-UlcwKc3zJlcNavwnT7zQBWAXnCyvso3PTPit--pRajlg3DsLS2SgHVNqpplfNFHmXl1a"/>
+              </div>
+              <div class="p-1 text-center">
+                <span class="font-bold text-[11px] text-on-surface block truncate">Frango ensopado</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- STEP 3: Acompanhamentos -->
+      <section class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-tertiary text-base">skillet</span>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-on-surface-variant">3. Acompanhamentos</h3>
+          </div>
+          <span class="text-[10px] font-semibold bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">
+            Selecione à vontade
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input checked value="Arroz" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-semibold text-on-surface">Arroz</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input checked value="Feijão" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-semibold text-on-surface">Feijão</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input checked value="Macarrão" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-semibold text-on-surface">Macarrão</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input checked value="Polenta" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-semibold text-on-surface">Polenta</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input checked value="Farofa" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-semibold text-on-surface">Farofa</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/30 cursor-pointer hover:bg-surface-container transition-colors">
+            <input checked value="Salada" class="acc-check w-3.5 h-3.5 text-secondary border-outline focus:ring-secondary" type="checkbox"/>
+            <span class="text-xs font-semibold text-on-surface">Salada</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Action Bar on Index -->
+      <div class="flex items-center justify-between p-3.5 bg-surface border border-outline-variant/80 rounded-xl shadow-xs">
+        <div>
+          <span class="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider block">Total da Marmita</span>
+          <span id="custom-total" class="text-xl font-extrabold text-primary">R$ 15,00</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="addCustomMarmitaIndex()" class="px-4 h-9 bg-primary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">shopping_basket</span>
+            Adicionar
+          </button>
+          <a href="entrega.html" class="px-3.5 h-9 bg-secondary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-secondary/90 transition-all flex items-center gap-1">
+            Ir para Entrega <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- BottomNavBar -->
@@ -174,8 +320,6 @@
     let currentViewingDay = getSelectedDayIndex();
 
     function renderWeeklyHome() {
-      const todayMenu = WEEKLY_MENU[todayIdx];
-      
       const tabsContainer = document.getElementById('week-day-tabs');
       tabsContainer.innerHTML = [1, 2, 3, 4, 5].map(dayNum => {
         const day = WEEKLY_MENU[dayNum];
@@ -218,23 +362,50 @@
       grid.innerHTML = day.dishes.map(dish => `
         <div class="bg-surface border border-outline-variant/60 rounded-xl overflow-hidden shadow-xs flex flex-col justify-between p-3 space-y-2">
           <div class="flex gap-3">
-            <img class="w-20 h-20 rounded-lg object-cover flex-shrink-0" alt="${dish.name}" src="${dish.image}"/>
+            <img class="w-16 h-16 rounded-lg object-cover flex-shrink-0" alt="${dish.name}" src="${dish.image}"/>
             <div class="flex-1 min-w-0">
-              <h5 class="font-bold text-sm text-on-surface truncate">${dish.name}</h5>
-              <p class="text-on-surface-variant text-xs line-clamp-2 mt-0.5">${dish.desc}</p>
-              <span class="inline-block text-[10px] font-semibold text-secondary mt-1">${isToday ? 'Tele Entrega Grátis Hoje' : 'Encomendar p/ ' + day.shortDay}</span>
+              <h5 class="font-bold text-xs text-on-surface truncate">${dish.name}</h5>
+              <p class="text-on-surface-variant text-[11px] line-clamp-2 mt-0.5">${dish.desc}</p>
+              <span class="inline-block text-[10px] font-semibold text-secondary mt-1">${isToday ? 'Tele Entrega Grátis' : 'Encomenda p/ ' + day.shortDay}</span>
             </div>
           </div>
 
           <div class="flex justify-between items-center pt-1 border-t border-outline-variant/30">
-            <span class="font-bold text-sm text-primary">${formatBRL(dish.price)}</span>
-            <button onclick="addToCart({ id: '${dish.id}', name: '${dish.name}', price: ${dish.price}, detail: '${day.dayName} • ${dish.desc}', targetDay: '${day.dayName}', image: '${dish.image}' })" class="px-3 h-7 bg-primary text-white font-semibold text-xs rounded-md shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1">
+            <span class="font-bold text-xs text-primary">${formatBRL(dish.price)}</span>
+            <button onclick="addToCart({ id: '${dish.id}', name: '${dish.name}', price: ${dish.price}, detail: '${day.dayName} (${day.dateLabel}) • ${dish.desc}', targetDay: '${day.dayName}', image: '${dish.image}' })" class="px-2.5 h-6 bg-primary text-white font-semibold text-[11px] rounded shadow-xs hover:bg-primary/90 transition-all flex items-center gap-0.5">
               <span class="material-symbols-outlined text-xs">add</span>
               ${isToday ? 'Pedir' : 'Encomendar'}
             </button>
           </div>
         </div>
       `).join('');
+    }
+
+    const sizeRadios = document.querySelectorAll('input[name="size"]');
+    const customTotal = document.getElementById('custom-total');
+    sizeRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        customTotal.textContent = formatBRL(parseFloat(e.target.value));
+      });
+    });
+
+    function addCustomMarmitaIndex() {
+      const selectedSize = document.querySelector('input[name="size"]:checked');
+      const selectedProtein = document.querySelector('input[name="protein"]:checked');
+      const selectedAccs = Array.from(document.querySelectorAll('.acc-check:checked')).map(cb => cb.value);
+      const currentDay = WEEKLY_MENU[currentViewingDay];
+
+      const item = {
+        id: 'marmita-custom-' + Date.now(),
+        name: selectedSize.getAttribute('data-name'),
+        detail: `${currentDay.dayName} (${currentDay.dateLabel}) • ${selectedProtein.value} • Acomp: ${selectedAccs.join(', ')}`,
+        targetDay: `${currentDay.dayName} (${currentDay.dateLabel})`,
+        price: parseFloat(selectedSize.value),
+        quantity: 1,
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc'
+      };
+
+      addToCart(item);
     }
 
     document.addEventListener('DOMContentLoaded', renderWeeklyHome);
