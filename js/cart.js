@@ -1,5 +1,5 @@
 /**
- * Temperos do Brasil - Shared Cart, Weekly Menu, Orders & Admin Controller
+ * Temperos do Brasil - Shared Cart, Weekly Menu, Orders, WhatsApp & SaaS Admin Controller
  */
 
 const CART_STORAGE_KEY = 'temperos_cart_v1';
@@ -8,8 +8,8 @@ const ORDERS_LIST_KEY = 'temperos_all_orders_v1';
 const WEEKLY_MENU_KEY = 'temperos_weekly_menu_v1';
 const SELECTED_DAY_KEY = 'temperos_selected_day_v1';
 
-// Mapbox Public Token (Split to pass static push scanner)
-const MAPBOX_TOKEN = ['pk.eyJ1IjoiamV5ZnJlZW5mIiwiYSI6ImNtbW14Nm9xMTJpMngyd285NjJxZTQ3bmgifQ', 'd0D7oqY4mesuWYkaQ9rKUQ'].join('.');
+// Restaurant WhatsApp Number
+const RESTAURANT_WHATSAPP = '5548988781598';
 
 // Default Weekly Menu Data
 const DEFAULT_WEEKLY_MENU = {
@@ -19,8 +19,8 @@ const DEFAULT_WEEKLY_MENU = {
     shortDay: 'SEG',
     specialName: 'Segunda da Feijoada Light & Virado',
     dishes: [
-      { id: 'seg-1', name: 'Feijoada Light', price: 15.00, desc: 'Feijão preto temperado com carnes magras, couve e farofa.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQU1RjBmF5UfWAhVRTJqtt-FUElVR3_JUYuylRjb1EVgFl97bbiOmfIwwTAoWuRRlGizmpqyOIb1aMga1PcQouApHX3s77xy_hkzcXZVWBrjbz2KCNUSPvFT53w7UiLH-luhNRWYoO9AvD978GD4eRao1AdqgZvEXbpz6iK81-5yqsW8TuA8O7tn0Xa_CRjjINeJWTlxJXuPxIJiw4HUaT51A5ZLjv_Ext1JwPp_9c_WZlFT75KkN2' },
-      { id: 'seg-2', name: 'Virado à Paulista', price: 20.00, desc: 'Tutu de feijão, bisteca suína grelhada, ovo frito e couve.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc' }
+      { id: 'seg-1', name: 'Feijoada Light', price: 15.00, desc: 'Feijão preto temperado com carnes magras, couve e farofa.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQU1RjBmF5UfWAhVRTJqtt-FUElVR3_JUYuylRjb1EVgFl97bbiOmfIwwTAoWuRRlGizmpqyOIb1aMga1PcQouApHX3s77xy_hkzcXZVWBrjbz2KCNUSPvFT53w7UiLH-luhNRWYoO9AvD978GD4eRao1AdqgZvEXbpz6iK81-5yqsW8TuA8O7tn0Xa_CRjjINeJWTlxJXuPxIJiw4HUaT51A5ZLjv_Ext1JwPp_9c_WZlFT75KkN2' },
+      { id: 'seg-2', name: 'Virado à Paulista', price: 20.00, desc: 'Tutu de feijão, bisteca suína grelhada, ovo frito e couve.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc' }
     ]
   },
   2: {
@@ -29,34 +29,10 @@ const DEFAULT_WEEKLY_MENU = {
     shortDay: 'TER',
     specialName: 'Cardápio Oficial • 21 de Julho',
     dishes: [
-      {
-        id: 'ter-carne-assada',
-        name: 'Marmita Carne Assada no Forno',
-        price: 15.00,
-        desc: 'Carne assada no forno suculenta + Acompanhamentos completos.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc'
-      },
-      {
-        id: 'ter-linguica',
-        name: 'Marmita Linguiça Assada',
-        price: 15.00,
-        desc: 'Linguiça assada saborosa + Acompanhamentos completos.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnGlS76inrAx6drJUD7E5D4JOw7uKG8Ns9-ZkaRVRx0TA5CvhrR9tG-ms04G3gAl0ZsmS5vLDTFEPPzOWyc0gVkSZL5YcmiHlH4u0lC04SwRomJtnUqKKcZdwmyt6GgvatcDLvCbcEmMAP3KQV8RaMVURN-4O4u_J1qsKOJJFvytKf0JSagnbFt46p5tvwaKIeWEjt6-9xTp6C8UmUzPwgJRPyqeBaF56lg_DnoR6k51vNsBxJ75Kc'
-      },
-      {
-        id: 'ter-frango',
-        name: 'Marmita Frango Ensopado',
-        price: 15.00,
-        desc: 'Frango ensopado com molho caseiro + Acompanhamentos completos.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC1PkwMJc_VcrN2ulOzWk2n4Wj8e-PZgSFC50u20-60ruWFUkrNIpZRgT0rJ5Vbk5xlisCJ_UxdYnl8NrmKGZitN2dOhlJdQ-dSIKyRuxzCfn_y-VneMqqrlzBEVdo9rOokkNPiwcwnqArD_Yhk5dEbDJKHRXYYI1tosoxa1mw-czyOHNB-UlcwKc3zJlcNavwnT7zQBWAXnCyvso3PTPit--pRajlg3DsLS2SgHVNqpplfNFHmXl1a'
-      },
-      {
-        id: 'ter-marmita-g',
-        name: 'Marmita G (2 Proteínas)',
-        price: 20.00,
-        desc: 'Escolha 2 proteínas + Acompanhamentos completos.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNElcq-0UBqJGWP1aEvfvNSVp-O7PVm4IlNUQy1P_R7sLMvKhG39KsA-J0FOGKktwk4qVpmNs5wOKAJ7TncSygMy_gYfR9VW3IdlRLosiXountFima8ZqZSN-0S-vX8Ex1PTPSOoWu5SYTkLvlmjtp_st74yqToHZPXtcDOXrzxeRieX9uNyIczQ0gjiLHX39ipsAAcxrnpBDJf4xBwLCiXRzXiZXTBN49OchoAJ7WJJUuMPxZTeht'
-      }
+      { id: 'ter-carne-assada', name: 'Marmita Carne Assada no Forno', price: 15.00, desc: 'Carne assada no forno suculenta + Acompanhamentos completos.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc' },
+      { id: 'ter-linguica', name: 'Marmita Linguiça Assada', price: 15.00, desc: 'Linguiça assada saborosa + Acompanhamentos completos.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnGlS76inrAx6drJUD7E5D4JOw7uKG8Ns9-ZkaRVRx0TA5CvhrR9tG-ms04G3gAl0ZsmS5vLDTFEPPzOWyc0gVkSZL5YcmiHlH4u0lC04SwRomJtnUqKKcZdwmyt6GgvatcDLvCbcEmMAP3KQV8RaMVURN-4O4u_J1qsKOJJFvytKf0JSagnbFt46p5tvwaKIeWEjt6-9xTp6C8UmUzPwgJRPyqeBaF56lg_DnoR6k51vNsBxJ75Kc' },
+      { id: 'ter-frango', name: 'Marmita Frango Ensopado', price: 15.00, desc: 'Frango ensopado com molho caseiro + Acompanhamentos completos.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC1PkwMJc_VcrN2ulOzWk2n4Wj8e-PZgSFC50u20-60ruWFUkrNIpZRgT0rJ5Vbk5xlisCJ_UxdYnl8NrmKGZitN2dOhlJdQ-dSIKyRuxzCfn_y-VneMqqrlzBEVdo9rOokkNPiwcwnqArD_Yhk5dEbDJKHRXYYI1tosoxa1mw-czyOHNB-UlcwKc3zJlcNavwnT7zQBWAXnCyvso3PTPit--pRajlg3DsLS2SgHVNqpplfNFHmXl1a' },
+      { id: 'ter-marmita-g', name: 'Marmita G (2 Proteínas)', price: 20.00, desc: 'Escolha 2 proteínas + Acompanhamentos completos.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNElcq-0UBqJGWP1aEvfvNSVp-O7PVm4IlNUQy1P_R7sLMvKhG39KsA-J0FOGKktwk4qVpmNs5wOKAJ7TncSygMy_gYfR9VW3IdlRLosiXountFima8ZqZSN-0S-vX8Ex1PTPSOoWu5SYTkLvlmjtp_st74yqToHZPXtcDOXrzxeRieX9uNyIczQ0gjiLHX39ipsAAcxrnpBDJf4xBwLCiXRzXiZXTBN49OchoAJ7WJJUuMPxZTeht' }
     ]
   },
   3: {
@@ -65,8 +41,8 @@ const DEFAULT_WEEKLY_MENU = {
     shortDay: 'QUA',
     specialName: 'Quarta da Feijoada Completa & Moqueca',
     dishes: [
-      { id: 'qua-1', name: 'Feijoada Completa', price: 20.00, desc: 'Feijoada tradicional com pertences, arroz branco, couve e laranjas.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQU1RjBmF5UfWAhVRTJqtt-FUElVR3_JUYuylRjb1EVgFl97bbiOmfIwwTAoWuRRlGizmpqyOIb1aMga1PcQouApHX3s77xy_hkzcXZVWBrjbz2KCNUSPvFT53w7UiLH-luhNRWYoO9AvD978GD4eRao1AdqgZvEXbpz6iK81-5yqsW8TuA8O7tn0Xa_CRjjINeJWTlxJXuPxIJiw4HUaT51A5ZLjv_Ext1JwPp_9c_WZlFT75KkN2' },
-      { id: 'qua-2', name: 'Moqueca Baiana', price: 30.00, desc: 'Peixe fresco com leite de coco artesanal e azeite de dendê.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHhdBFMyj61NEiIxLepFLbnS615uRmW4535mcRfuO1tzk6dEwATlxyhi6NrxrbMgC5WCu4LHxWdeZ-9t_c9rHq37Qj_Unyxj1i5irFCi99LCd21DrrImbLb4cdfCCDYpwl9YQPjih3WHeAq7UgzYtUhD0VhDjOzlEKRrFlyLf09MgFepnrNalDjJ_OvHHCPU-d4A8N5J2ij3nb2x8eW5qxszHJjIo695bvA0NVdPx6w6bt6mka0efA' }
+      { id: 'qua-1', name: 'Feijoada Completa', price: 20.00, desc: 'Feijoada tradicional com pertences, arroz branco, couve e laranjas.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQU1RjBmF5UfWAhVRTJqtt-FUElVR3_JUYuylRjb1EVgFl97bbiOmfIwwTAoWuRRlGizmpqyOIb1aMga1PcQouApHX3s77xy_hkzcXZVWBrjbz2KCNUSPvFT53w7UiLH-luhNRWYoO9AvD978GD4eRao1AdqgZvEXbpz6iK81-5yqsW8TuA8O7tn0Xa_CRjjINeJWTlxJXuPxIJiw4HUaT51A5ZLjv_Ext1JwPp_9c_WZlFT75KkN2' },
+      { id: 'qua-2', name: 'Moqueca Baiana', price: 30.00, desc: 'Peixe fresco com leite de coco artesanal e azeite de dendê.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBHhdBFMyj61NEiIxLepFLbnS615uRmW4535mcRfuO1tzk6dEwATlxyhi6NrxrbMgC5WCu4LHxWdeZ-9t_c9rHq37Qj_Unyxj1i5irFCi99LCd21DrrImbLb4cdfCCDYpwl9YQPjih3WHeAq7UgzYtUhD0VhDjOzlEKRrFlyLf09MgFepnrNalDjJ_OvHHCPU-d4A8N5J2ij3nb2x8eW5qxszHJjIo695bvA0NVdPx6w6bt6mka0efA' }
     ]
   },
   4: {
@@ -75,8 +51,8 @@ const DEFAULT_WEEKLY_MENU = {
     shortDay: 'QUI',
     specialName: 'Quinta do Escondidinho & Lasanha',
     dishes: [
-      { id: 'qui-1', name: 'Escondidinho de Carne Seca', price: 20.00, desc: 'Carne seca desfiada coberta com purê de mandioca gratinado.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCD2Q7D8wBnvJ_qZYJ1spQsmuqf6neMhlr6GvW5QMDw6NfUS-CxWKV7-xX6DTmCAQ27CL3KncTVAZu6uqJXS-QGxdOgFSbT5-jpUdx7aR93Y7T4ujZWZbmqU0wMb2dEHna_P87drCdMzPyQqx8V1_DwmYePYnE1_38DrGUNdTs8O81j4qXKssoshW3lI8OaidlE3Dcr_r9kg-PYYYu_xMyd5lxGnrhRcVdQNfLUYsT562wiDtL6QwAp' },
-      { id: 'qui-2', name: 'Lasanha à Bolonhesa', price: 15.00, desc: 'Massa artesanal recheada com carne moída temperada e molho caseiro.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnGlS76inrAx6drJUD7E5D4JOw7uKG8Ns9-ZkaRVRx0TA5CvhrR9tG-ms04G3gAl0ZsmS5vLDTFEPPzOWyc0gVkSZL5YcmiHlH4u0lC04SwRomJtnUqKKcZdwmyt6GgvatcDLvCbcEmMAP3KQV8RaMVURN-4O4u_J1qsKOJJFvytKf0JSagnbFt46p5tvwaKIeWEjt6-9xTp6C8UmUzPwgJRPyqeBaF56lg_DnoR6k51vNsBxJ75Kc' }
+      { id: 'qui-1', name: 'Escondidinho de Carne Seca', price: 20.00, desc: 'Carne seca desfiada coberta com purê de mandioca gratinado.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCD2Q7D8wBnvJ_qZYJ1spQsmuqf6neMhlr6GvW5QMDw6NfUS-CxWKV7-xX6DTmCAQ27CL3KncTVAZu6uqJXS-QGxdOgFSbT5-jpUdx7aR93Y7T4ujZWZbmqU0wMb2dEHna_P87drCdMzPyQqx8V1_DwmYePYnE1_38DrGUNdTs8O81j4qXKssoshW3lI8OaidlE3Dcr_r9kg-PYYYu_xMyd5lxGnrhRcVdQNfLUYsT562wiDtL6QwAp' },
+      { id: 'qui-2', name: 'Lasanha à Bolonhesa', price: 15.00, desc: 'Massa artesanal recheada com carne moída temperada e molho caseiro.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnGlS76inrAx6drJUD7E5D4JOw7uKG8Ns9-ZkaRVRx0TA5CvhrR9tG-ms04G3gAl0ZsmS5vLDTFEPPzOWyc0gVkSZL5YcmiHlH4u0lC04SwRomJtnUqKKcZdwmyt6GgvatcDLvCbcEmMAP3KQV8RaMVURN-4O4u_J1qsKOJJFvytKf0JSagnbFt46p5tvwaKIeWEjt6-9xTp6C8UmUzPwgJRPyqeBaF56lg_DnoR6k51vNsBxJ75Kc' }
     ]
   },
   5: {
@@ -85,13 +61,12 @@ const DEFAULT_WEEKLY_MENU = {
     shortDay: 'SEX',
     specialName: 'Sexta Nordestina: Baião de Dois & Costela',
     dishes: [
-      { id: 'sex-1', name: 'Baião de Dois', price: 20.00, desc: 'Arroz, feijão fradinho, queijo coalho grelhado e carne de sol.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCHWYuPra0qtDl9CXxI8oPdUWNGDiCdBUrHEnS5ZRSzcUj3JKWSN4ik0wBjkPgddljee3kq8_FI85ypkVNYeAal86_QGTGi8-IEOnO9CPWfW4iCT0eHzG4OU25XEy0Wnoj4cF4sVDOEXwFpOIwk379-Ku7TOSRTz5LOPKPLzYCl_qHDt-PrxxsfmFw52xkY8mbcpzdXG4QJT9A22suVbsaHPT6LMquNIgjcj9lNcmX35ipz2w1KTEEn' },
-      { id: 'sex-2', name: 'Costela Assada com Mandioca', price: 30.00, desc: 'Costela bovina assada lentamente com mandioca cozida na manteiga.', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc' }
+      { id: 'sex-1', name: 'Baião de Dois', price: 20.00, desc: 'Arroz, feijão fradinho, queijo coalho grelhado e carne de sol.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCHWYuPra0qtDl9CXxI8oPdUWNGDiCdBUrHEnS5ZRSzcUj3JKWSN4ik0wBjkPgddljee3kq8_FI85ypkVNYeAal86_QGTGi8-IEOnO9CPWfW4iCT0eHzG4OU25XEy0Wnoj4cF4sVDOEXwFpOIwk379-Ku7TOSRTz5LOPKPLzYCl_qHDt-PrxxsfmFw52xkY8mbcpzdXG4QJT9A22suVbsaHPT6LMquNIgjcj9lNcmX35ipz2w1KTEEn' },
+      { id: 'sex-2', name: 'Costela Assada com Mandioca', price: 30.00, desc: 'Costela bovina assada lentamente com mandioca cozida na manteiga.', available: true, image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc' }
     ]
   }
 };
 
-// Get Dynamic Weekly Menu (localStoge persistent)
 function getWeeklyMenu() {
   try {
     const raw = localStorage.getItem(WEEKLY_MENU_KEY);
@@ -100,7 +75,6 @@ function getWeeklyMenu() {
   return DEFAULT_WEEKLY_MENU;
 }
 
-// Save Weekly Menu
 function saveWeeklyMenu(menu) {
   try {
     localStorage.setItem(WEEKLY_MENU_KEY, JSON.stringify(menu));
@@ -129,7 +103,6 @@ function setSelectedDayIndex(dayIdx) {
   } catch(e) {}
 }
 
-// Initial default cart items
 const DEFAULT_CART = [
   {
     id: 'ter-carne-assada',
@@ -225,21 +198,20 @@ function updateCartBadges() {
   });
 }
 
-// All Orders Management (For Admin Panel)
+// All Orders Management (Persistent in localStorage)
 function getAllOrders() {
   try {
     const raw = localStorage.getItem(ORDERS_LIST_KEY);
     if (raw) return JSON.parse(raw);
   } catch(e) {}
   
-  // Default demo orders if none exist
   return [
     {
       id: 'TB-849201',
       timestamp: new Date().toISOString(),
       status: 'preparando',
       name: 'Maria Silva',
-      address: 'Av. Beira Mar Norte, 1500 - Tubarão, SC',
+      address: 'Av. Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC',
       paymentMethod: 'PIX',
       items: DEFAULT_CART,
       subtotal: 15.00,
@@ -250,24 +222,67 @@ function getAllOrders() {
   ];
 }
 
+// Format WhatsApp Message String
+function buildWhatsAppMessage(order) {
+  let msg = `*NOVO PEDIDO #${order.id}* 🍱\n`;
+  msg += `*Temperos do Brasil*\n`;
+  msg += `------------------------------------\n`;
+  msg += `👤 *Cliente:* ${order.name}\n`;
+  msg += `📍 *Endereço:* ${order.address}\n`;
+  msg += `💳 *Forma de Pagamento:* ${order.paymentMethod}\n`;
+  if (order.notes) {
+    msg += `📝 *Observações:* ${order.notes}\n`;
+  }
+  msg += `------------------------------------\n`;
+  msg += `📋 *ITENS DO PEDIDO:*\n`;
+  
+  order.items.forEach(item => {
+    msg += `• ${item.quantity}x ${item.name} (${formatBRL(item.price * item.quantity)})\n`;
+    if (item.detail) {
+      msg += `   _${item.detail}_\n`;
+    }
+  });
+  
+  msg += `------------------------------------\n`;
+  msg += `🚚 *Entrega:* Grátis (Tubarão e região)\n`;
+  msg += `💰 *TOTAL DO PEDIDO:* *${formatBRL(order.total)}*\n`;
+  msg += `------------------------------------\n`;
+  msg += `Seu almoço com carinho e sabor! ♡`;
+
+  return msg;
+}
+
+// Save Order & Generate WhatsApp Dispatch Link
 function saveOrder(orderData) {
+  const currentCart = getCart();
+  const summary = getCartSummary();
+
   const order = {
     id: 'TB-' + Math.floor(100000 + Math.random() * 900000),
     timestamp: new Date().toISOString(),
     status: 'recebido', // 'recebido', 'preparando', 'saiu', 'entregue'
-    items: orderData.items || getCart(),
-    address: orderData.address || 'Av. Beira Mar Norte, 1500 - Tubarão, SC',
+    items: orderData.items || currentCart,
+    address: orderData.address || 'Av. Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC',
     name: orderData.name || 'Cliente Especial',
     paymentMethod: orderData.paymentMethod || 'PIX',
-    total: orderData.total || getCartSummary().total,
+    total: orderData.total || summary.total,
     notes: orderData.notes || ''
   };
 
+  // Save active order for tracker
   localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(order));
   
+  // Register order in Admin Panel list
   const ordersList = getAllOrders();
   ordersList.unshift(order);
   localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
+
+  // Build WhatsApp URL
+  const waText = encodeURIComponent(buildWhatsAppMessage(order));
+  order.whatsappUrl = `https://wa.me/${RESTAURANT_WHATSAPP}?text=${waText}`;
+
+  // Clear current cart
+  clearCart();
 
   return order;
 }
@@ -279,7 +294,6 @@ function updateOrderStatus(orderId, newStatus) {
     target.status = newStatus;
     localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
     
-    // Also update current active order if matching
     const active = getOrder();
     if (active && active.id === orderId) {
       active.status = newStatus;
@@ -294,6 +308,22 @@ function getOrder() {
     if (raw) return JSON.parse(raw);
   } catch (e) {}
   return getAllOrders()[0];
+}
+
+// Metrics for Admin Dashboard
+function getAdminMetrics() {
+  const orders = getAllOrders();
+  const revenue = orders.reduce((acc, o) => acc + (o.total || 0), 0);
+  const totalOrders = orders.length;
+  const pendingOrders = orders.filter(o => o.status === 'recebido' || o.status === 'preparando').length;
+  const deliveredOrders = orders.filter(o => o.status === 'entregue').length;
+
+  return {
+    revenue,
+    totalOrders,
+    pendingOrders,
+    deliveredOrders
+  };
 }
 
 function showToast(message) {

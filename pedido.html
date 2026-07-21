@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
 
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script id="tailwind-config">
@@ -45,9 +45,9 @@
 
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-background text-on-surface font-sans text-sm selection:bg-primary-container min-h-screen pb-24">
+<body class="bg-background text-on-surface font-sans text-sm selection:bg-primary-container">
 
-  <!-- TopAppBar (Slim) -->
+  <!-- TopAppBar -->
   <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-14 bg-surface/95 backdrop-blur-md border-b border-outline-variant/60 shadow-xs">
     <div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
       <span class="material-symbols-outlined text-primary text-base">location_on</span>
@@ -56,150 +56,111 @@
     <a href="index.html" class="font-bold text-base text-primary absolute left-1/2 -translate-x-1/2 tracking-tight">
       Temperos do Brasil
     </a>
-    <div class="flex items-center">
-      <div class="w-7 h-7 rounded-full border border-primary overflow-hidden">
-        <img class="w-full h-full object-cover" alt="Perfil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgcdOzPVhSYKHzj0eCtbWeV4vp1UV9Qb4JBkcZiTB9DepA9Iuv9xWgXm9APlwi-EjaimSDAj7TU8ppPw7_sWvIn6Hh4Zg7GwZWbwmW-nDQQGpYH4gy0W_atO5KUD5HWSzkGJKjqJU3fueFsfHTHKOd_anEUUC09YMv8mCvPQpVVBQbUZDvHjh8i-Kj7d5Ghay3ucEqN07qMDUcR8uHThwfbeICiA49PXA0aNId-jj-LNPMD2qUPT4a"/>
-      </div>
+    <div class="flex items-center gap-2">
+      <a href="admin.html" class="hidden sm:flex items-center gap-1 text-[11px] font-bold text-on-surface-variant hover:text-primary px-2 py-1 rounded-lg hover:bg-surface-container">
+        <span class="material-symbols-outlined text-sm">admin_panel_settings</span> Admin
+      </a>
+      <a href="entrega.html" class="relative p-1.5 rounded-lg hover:bg-surface-container transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant">shopping_basket</span>
+        <span class="cart-badge absolute -top-1 -right-1 bg-primary text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
+      </a>
     </div>
   </header>
 
-  <main class="pt-16 max-w-3xl mx-auto px-4">
+  <main class="pt-16 pb-24 max-w-xl mx-auto px-4 space-y-4">
     
-    <!-- Header Section -->
-    <div class="flex items-center justify-between mb-4">
-      <div class="flex items-center gap-2">
-        <a href="index.html" class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center hover:bg-surface-container-highest transition-colors">
-          <span class="material-symbols-outlined text-on-surface-variant text-base">arrow_back</span>
-        </a>
+    <!-- Order Summary Badge Header -->
+    <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
+      <div class="flex justify-between items-start">
         <div>
-          <h2 class="text-lg font-bold text-primary">Acompanhar Pedido</h2>
-          <p id="order-id-badge" class="text-on-surface-variant text-xs">Carregando detalhes...</p>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-secondary bg-secondary-container px-2 py-0.5 rounded">
+            Pedido Confirmado
+          </span>
+          <h2 id="order-id-display" class="text-xl font-bold text-on-surface mt-1">Pedido #TB-849201</h2>
+          <p id="order-date-display" class="text-xs text-on-surface-variant">Realizado hoje às 12:30</p>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] font-bold uppercase text-on-surface-variant block">Valor Total</span>
+          <span id="order-total-display" class="text-lg font-extrabold text-primary">R$ 15,00</span>
         </div>
       </div>
-      <span class="px-2.5 py-0.5 bg-secondary-container text-on-secondary-container rounded-full text-[10px] font-bold flex items-center gap-1">
-        <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
-        Em Andamento
-      </span>
+
+      <!-- Action Button WhatsApp Resend -->
+      <a id="wa-resend-btn" target="_blank" href="#" class="w-full h-9 bg-[#25D366] text-white rounded-lg font-bold text-xs shadow-xs hover:brightness-105 transition-all flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined text-base">chat</span>
+        Enviar / Confirmar Pedido no WhatsApp do Restaurante
+      </a>
     </div>
 
-    <!-- Live Status Tracker Timeline (Minimalist Slim) -->
-    <section class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs mb-4">
-      <h3 class="font-semibold text-xs text-on-surface-variant uppercase tracking-wider mb-4">Status da Entrega</h3>
-      
-      <div class="relative flex justify-between items-center max-w-md mx-auto px-2">
-        <!-- Connecting Line -->
-        <div class="absolute left-4 right-4 top-4 h-0.5 bg-surface-container-highest z-0">
-          <div id="status-progress-line" class="h-full bg-secondary transition-all duration-700 w-1/2"></div>
-        </div>
+    <!-- Status Progress Timeline -->
+    <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-4">
+      <h3 class="font-bold text-sm text-on-surface flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-primary text-base">timeline</span>
+        Status do Pedido em Tempo Real
+      </h3>
 
+      <div class="space-y-4 pl-2 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-outline-variant/40">
+        
         <!-- Step 1: Recebido -->
-        <div class="relative z-10 flex flex-col items-center gap-1">
-          <div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center text-xs shadow-xs">
-            <span class="material-symbols-outlined text-sm">check</span>
+        <div id="step-recebido" class="relative flex items-center gap-3">
+          <div class="w-5 h-5 rounded-full bg-secondary text-white flex items-center justify-center z-10 text-[10px] font-bold">✓</div>
+          <div>
+            <p class="font-bold text-xs text-on-surface">1. Pedido Recebido</p>
+            <p class="text-[11px] text-on-surface-variant">Seu pedido deu entrada na nossa cozinha.</p>
           </div>
-          <span class="text-[11px] font-semibold text-on-surface">Recebido</span>
         </div>
 
-        <!-- Step 2: Em Preparação -->
-        <div class="relative z-10 flex flex-col items-center gap-1">
-          <div id="step-prep-icon" class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center text-xs shadow-xs ring-2 ring-secondary-container">
-            <span class="material-symbols-outlined text-sm">skillet</span>
+        <!-- Step 2: Preparando -->
+        <div id="step-preparando" class="relative flex items-center gap-3">
+          <div class="step-circle w-5 h-5 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center z-10 text-[10px] font-bold">2</div>
+          <div>
+            <p class="font-bold text-xs text-on-surface">2. No Fogo (Em Preparação)</p>
+            <p class="text-[11px] text-on-surface-variant">Sua marmita está sendo montada com carinho.</p>
           </div>
-          <span class="text-[11px] font-bold text-secondary">No Fogo</span>
         </div>
 
-        <!-- Step 3: A Caminho -->
-        <div class="relative z-10 flex flex-col items-center gap-1">
-          <div id="step-delivery-icon" class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center text-xs">
-            <span class="material-symbols-outlined text-sm">moped</span>
+        <!-- Step 3: Saiu -->
+        <div id="step-saiu" class="relative flex items-center gap-3">
+          <div class="step-circle w-5 h-5 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center z-10 text-[10px] font-bold">3</div>
+          <div>
+            <p class="font-bold text-xs text-on-surface">3. A Caminho (Saiu para Entrega)</p>
+            <p class="text-[11px] text-on-surface-variant">O entregador já está a caminho do seu endereço.</p>
           </div>
-          <span class="text-[11px] font-medium text-on-surface-variant">A Caminho</span>
         </div>
 
         <!-- Step 4: Entregue -->
-        <div class="relative z-10 flex flex-col items-center gap-1">
-          <div id="step-done-icon" class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center text-xs">
-            <span class="material-symbols-outlined text-sm">home</span>
-          </div>
-          <span class="text-[11px] font-medium text-on-surface-variant">Entregue</span>
-        </div>
-      </div>
-    </section>
-
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-      
-      <!-- Order Items (7 cols) -->
-      <div class="md:col-span-7 space-y-4">
-        <section class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs">
-          <h3 class="font-bold text-sm text-tertiary mb-3 flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-base">restaurant</span>
-            Itens Solicitados
-          </h3>
-          <div id="order-items-list" class="space-y-2 border-b border-outline-variant/30 pb-3 mb-3">
-          </div>
-          <div class="text-on-surface-variant text-[11px] italic">
-            <span id="order-notes-display" class="flex items-center gap-1">
-              <span class="material-symbols-outlined text-xs">notes</span> Obs: Nenhuma
-            </span>
-          </div>
-        </section>
-
-        <!-- Delivery Address -->
-        <section class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs">
-          <h3 class="font-bold text-sm text-tertiary mb-3 flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-base">local_shipping</span>
-            Endereço
-          </h3>
-          <div class="flex gap-3 items-start">
-            <div class="bg-surface-container p-2 rounded-lg text-primary flex-shrink-0">
-              <span class="material-symbols-outlined text-base">home</span>
-            </div>
-            <div class="flex-1">
-              <p id="order-customer-name" class="font-semibold text-xs text-on-surface">Maria Silva</p>
-              <p id="order-address-text" class="text-on-surface-variant text-xs">Av. Beira Mar Norte, 1500 - Tubarão, SC</p>
-              <p id="order-payment-text" class="text-secondary text-[11px] font-bold mt-0.5">Pagamento: PIX</p>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- Summary Card (5 cols) -->
-      <div class="md:col-span-5 space-y-3">
-        <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
-          <h3 class="font-bold text-sm text-on-surface">Resumo Financeiro</h3>
-          
-          <div class="space-y-2 text-xs">
-            <div class="flex justify-between text-on-surface-variant">
-              <span>Subtotal</span>
-              <span id="summary-subtotal" class="font-semibold">R$ 0,00</span>
-            </div>
-            <div class="flex justify-between text-on-surface-variant">
-              <span>Entrega</span>
-              <span class="text-secondary font-semibold">Grátis</span>
-            </div>
-            <div class="border-t border-outline-variant/30 pt-2 flex justify-between items-center">
-              <span class="font-bold text-xs text-on-surface">Total Pago</span>
-              <span id="summary-total" class="font-bold text-base text-primary">R$ 0,00</span>
-            </div>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <button onclick="sendWhatsAppOrder()" class="w-full bg-[#25D366] text-white h-9 rounded-lg font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs hover:brightness-105 transition-all">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg>
-              Enviar para o WhatsApp
-            </button>
-            <a href="cardapio.html" class="w-full bg-surface-container text-on-surface h-9 rounded-lg font-semibold text-xs flex items-center justify-center gap-1 hover:bg-surface-container-highest transition-all">
-              <span class="material-symbols-outlined text-xs">add</span>
-              Novo Pedido
-            </a>
+        <div id="step-entregue" class="relative flex items-center gap-3">
+          <div class="step-circle w-5 h-5 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center z-10 text-[10px] font-bold">4</div>
+          <div>
+            <p class="font-bold text-xs text-on-surface">4. Entregue</p>
+            <p class="text-[11px] text-on-surface-variant">Bom apetite! Obrigado por escolher Temperos do Brasil.</p>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
+
+    <!-- Order Items Breakdown -->
+    <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
+      <h3 class="font-bold text-sm text-on-surface">Itens do Pedido</h3>
+      <div id="order-items-list" class="space-y-2 divide-y divide-outline-variant/20">
+      </div>
+
+      <div class="border-t border-outline-variant/40 pt-2.5 space-y-1 text-xs">
+        <div class="flex justify-between text-on-surface-variant">
+          <span>Endereço de Entrega</span>
+          <span id="order-address-display" class="font-semibold text-right max-w-[200px] truncate">Tubarão, SC</span>
+        </div>
+        <div class="flex justify-between text-on-surface-variant">
+          <span>Pagamento</span>
+          <span id="order-payment-display" class="font-semibold">PIX</span>
+        </div>
+      </div>
+    </div>
+
   </main>
 
-  <!-- BottomNavBar (Slim) -->
+  <!-- BottomNavBar -->
   <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-14 bg-surface/95 backdrop-blur-md border-t border-outline-variant/50">
     <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors" href="index.html">
       <span class="material-symbols-outlined text-base">home</span>
@@ -213,73 +174,74 @@
       <span class="material-symbols-outlined text-base">local_shipping</span>
       Entrega
     </a>
-    <a class="flex flex-col items-center justify-center text-primary font-semibold text-[11px]" href="pedido.html">
+    <a class="flex flex-col items-center justify-center text-primary font-semibold text-[11px] relative" href="pedido.html">
       <span class="material-symbols-outlined text-base">shopping_basket</span>
       Pedido
+      <span class="cart-badge absolute -top-1 right-2 bg-primary text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full font-bold">0</span>
     </a>
   </nav>
 
   <script src="js/cart.js"></script>
   <script>
-    let currentOrderData = null;
+    function renderOrderTracker() {
+      const order = getOrder();
+      if (!order) return;
 
-    function renderOrderDetails() {
-      currentOrderData = getOrder();
+      document.getElementById('order-id-display').textContent = `Pedido #${order.id}`;
+      document.getElementById('order-total-display').textContent = formatBRL(order.total);
+      document.getElementById('order-address-display').textContent = order.address;
+      document.getElementById('order-payment-display').textContent = order.paymentMethod;
 
-      document.getElementById('order-id-badge').textContent = `Pedido #${currentOrderData.id} • Tubarão, SC`;
-      document.getElementById('order-customer-name').textContent = currentOrderData.name || 'Cliente';
-      document.getElementById('order-address-text').textContent = currentOrderData.address || 'Tubarão, SC';
-      document.getElementById('order-payment-text').textContent = `Pagamento: ${currentOrderData.paymentMethod || 'PIX'}`;
-      document.getElementById('order-notes-display').innerHTML = `<span class="material-symbols-outlined text-xs">notes</span> Obs: ${currentOrderData.notes || 'Nenhuma'}`;
+      const dateObj = new Date(order.timestamp || Date.now());
+      document.getElementById('order-date-display').textContent = `Realizado às ${dateObj.getHours().toString().padStart(2, '0')}:${dateObj.getMinutes().toString().padStart(2, '0')}`;
 
+      // Set WhatsApp resend button link
+      const waBtn = document.getElementById('wa-resend-btn');
+      const waText = encodeURIComponent(buildWhatsAppMessage(order));
+      waBtn.href = `https://wa.me/${RESTAURANT_WHATSAPP}?text=${waText}`;
+
+      // Items list
       const itemsList = document.getElementById('order-items-list');
-      if (currentOrderData.items && currentOrderData.items.length > 0) {
-        itemsList.innerHTML = currentOrderData.items.map(item => `
-          <div class="flex justify-between items-start text-xs">
-            <div>
-              <p class="font-semibold text-on-surface">${item.quantity}x ${item.name}</p>
-              ${item.detail ? `<p class="text-[10px] text-on-surface-variant truncate max-w-[200px]">${item.detail}</p>` : ''}
-            </div>
-            <span class="font-bold text-secondary">${formatBRL(item.price * item.quantity)}</span>
+      itemsList.innerHTML = order.items.map(item => `
+        <div class="pt-1.5 flex justify-between items-start">
+          <div>
+            <p class="font-semibold text-xs text-on-surface">${item.quantity}x ${item.name}</p>
+            ${item.detail ? `<p class="text-[10px] text-on-surface-variant">${item.detail}</p>` : ''}
           </div>
-        `).join('');
-      }
+          <span class="font-bold text-xs text-primary">${formatBRL(item.price * item.quantity)}</span>
+        </div>
+      `).join('');
 
-      const total = currentOrderData.total || 48.90;
-      document.getElementById('summary-subtotal').textContent = formatBRL(total);
-      document.getElementById('summary-total').textContent = formatBRL(total);
-    }
+      // Status Timeline Active State
+      const statusMap = {
+        'recebido': 1,
+        'preparando': 2,
+        'saiu': 3,
+        'entregue': 4
+      };
 
-    function sendWhatsAppOrder() {
-      if (!currentOrderData) return;
-      const phoneNumber = "5548988781598";
-      let itemsText = currentOrderData.items.map(i => `- ${i.quantity}x ${i.name} (${formatBRL(i.price)})`).join('\n');
+      const currentStep = statusMap[order.status] || 1;
       
-      const message = `
-*PEDIDO TEMPEROS DO BRASIL*
-----------------------------------
-*Pedido:* #${currentOrderData.id}
-*Cliente:* ${currentOrderData.name}
+      ['recebido', 'preparando', 'saiu', 'entregue'].forEach((st, idx) => {
+        const stepNum = idx + 1;
+        const el = document.getElementById(`step-${st}`);
+        const circle = el.querySelector('div');
 
-*Itens:*
-${itemsText}
-
-*Obs:* ${currentOrderData.notes || 'Nenhuma'}
-*Pagamento:* ${currentOrderData.paymentMethod}
-*Endereço:* ${currentOrderData.address}
-
-*Total:* ${formatBRL(currentOrderData.total)} (Frete Grátis)
-----------------------------------`.trim();
-
-      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        if (stepNum <= currentStep) {
+          circle.className = 'w-5 h-5 rounded-full bg-secondary text-white flex items-center justify-center z-10 text-[10px] font-bold';
+          circle.textContent = '✓';
+        } else {
+          circle.className = 'w-5 h-5 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center z-10 text-[10px] font-bold';
+          circle.textContent = stepNum;
+        }
+      });
     }
 
-    setTimeout(() => {
-      document.getElementById('status-progress-line').style.width = '75%';
-      document.getElementById('step-delivery-icon').className = 'w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center text-xs shadow-xs ring-2 ring-secondary-container';
-    }, 3000);
-
-    document.addEventListener('DOMContentLoaded', renderOrderDetails);
+    // Auto refresh order status every 3 seconds
+    document.addEventListener('DOMContentLoaded', () => {
+      renderOrderTracker();
+      setInterval(renderOrderTracker, 3000);
+    });
   </script>
 </body>
 </html>

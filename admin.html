@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Painel de Administração - Temperos do Brasil</title>
+  <title>Painel Gestor Pro - Temperos do Brasil</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,40 +47,121 @@
 </head>
 <body class="bg-background text-on-surface font-sans text-sm selection:bg-primary-container pb-20">
 
-  <!-- TopAppBar -->
+  <!-- SaaS Header -->
   <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-14 bg-surface/95 backdrop-blur-md border-b border-outline-variant/60 shadow-xs">
     <div class="flex items-center gap-2">
-      <span class="material-symbols-outlined text-primary text-base">admin_panel_settings</span>
-      <span class="font-bold text-xs text-primary uppercase tracking-wider">Painel Administrativo</span>
+      <div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-black text-xs shadow-xs">
+        TB
+      </div>
+      <div>
+        <h1 class="font-extrabold text-sm text-on-surface leading-none">Temperos do Brasil</h1>
+        <span class="text-[10px] text-secondary font-bold uppercase tracking-wider">Painel Gestor POS Pro</span>
+      </div>
     </div>
-    
-    <a href="index.html" class="font-bold text-base text-primary absolute left-1/2 -translate-x-1/2 tracking-tight">
-      Temperos do Brasil
-    </a>
 
-    <div class="flex items-center gap-2">
-      <a href="index.html" class="text-xs text-on-surface-variant hover:text-primary font-semibold flex items-center gap-1">
-        <span class="material-symbols-outlined text-sm">storefront</span> Ver App
+    <div class="flex items-center gap-3">
+      <a href="index.html" target="_blank" class="h-8 px-3 bg-surface-container text-on-surface hover:bg-surface-container-highest rounded-lg font-bold text-xs transition-colors flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm">open_in_new</span> Ver Loja
       </a>
     </div>
   </header>
 
-  <main class="pt-16 max-w-4xl mx-auto px-4 space-y-5">
+  <main class="pt-16 max-w-5xl mx-auto px-4 space-y-5">
     
-    <!-- Admin Navigation Tabs -->
+    <!-- Top KPI Metrics Widgets -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <!-- Widget 1: Revenue -->
+      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
+        <div class="flex justify-between items-center text-on-surface-variant">
+          <span class="text-[11px] font-bold uppercase tracking-wider">Faturamento Hoje</span>
+          <span class="material-symbols-outlined text-secondary text-base">payments</span>
+        </div>
+        <p id="kpi-revenue" class="text-xl font-extrabold text-primary">R$ 0,00</p>
+        <span class="text-[10px] text-secondary font-semibold">Vendas em tempo real</span>
+      </div>
+
+      <!-- Widget 2: Total Orders -->
+      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
+        <div class="flex justify-between items-center text-on-surface-variant">
+          <span class="text-[11px] font-bold uppercase tracking-wider">Total Pedidos</span>
+          <span class="material-symbols-outlined text-primary text-base">receipt_long</span>
+        </div>
+        <p id="kpi-orders" class="text-xl font-extrabold text-on-surface">0</p>
+        <span class="text-[10px] text-on-surface-variant">Pedidos recebidos</span>
+      </div>
+
+      <!-- Widget 3: Active Kitchen -->
+      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
+        <div class="flex justify-between items-center text-on-surface-variant">
+          <span class="text-[11px] font-bold uppercase tracking-wider">Na Cozinha (No Fogo)</span>
+          <span class="material-symbols-outlined text-amber-600 text-base">skillet</span>
+        </div>
+        <p id="kpi-pending" class="text-xl font-extrabold text-amber-600">0</p>
+        <span class="text-[10px] text-amber-700 font-semibold">Aguardando preparo</span>
+      </div>
+
+      <!-- Widget 4: Delivered -->
+      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
+        <div class="flex justify-between items-center text-on-surface-variant">
+          <span class="text-[11px] font-bold uppercase tracking-wider">Concluídos</span>
+          <span class="material-symbols-outlined text-secondary text-base">check_circle</span>
+        </div>
+        <p id="kpi-delivered" class="text-xl font-extrabold text-secondary">0</p>
+        <span class="text-[10px] text-secondary font-semibold">Entregas realizadas</span>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
     <div class="flex border-b border-outline-variant/60 gap-4 text-xs font-bold">
-      <button id="tab-btn-menu" onclick="switchAdminTab('menu')" class="pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1">
-        <span class="material-symbols-outlined text-base">restaurant_menu</span>
-        Gerenciar Cardápio Semanal
-      </button>
-      <button id="tab-btn-orders" onclick="switchAdminTab('orders')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1">
+      <button id="tab-btn-orders" onclick="switchAdminTab('orders')" class="pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5">
         <span class="material-symbols-outlined text-base">receipt_long</span>
         Gestão de Pedidos em Tempo Real
       </button>
+      <button id="tab-btn-menu" onclick="switchAdminTab('menu')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-base">restaurant_menu</span>
+        Gerenciar Cardápio Semanal
+      </button>
     </div>
 
-    <!-- TAB 1: MENU MANAGEMENT -->
-    <section id="section-admin-menu" class="space-y-4">
+    <!-- TAB 1: ORDERS MANAGEMENT (Default active) -->
+    <section id="section-admin-orders" class="space-y-4">
+      
+      <!-- Filter Bar -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-surface border border-outline-variant/60 p-3 rounded-xl shadow-xs">
+        
+        <div class="flex flex-wrap gap-1.5" id="order-filter-buttons">
+          <button onclick="filterOrders('all')" class="filter-btn active px-3 h-7 bg-primary text-white text-xs font-bold rounded-lg shadow-xs">
+            Todos
+          </button>
+          <button onclick="filterOrders('recebido')" class="filter-btn px-3 h-7 bg-surface-container text-on-surface text-xs font-semibold rounded-lg hover:bg-surface-container-highest">
+            Recebidos
+          </button>
+          <button onclick="filterOrders('preparando')" class="filter-btn px-3 h-7 bg-surface-container text-on-surface text-xs font-semibold rounded-lg hover:bg-surface-container-highest">
+            No Fogo (Preparo)
+          </button>
+          <button onclick="filterOrders('saiu')" class="filter-btn px-3 h-7 bg-surface-container text-on-surface text-xs font-semibold rounded-lg hover:bg-surface-container-highest">
+            A Caminho
+          </button>
+          <button onclick="filterOrders('entregue')" class="filter-btn px-3 h-7 bg-surface-container text-on-surface text-xs font-semibold rounded-lg hover:bg-surface-container-highest">
+            Entregues
+          </button>
+        </div>
+
+        <div class="relative w-full sm:w-56">
+          <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span>
+          <input id="order-search-input" onkeyup="searchOrders(this.value)" type="text" placeholder="Buscar pedido ou cliente..." class="w-full h-8 pl-8 pr-3 bg-surface-container-low border border-outline-variant/60 rounded-lg text-xs outline-none focus:ring-1 focus:ring-primary"/>
+        </div>
+
+      </div>
+
+      <!-- Orders List Container -->
+      <div id="admin-orders-list" class="space-y-3.5">
+        <!-- Dynamic Orders Rendered Here -->
+      </div>
+    </section>
+
+    <!-- TAB 2: MENU MANAGEMENT -->
+    <section id="section-admin-menu" class="space-y-4 hidden">
       
       <!-- Day Selector (Segunda a Sexta) -->
       <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
@@ -103,40 +184,23 @@
       <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-4">
         <div class="flex justify-between items-center">
           <div>
-            <h4 id="admin-day-title" class="font-bold text-sm text-on-surface">Pratos de Terça-feira</h4>
-            <p class="text-xs text-on-surface-variant">Edite nomes, preços, descrições e fotos dos pratos do dia</p>
+            <h4 id="admin-day-title" class="font-bold text-sm text-on-surface">Cardápio de Terça-feira</h4>
+            <p class="text-xs text-on-surface-variant">Edite pratos, preços, fotos e disponibilidade em tempo real</p>
           </div>
-          <button onclick="addNewDishAdmin()" class="h-8 px-3 bg-secondary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-secondary/90 transition-all flex items-center gap-1">
+          <button onclick="addNewDishAdmin()" class="h-8 px-3.5 bg-secondary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-secondary/90 transition-all flex items-center gap-1">
             <span class="material-symbols-outlined text-sm">add</span> Novo Prato
           </button>
         </div>
 
-        <div id="admin-dishes-editor" class="space-y-3">
+        <div id="admin-dishes-editor" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           <!-- Dynamic Dish Form Inputs -->
         </div>
 
-        <div class="pt-2 border-t border-outline-variant/40 flex justify-end">
+        <div class="pt-3 border-t border-outline-variant/40 flex justify-end">
           <button onclick="saveAdminMenuChanges()" class="h-10 px-6 bg-primary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-sm">save</span> Salvar Alterações no Cardápio
+            <span class="material-symbols-outlined text-sm">save</span> Salvar no Sistema
           </button>
         </div>
-      </div>
-    </section>
-
-    <!-- TAB 2: ORDERS MANAGEMENT -->
-    <section id="section-admin-orders" class="space-y-4 hidden">
-      <div class="flex justify-between items-center">
-        <div>
-          <h3 class="font-bold text-base text-on-surface">Pedidos Recebidos</h3>
-          <p class="text-xs text-on-surface-variant">Altere o status para atualizar o acompanhamento do cliente em tempo real</p>
-        </div>
-        <button onclick="renderAdminOrders()" class="h-8 px-3 bg-surface-container text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors flex items-center gap-1">
-          <span class="material-symbols-outlined text-sm">refresh</span> Atualizar Lista
-        </button>
-      </div>
-
-      <div id="admin-orders-list" class="space-y-3">
-        <!-- Dynamic Orders List -->
       </div>
     </section>
 
@@ -146,6 +210,15 @@
   <script>
     let adminCurrentDay = getSelectedDayIndex();
     let localMenuCopy = JSON.parse(JSON.stringify(WEEKLY_MENU));
+    let activeFilter = 'all';
+
+    function updateKPIs() {
+      const metrics = getAdminMetrics();
+      document.getElementById('kpi-revenue').textContent = formatBRL(metrics.revenue);
+      document.getElementById('kpi-orders').textContent = metrics.totalOrders;
+      document.getElementById('kpi-pending').textContent = metrics.pendingOrders;
+      document.getElementById('kpi-delivered').textContent = metrics.deliveredOrders;
+    }
 
     function switchAdminTab(tab) {
       const menuBtn = document.getElementById('tab-btn-menu');
@@ -154,19 +227,141 @@
       const ordersSec = document.getElementById('section-admin-orders');
 
       if (tab === 'menu') {
-        menuBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1';
-        ordersBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1';
+        menuBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5';
+        ordersBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
         menuSec.classList.remove('hidden');
         ordersSec.classList.add('hidden');
+        renderAdminDayTabs();
       } else {
-        ordersBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1';
-        menuBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1';
+        ordersBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5';
+        menuBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
         ordersSec.classList.remove('hidden');
         menuSec.classList.add('hidden');
         renderAdminOrders();
       }
     }
 
+    // Filter & Search Orders
+    function filterOrders(status) {
+      activeFilter = status;
+      const btns = document.querySelectorAll('.filter-btn');
+      btns.forEach(btn => {
+        btn.className = 'filter-btn px-3 h-7 bg-surface-container text-on-surface text-xs font-semibold rounded-lg hover:bg-surface-container-highest';
+      });
+      event.target.className = 'filter-btn active px-3 h-7 bg-primary text-white text-xs font-bold rounded-lg shadow-xs';
+      renderAdminOrders();
+    }
+
+    function searchOrders(query) {
+      renderAdminOrders(query.toLowerCase());
+    }
+
+    function renderAdminOrders(searchQuery = '') {
+      updateKPIs();
+      const orders = getAllOrders();
+      const container = document.getElementById('admin-orders-list');
+
+      let filtered = orders;
+      if (activeFilter !== 'all') {
+        filtered = filtered.filter(o => o.status === activeFilter);
+      }
+
+      if (searchQuery) {
+        filtered = filtered.filter(o => 
+          o.id.toLowerCase().includes(searchQuery) || 
+          (o.name && o.name.toLowerCase().includes(searchQuery)) ||
+          (o.address && o.address.toLowerCase().includes(searchQuery))
+        );
+      }
+
+      if (!filtered || filtered.length === 0) {
+        container.innerHTML = `<div class="bg-surface border border-outline-variant/60 p-8 text-center rounded-xl"><p class="text-xs text-on-surface-variant">Nenhum pedido encontrado.</p></div>`;
+        return;
+      }
+
+      const statusBadgeStyles = {
+        'recebido': 'bg-amber-100 text-amber-800 border-amber-300',
+        'preparando': 'bg-orange-100 text-orange-800 border-orange-300',
+        'saiu': 'bg-blue-100 text-blue-800 border-blue-300',
+        'entregue': 'bg-emerald-100 text-emerald-800 border-emerald-300'
+      };
+
+      const statusLabels = {
+        'recebido': '1. Recebido',
+        'preparando': '2. No Fogo',
+        'saiu': '3. A Caminho',
+        'entregue': '4. Entregue'
+      };
+
+      container.innerHTML = filtered.map(order => `
+        <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2 border-b border-outline-variant/30">
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-sm text-primary">Pedido #${order.id}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${statusBadgeStyles[order.status] || 'bg-surface-container'}">
+                ${statusLabels[order.status] || order.status}
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-sm text-secondary">${formatBRL(order.total)}</span>
+              <span class="text-[11px] text-on-surface-variant font-medium">(${order.paymentMethod})</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <p class="font-bold text-on-surface">Cliente: ${order.name}</p>
+              <p class="text-on-surface-variant text-[11px] mt-0.5 line-clamp-2">📍 ${order.address}</p>
+            </div>
+            
+            <!-- Quick Action Workflow Buttons -->
+            <div class="flex flex-wrap items-center gap-1.5 justify-start sm:justify-end">
+              <button onclick="changeOrderStatusAdmin('${order.id}', 'recebido')" class="px-2.5 h-7 text-[11px] font-bold rounded ${order.status === 'recebido' ? 'bg-amber-600 text-white' : 'bg-surface-container text-on-surface hover:bg-surface-container-highest'}">
+                Recebido
+              </button>
+              <button onclick="changeOrderStatusAdmin('${order.id}', 'preparando')" class="px-2.5 h-7 text-[11px] font-bold rounded ${order.status === 'preparando' ? 'bg-orange-600 text-white' : 'bg-surface-container text-on-surface hover:bg-surface-container-highest'}">
+                No Fogo
+              </button>
+              <button onclick="changeOrderStatusAdmin('${order.id}', 'saiu')" class="px-2.5 h-7 text-[11px] font-bold rounded ${order.status === 'saiu' ? 'bg-blue-600 text-white' : 'bg-surface-container text-on-surface hover:bg-surface-container-highest'}">
+                A Caminho
+              </button>
+              <button onclick="changeOrderStatusAdmin('${order.id}', 'entregue')" class="px-2.5 h-7 text-[11px] font-bold rounded ${order.status === 'entregue' ? 'bg-emerald-600 text-white' : 'bg-surface-container text-on-surface hover:bg-surface-container-highest'}">
+                Entregue
+              </button>
+            </div>
+          </div>
+
+          <!-- Items Breakdown -->
+          <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/30 text-xs space-y-1">
+            <span class="font-bold text-on-surface-variant uppercase text-[10px]">Itens Solicitados:</span>
+            ${order.items.map(i => `<p class="text-xs font-medium text-on-surface">• <strong>${i.quantity}x</strong> ${i.name} (${formatBRL(i.price * i.quantity)}) ${i.detail ? `<span class="text-[10px] text-on-surface-variant">-- ${i.detail}</span>` : ''}</p>`).join('')}
+            ${order.notes ? `<p class="text-[11px] text-error font-semibold mt-1">Obs do Cliente: ${order.notes}</p>` : ''}
+          </div>
+
+          <div class="flex justify-between items-center pt-1">
+            <span class="text-[10px] text-on-surface-variant">Data/Hora: ${new Date(order.timestamp).toLocaleString('pt-BR')}</span>
+            <button onclick="contactCustomerWhatsApp('${order.name}', '${order.id}')" class="h-7 px-3 bg-[#25D366] text-white font-bold text-xs rounded-md shadow-xs flex items-center gap-1 hover:brightness-105">
+              <span class="material-symbols-outlined text-sm">chat</span> WhatsApp Cliente
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function changeOrderStatusAdmin(orderId, status) {
+      updateOrderStatus(orderId, status);
+      renderAdminOrders();
+      showToast(`Pedido #${orderId} atualizado para "${status}"!`);
+    }
+
+    function contactCustomerWhatsApp(name, orderId) {
+      const phoneNumber = "5548988781598";
+      const message = `Olá ${name}, referente ao seu pedido #${orderId} do Temperos do Brasil!`;
+      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    // MENU EDITOR
     function renderAdminDayTabs() {
       const container = document.getElementById('admin-day-tabs');
       container.innerHTML = [1, 2, 3, 4, 5].map(dayNum => {
@@ -199,12 +394,12 @@
 
       const editor = document.getElementById('admin-dishes-editor');
       if (!day.dishes || day.dishes.length === 0) {
-        editor.innerHTML = `<p class="text-xs text-on-surface-variant text-center py-4">Nenhum prato cadastrado para este dia.</p>`;
+        editor.innerHTML = `<p class="text-xs text-on-surface-variant text-center py-4 col-span-2">Nenhum prato cadastrado para este dia.</p>`;
         return;
       }
 
       editor.innerHTML = day.dishes.map((dish, idx) => `
-        <div class="bg-surface-container-low p-3.5 rounded-lg border border-outline-variant/40 space-y-2">
+        <div class="bg-surface-container-low p-3.5 rounded-xl border border-outline-variant/40 space-y-2.5">
           <div class="flex justify-between items-center">
             <span class="text-xs font-bold text-primary">Prato #${idx + 1}</span>
             <button onclick="removeDishAdmin(${idx})" class="text-xs text-error font-semibold hover:underline flex items-center gap-0.5">
@@ -212,26 +407,17 @@
             </button>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <div class="space-y-1">
-              <label class="text-[11px] font-bold text-on-surface-variant">Nome do Prato</label>
-              <input type="text" value="${dish.name}" onchange="updateDishField(${idx}, 'name', this.value)" class="w-full h-8 px-2.5 bg-white border border-outline-variant/60 rounded text-xs focus:ring-1 focus:ring-primary outline-none"/>
-            </div>
-
-            <div class="space-y-1">
-              <label class="text-[11px] font-bold text-on-surface-variant">Preço (R$)</label>
-              <input type="number" step="0.50" value="${dish.price}" onchange="updateDishField(${idx}, 'price', parseFloat(this.value))" class="w-full h-8 px-2.5 bg-white border border-outline-variant/60 rounded text-xs focus:ring-1 focus:ring-primary outline-none"/>
-            </div>
-
-            <div class="space-y-1">
-              <label class="text-[11px] font-bold text-on-surface-variant">URL da Imagem</label>
-              <input type="text" value="${dish.image}" onchange="updateDishField(${idx}, 'image', this.value)" class="w-full h-8 px-2.5 bg-white border border-outline-variant/60 rounded text-xs focus:ring-1 focus:ring-primary outline-none truncate"/>
+          <div class="flex gap-2">
+            <img class="w-14 h-14 rounded-lg object-cover flex-shrink-0" src="${dish.image}"/>
+            <div class="flex-1 space-y-1">
+              <input type="text" value="${dish.name}" onchange="updateDishField(${idx}, 'name', this.value)" placeholder="Nome do Prato" class="w-full h-7 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+              <input type="number" step="0.50" value="${dish.price}" onchange="updateDishField(${idx}, 'price', parseFloat(this.value))" placeholder="Preço (R$)" class="w-full h-7 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
             </div>
           </div>
 
           <div class="space-y-1">
-            <label class="text-[11px] font-bold text-on-surface-variant">Descrição</label>
-            <input type="text" value="${dish.desc}" onchange="updateDishField(${idx}, 'desc', this.value)" class="w-full h-8 px-2.5 bg-white border border-outline-variant/60 rounded text-xs focus:ring-1 focus:ring-primary outline-none"/>
+            <input type="text" value="${dish.desc}" onchange="updateDishField(${idx}, 'desc', this.value)" placeholder="Descrição do Prato" class="w-full h-7 px-2 bg-white border border-outline-variant/60 rounded text-xs focus:ring-1 focus:ring-primary outline-none"/>
+            <input type="text" value="${dish.image}" onchange="updateDishField(${idx}, 'image', this.value)" placeholder="URL da Imagem" class="w-full h-7 px-2 bg-white border border-outline-variant/60 rounded text-[10px] text-on-surface-variant truncate focus:ring-1 focus:ring-primary outline-none"/>
           </div>
         </div>
       `).join('');
@@ -247,7 +433,7 @@
         id: 'custom-' + Date.now(),
         name: 'Novo Prato Especial',
         price: 15.00,
-        desc: 'Descrição saborosa do novo prato...',
+        desc: 'Descrição do novo prato...',
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc'
       });
       renderAdminDishesEditor();
@@ -260,7 +446,7 @@
 
     function saveAdminMenuChanges() {
       saveWeeklyMenu(localMenuCopy);
-      showToast('Cardápio atualizado com sucesso!');
+      showToast('Cardápio atualizado no sistema!');
     }
 
     function resetMenuToDefault() {
@@ -272,64 +458,8 @@
       }
     }
 
-    // Orders Management Render
-    function renderAdminOrders() {
-      const orders = getAllOrders();
-      const container = document.getElementById('admin-orders-list');
-
-      if (!orders || orders.length === 0) {
-        container.innerHTML = `<p class="text-xs text-on-surface-variant text-center py-4">Nenhum pedido recebido ainda.</p>`;
-        return;
-      }
-
-      container.innerHTML = orders.map(order => `
-        <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="font-extrabold text-sm text-primary">Pedido #${order.id}</span>
-              <p class="text-xs text-on-surface font-semibold mt-0.5">${order.name} • ${order.paymentMethod}</p>
-              <p class="text-[11px] text-on-surface-variant">${order.address}</p>
-            </div>
-            
-            <div class="flex flex-col items-end gap-1">
-              <span class="font-bold text-sm text-secondary">${formatBRL(order.total)}</span>
-              <select onchange="changeOrderStatusAdmin('${order.id}', this.value)" class="h-7 px-2 text-xs bg-surface-container border border-outline-variant/60 rounded font-semibold focus:ring-primary outline-none">
-                <option value="recebido" ${order.status === 'recebido' ? 'selected' : ''}>Recebido</option>
-                <option value="preparando" ${order.status === 'preparando' ? 'selected' : ''}>No Fogo (Preparando)</option>
-                <option value="saiu" ${order.status === 'saiu' ? 'selected' : ''}>A Caminho (Saiu)</option>
-                <option value="entregue" ${order.status === 'entregue' ? 'selected' : ''}>Entregue</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="bg-surface-container-low p-2.5 rounded-lg border border-outline-variant/30 text-xs space-y-1">
-            <span class="font-bold text-on-surface-variant uppercase text-[10px]">Itens:</span>
-            ${order.items.map(i => `<p class="text-xs font-medium text-on-surface">• ${i.quantity}x ${i.name} (${formatBRL(i.price)})</p>`).join('')}
-            ${order.notes ? `<p class="text-[11px] text-error font-semibold mt-1">Obs: ${order.notes}</p>` : ''}
-          </div>
-
-          <div class="flex justify-end pt-1">
-            <button onclick="contactCustomerWhatsApp('${order.name}', '${order.id}')" class="h-7 px-3 bg-[#25D366] text-white font-bold text-xs rounded-md shadow-xs flex items-center gap-1 hover:brightness-105">
-              WhatsApp
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function changeOrderStatusAdmin(orderId, status) {
-      updateOrderStatus(orderId, status);
-      showToast(`Status do pedido #${orderId} atualizado!`);
-    }
-
-    function contactCustomerWhatsApp(name, orderId) {
-      const phoneNumber = "5548988781598";
-      const message = `Olá ${name}, referente ao seu pedido #${orderId} do Temperos do Brasil!`;
-      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-      renderAdminDayTabs();
+      renderAdminOrders();
     });
   </script>
 </body>
