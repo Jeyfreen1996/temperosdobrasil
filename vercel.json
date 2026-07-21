@@ -27,6 +27,7 @@
   "rewrites": [
     { "source": "/cardapio", "destination": "/cardapio.html" },
     { "source": "/entrega", "destination": "/entrega.html" },
-    { "source": "/pedido", "destination": "/pedido.html" }
+    { "source": "/pedido", "destination": "/pedido.html" },
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }

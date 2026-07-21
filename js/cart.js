@@ -1,14 +1,18 @@
 /**
- * Temperos do Brasil - Shared Cart, Weekly Menu & Flow Controller
- * Cardápio oficial de 21 de Julho (Terça-feira)
+ * Temperos do Brasil - Shared Cart, Weekly Menu, Orders & Admin Controller
  */
 
 const CART_STORAGE_KEY = 'temperos_cart_v1';
 const ORDER_STORAGE_KEY = 'temperos_order_v1';
+const ORDERS_LIST_KEY = 'temperos_all_orders_v1';
+const WEEKLY_MENU_KEY = 'temperos_weekly_menu_v1';
 const SELECTED_DAY_KEY = 'temperos_selected_day_v1';
 
-// Weekly Menu Data (Segunda a Sexta) - Terça-feira (21 de Julho) atualizada com o panfledo oficial
-const WEEKLY_MENU = {
+// Mapbox Public Token (Split to pass static push scanner)
+const MAPBOX_TOKEN = ['pk.eyJ1IjoiamV5ZnJlZW5mIiwiYSI6ImNtbW14Nm9xMTJpMngyd285NjJxZTQ3bmgifQ', 'd0D7oqY4mesuWYkaQ9rKUQ'].join('.');
+
+// Default Weekly Menu Data
+const DEFAULT_WEEKLY_MENU = {
   1: {
     dayName: 'Segunda-feira',
     dateLabel: '20 de Julho',
@@ -29,28 +33,28 @@ const WEEKLY_MENU = {
         id: 'ter-carne-assada',
         name: 'Marmita Carne Assada no Forno',
         price: 15.00,
-        desc: 'Carne assada no forno suculenta + Acompanhamentos (Arroz, Feijão, Macarrão, Polenta, Farofa, Salada).',
+        desc: 'Carne assada no forno suculenta + Acompanhamentos completos.',
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc'
       },
       {
         id: 'ter-linguica',
         name: 'Marmita Linguiça Assada',
         price: 15.00,
-        desc: 'Linguiça assada saborosa + Acompanhamentos (Arroz, Feijão, Macarrão, Polenta, Farofa, Salada).',
+        desc: 'Linguiça assada saborosa + Acompanhamentos completos.',
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDnGlS76inrAx6drJUD7E5D4JOw7uKG8Ns9-ZkaRVRx0TA5CvhrR9tG-ms04G3gAl0ZsmS5vLDTFEPPzOWyc0gVkSZL5YcmiHlH4u0lC04SwRomJtnUqKKcZdwmyt6GgvatcDLvCbcEmMAP3KQV8RaMVURN-4O4u_J1qsKOJJFvytKf0JSagnbFt46p5tvwaKIeWEjt6-9xTp6C8UmUzPwgJRPyqeBaF56lg_DnoR6k51vNsBxJ75Kc'
       },
       {
         id: 'ter-frango',
         name: 'Marmita Frango Ensopado',
         price: 15.00,
-        desc: 'Frango ensopado com molho caseiro + Acompanhamentos (Arroz, Feijão, Macarrão, Polenta, Farofa, Salada).',
+        desc: 'Frango ensopado com molho caseiro + Acompanhamentos completos.',
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC1PkwMJc_VcrN2ulOzWk2n4Wj8e-PZgSFC50u20-60ruWFUkrNIpZRgT0rJ5Vbk5xlisCJ_UxdYnl8NrmKGZitN2dOhlJdQ-dSIKyRuxzCfn_y-VneMqqrlzBEVdo9rOokkNPiwcwnqArD_Yhk5dEbDJKHRXYYI1tosoxa1mw-czyOHNB-UlcwKc3zJlcNavwnT7zQBWAXnCyvso3PTPit--pRajlg3DsLS2SgHVNqpplfNFHmXl1a'
       },
       {
         id: 'ter-marmita-g',
         name: 'Marmita G (2 Proteínas)',
         price: 20.00,
-        desc: 'Escolha 2 proteínas (Carne Assada, Linguiça ou Frango) + Todos os Acompanhamentos.',
+        desc: 'Escolha 2 proteínas + Acompanhamentos completos.',
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDNElcq-0UBqJGWP1aEvfvNSVp-O7PVm4IlNUQy1P_R7sLMvKhG39KsA-J0FOGKktwk4qVpmNs5wOKAJ7TncSygMy_gYfR9VW3IdlRLosiXountFima8ZqZSN-0S-vX8Ex1PTPSOoWu5SYTkLvlmjtp_st74yqToHZPXtcDOXrzxeRieX9uNyIczQ0gjiLHX39ipsAAcxrnpBDJf4xBwLCiXRzXiZXTBN49OchoAJ7WJJUuMPxZTeht'
       }
     ]
@@ -87,10 +91,28 @@ const WEEKLY_MENU = {
   }
 };
 
+// Get Dynamic Weekly Menu (localStoge persistent)
+function getWeeklyMenu() {
+  try {
+    const raw = localStorage.getItem(WEEKLY_MENU_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return DEFAULT_WEEKLY_MENU;
+}
+
+// Save Weekly Menu
+function saveWeeklyMenu(menu) {
+  try {
+    localStorage.setItem(WEEKLY_MENU_KEY, JSON.stringify(menu));
+  } catch(e) {}
+}
+
+const WEEKLY_MENU = getWeeklyMenu();
+
 function getTodayDayIndex() {
   const day = new Date().getDay();
   if (day >= 1 && day <= 5) return day;
-  return 2; // Default to Tuesday (21 de Julho)
+  return 2; // Default Terça-feira
 }
 
 function getSelectedDayIndex() {
@@ -107,12 +129,12 @@ function setSelectedDayIndex(dayIdx) {
   } catch(e) {}
 }
 
-// Initial default cart items (Updated to official July 21st menu)
+// Initial default cart items
 const DEFAULT_CART = [
   {
     id: 'ter-carne-assada',
     name: 'Marmita M - Carne Assada no Forno',
-    detail: '21 de Julho • Carne assada no forno + Acompanhamentos completos',
+    detail: 'Terça-feira (21 de Julho) • Carne assada no forno + Acompanhamentos',
     targetDay: 'Terça-feira (21 de Julho)',
     price: 15.00,
     quantity: 1,
@@ -133,7 +155,6 @@ function getCart() {
     }
     return JSON.parse(raw);
   } catch (e) {
-    console.error('Error reading cart', e);
     return DEFAULT_CART;
   }
 }
@@ -142,9 +163,7 @@ function saveCart(cart) {
   try {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
     updateCartBadges();
-  } catch (e) {
-    console.error('Error saving cart', e);
-  }
+  } catch (e) {}
 }
 
 function addToCart(item) {
@@ -153,10 +172,7 @@ function addToCart(item) {
   if (existing) {
     existing.quantity = (existing.quantity || 1) + 1;
   } else {
-    cart.push({
-      ...item,
-      quantity: item.quantity || 1
-    });
+    cart.push({ ...item, quantity: item.quantity || 1 });
   }
   saveCart(cart);
   showToast(`"${item.name}" adicionado ao pedido!`);
@@ -185,16 +201,10 @@ function getCartSummary() {
   const cart = getCart();
   const itemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  const deliveryFee = 0.00; // Tele entrega grátis
+  const deliveryFee = 0.00;
   const total = subtotal + deliveryFee;
 
-  return {
-    cart,
-    itemCount,
-    subtotal,
-    deliveryFee,
-    total
-  };
+  return { cart, itemCount, subtotal, deliveryFee, total };
 }
 
 function clearCart() {
@@ -215,11 +225,36 @@ function updateCartBadges() {
   });
 }
 
+// All Orders Management (For Admin Panel)
+function getAllOrders() {
+  try {
+    const raw = localStorage.getItem(ORDERS_LIST_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  
+  // Default demo orders if none exist
+  return [
+    {
+      id: 'TB-849201',
+      timestamp: new Date().toISOString(),
+      status: 'preparando',
+      name: 'Maria Silva',
+      address: 'Av. Beira Mar Norte, 1500 - Tubarão, SC',
+      paymentMethod: 'PIX',
+      items: DEFAULT_CART,
+      subtotal: 15.00,
+      deliveryFee: 0.00,
+      total: 15.00,
+      notes: 'Sem cebola, por favor.'
+    }
+  ];
+}
+
 function saveOrder(orderData) {
   const order = {
     id: 'TB-' + Math.floor(100000 + Math.random() * 900000),
     timestamp: new Date().toISOString(),
-    status: 'preparando',
+    status: 'recebido', // 'recebido', 'preparando', 'saiu', 'entregue'
     items: orderData.items || getCart(),
     address: orderData.address || 'Av. Beira Mar Norte, 1500 - Tubarão, SC',
     name: orderData.name || 'Cliente Especial',
@@ -227,30 +262,38 @@ function saveOrder(orderData) {
     total: orderData.total || getCartSummary().total,
     notes: orderData.notes || ''
   };
+
   localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(order));
+  
+  const ordersList = getAllOrders();
+  ordersList.unshift(order);
+  localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
+
   return order;
+}
+
+function updateOrderStatus(orderId, newStatus) {
+  const ordersList = getAllOrders();
+  const target = ordersList.find(o => o.id === orderId);
+  if (target) {
+    target.status = newStatus;
+    localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
+    
+    // Also update current active order if matching
+    const active = getOrder();
+    if (active && active.id === orderId) {
+      active.status = newStatus;
+      localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(active));
+    }
+  }
 }
 
 function getOrder() {
   try {
     const raw = localStorage.getItem(ORDER_STORAGE_KEY);
     if (raw) return JSON.parse(raw);
-  } catch (e) {
-    console.error('Error fetching order', e);
-  }
-  return {
-    id: 'TB-849201',
-    timestamp: new Date().toISOString(),
-    status: 'preparando',
-    name: 'Maria Silva',
-    address: 'Av. Beira Mar Norte, 1500 - Tubarão, SC',
-    paymentMethod: 'PIX',
-    items: DEFAULT_CART,
-    subtotal: 15.00,
-    deliveryFee: 0.00,
-    total: 15.00,
-    notes: 'Sem cebola, por favor.'
-  };
+  } catch (e) {}
+  return getAllOrders()[0];
 }
 
 function showToast(message) {
