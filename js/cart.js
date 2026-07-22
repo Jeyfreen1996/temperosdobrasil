@@ -289,8 +289,10 @@ function updateCartBadges() {
     badge.textContent = itemCount;
     if (itemCount > 0) {
       badge.classList.remove('hidden');
+      badge.style.display = 'flex';
     } else {
       badge.classList.add('hidden');
+      badge.style.display = 'none';
     }
   });
 }
