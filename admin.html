@@ -55,7 +55,7 @@
       </div>
       <div>
         <h1 class="font-extrabold text-sm text-on-surface leading-none">Temperos do Brasil</h1>
-        <span class="text-[10px] text-secondary font-bold uppercase tracking-wider">Painel Gestor POS Pro</span>
+        <span class="text-[10px] text-secondary font-bold uppercase tracking-wider">Painel Gestor POS Pro • Supabase Cloud</span>
       </div>
     </div>
 
@@ -111,18 +111,18 @@
     </div>
 
     <!-- Navigation Tabs -->
-    <div class="flex border-b border-outline-variant/60 gap-4 text-xs font-bold">
-      <button id="tab-btn-orders" onclick="switchAdminTab('orders')" class="pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5">
+    <div class="flex border-b border-outline-variant/60 gap-4 text-xs font-bold overflow-x-auto">
+      <button id="tab-btn-orders" onclick="switchAdminTab('orders')" class="pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5 whitespace-nowrap">
         <span class="material-symbols-outlined text-base">receipt_long</span>
         Gestão de Pedidos em Tempo Real
       </button>
-      <button id="tab-btn-menu" onclick="switchAdminTab('menu')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5">
+      <button id="tab-btn-menu" onclick="switchAdminTab('menu')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5 whitespace-nowrap">
         <span class="material-symbols-outlined text-base">restaurant_menu</span>
         Gerenciar Cardápio Semanal & Marmitas
       </button>
-      <button id="tab-btn-config" onclick="switchAdminTab('config')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5">
-        <span class="material-symbols-outlined text-base">settings</span>
-        Configurações do Restaurante
+      <button id="tab-btn-config" onclick="switchAdminTab('config')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5 whitespace-nowrap">
+        <span class="material-symbols-outlined text-base">settings_suggest</span>
+        Gerenciador Completo da Tela Inicial & Supabase
       </button>
     </div>
 
@@ -188,7 +188,6 @@
             <p class="text-xs text-on-surface-variant">Edite pratos, preços, fotos e adicione novas opções para este dia</p>
           </div>
           
-          <!-- BIG GREEN BUTTON FOR NEW DISH -->
           <button type="button" onclick="addNewDishAdmin()" class="h-10 px-4 bg-secondary text-white font-extrabold text-xs rounded-xl shadow-md hover:bg-secondary/90 transition-all flex items-center gap-1.5 cursor-pointer">
             <span class="material-symbols-outlined text-base">add_circle</span>
             + Adicionar Novo Prato
@@ -201,41 +200,121 @@
 
         <div class="pt-3 border-t border-outline-variant/40 flex justify-end">
           <button type="button" onclick="saveAdminMenuChanges()" class="h-10 px-6 bg-primary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-sm">save</span> Salvar Alterações no Sistema
+            <span class="material-symbols-outlined text-sm">save</span> Salvar Alterações no Supabase
           </button>
         </div>
       </div>
     </section>
 
-    <!-- TAB 3: RESTAURANT CONFIG -->
+    <!-- TAB 3: COMPLETE HOME PAGE & RESTAURANT CONFIG -->
     <section id="section-admin-config" class="space-y-4 hidden">
-      <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-4 max-w-xl">
-        <h3 class="font-bold text-sm text-on-surface flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-primary text-base">store</span>
-          Dados e WhatsApp do Restaurante
-        </h3>
-
-        <div class="space-y-3">
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-on-surface-variant" for="config-wa">Número do WhatsApp (Receber Pedidos)</label>
-            <input id="config-wa" type="text" value="5548988781598" class="w-full h-9 px-3 bg-surface-container-low border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
-            <span class="text-[10px] text-on-surface-variant">Formato internacional com código de área (Ex: 5548988781598)</span>
+      <div class="bg-surface border border-outline-variant/60 p-5 rounded-xl shadow-xs space-y-5">
+        <div class="flex justify-between items-center border-b border-outline-variant/40 pb-3">
+          <div>
+            <h3 class="font-extrabold text-base text-on-surface flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-primary text-lg">tune</span>
+              Gerenciador Completo da Tela Inicial (index.html) & Supabase
+            </h3>
+            <p class="text-xs text-on-surface-variant">Configure os textos, títulos, avisos e promoções que aparecem na tela inicial em tempo real</p>
           </div>
-
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-on-surface-variant" for="config-name">Nome do Restaurante</label>
-            <input id="config-name" type="text" value="Temperos do Brasil" class="w-full h-9 px-3 bg-surface-container-low border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
-          </div>
-
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-on-surface-variant" for="config-city">Cidade / Região de Entrega</label>
-            <input id="config-city" type="text" value="Tubarão e região" class="w-full h-9 px-3 bg-surface-container-low border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
-          </div>
+          <span class="bg-secondary-container text-secondary text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+            🟢 Conectado ao Supabase
+          </span>
         </div>
 
-        <div class="pt-2 flex justify-end">
-          <button onclick="saveAdminConfig()" class="h-9 px-5 bg-primary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all flex items-center gap-1">
-            <span class="material-symbols-outlined text-sm">save</span> Salvar Configurações
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Column 1: Configurações Gerais do Restaurante -->
+          <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
+            <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">store</span> Dados Principais
+            </h4>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-wa">WhatsApp do Restaurante</label>
+              <input id="config-wa" type="text" value="5548988781598" class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-name">Nome do Restaurante</label>
+              <input id="config-name" type="text" value="Temperos do Brasil" class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-city">Cidade / Região de Entrega</label>
+              <input id="config-city" type="text" value="Tubarão e região" class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-hours">Horário de Funcionamento</label>
+              <input id="config-hours" type="text" value="Segunda a Sexta: 10h30 às 14h" class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+          </div>
+
+          <!-- Column 2: Banner Hero da Tela de Início -->
+          <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
+            <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">home_app_logo</span> Banner Principal (Hero)
+            </h4>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-hero-title">Título Principal (Hero Title)</label>
+              <input id="config-hero-title" type="text" value="Marmitas Caseiras com Sabor do Brasil" class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-hero-subtitle">Subtítulo (Hero Subtitle)</label>
+              <textarea id="config-hero-subtitle" rows="2" class="w-full p-2.5 bg-white border border-outline-variant/60 rounded-lg text-xs focus:ring-1 focus:ring-primary outline-none resize-none">Comida de verdade, feita diariamente com ingredientes frescos e entregue quentinha em Tubarão e região.</textarea>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-promo-badge">Selo Promocional (Hero Badge)</label>
+              <input id="config-promo-badge" type="text" value="🔥 Marmita do Dia a partir de R$ 15,00" class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Banner Promocional & Barra de Avisos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          
+          <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
+            <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">campaign</span> Barra Superior de Anúncios
+            </h4>
+
+            <div class="flex items-center gap-2 pb-1">
+              <input id="config-announcement-enabled" type="checkbox" checked class="rounded text-primary focus:ring-primary h-4 w-4"/>
+              <label for="config-announcement-enabled" class="text-xs font-bold text-on-surface cursor-pointer">Exibir Barra de Aviso Superior no Início</label>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-announcement-text">Texto do Anúncio Superior</label>
+              <input id="config-announcement-text" type="text" value="📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp." class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+          </div>
+
+          <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
+            <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">loyalty</span> Banner Oferta Rodapé
+            </h4>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-banner-headline">Título do Banner Oferta</label>
+              <input id="config-banner-headline" type="text" value="Peça seu almoço quentinho hoje!" class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-banner-subtext">Subtexto do Banner Oferta</label>
+              <input id="config-banner-subtext" type="text" value="Entrega rápida e grátis para Tubarão e região." class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="pt-3 border-t border-outline-variant/40 flex justify-end">
+          <button onclick="saveAdminConfig()" class="h-10 px-6 bg-primary text-white font-bold text-xs rounded-xl shadow-md hover:bg-primary/90 transition-all flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">cloud_upload</span> Salvar Tudo e Sincronizar no Supabase
           </button>
         </div>
       </div>
@@ -251,7 +330,6 @@
       adminCurrentDay = 2; // Default Terça-feira
     }
 
-    // Ensure valid menu data copy
     let localMenuCopy = getWeeklyMenu();
     if (!localMenuCopy || !localMenuCopy[1]) {
       localMenuCopy = JSON.parse(JSON.stringify(DEFAULT_WEEKLY_MENU));
@@ -276,24 +354,24 @@
       const ordersSec = document.getElementById('section-admin-orders');
       const configSec = document.getElementById('section-admin-config');
 
-      menuBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
-      ordersBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
-      configBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5';
+      menuBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5 whitespace-nowrap';
+      ordersBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5 whitespace-nowrap';
+      configBtn.className = 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5 whitespace-nowrap';
 
       menuSec.classList.add('hidden');
       ordersSec.classList.add('hidden');
       configSec.classList.add('hidden');
 
       if (tab === 'menu') {
-        menuBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5';
+        menuBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5 whitespace-nowrap';
         menuSec.classList.remove('hidden');
         renderAdminDayTabs();
       } else if (tab === 'config') {
-        configBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5';
+        configBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5 whitespace-nowrap';
         configSec.classList.remove('hidden');
         loadConfigForm();
       } else {
-        ordersBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5';
+        ordersBtn.className = 'pb-2.5 border-b-2 border-primary text-primary flex items-center gap-1.5 whitespace-nowrap';
         ordersSec.classList.remove('hidden');
         renderAdminOrders();
       }
@@ -412,7 +490,7 @@
     function changeOrderStatusAdmin(orderId, status) {
       updateOrderStatus(orderId, status);
       renderAdminOrders();
-      showToast(`Status do Pedido #${orderId} alterado!`);
+      showToast(`Status do Pedido #${orderId} alterado no Supabase!`);
     }
 
     function deleteOrderConfirm(orderId) {
@@ -510,12 +588,10 @@
     }
 
     function addNewDishAdmin() {
-      // 1. Ensure valid day key
       if (![1, 2, 3, 4, 5].includes(adminCurrentDay)) {
         adminCurrentDay = 2;
       }
 
-      // 2. Ensure day object structure exists
       if (!localMenuCopy[adminCurrentDay]) {
         localMenuCopy[adminCurrentDay] = JSON.parse(JSON.stringify(DEFAULT_WEEKLY_MENU[adminCurrentDay] || DEFAULT_WEEKLY_MENU[2]));
       }
@@ -524,7 +600,6 @@
         localMenuCopy[adminCurrentDay].dishes = [];
       }
 
-      // 3. Push new dish
       const newDish = {
         id: 'dish-' + Date.now(),
         name: 'Novo Prato do Dia',
@@ -536,9 +611,8 @@
 
       localMenuCopy[adminCurrentDay].dishes.push(newDish);
 
-      // 4. Re-render UI & focus on new input
       renderAdminDishesEditor();
-      showToast('Novo prato adicionado! Altere os dados e clique em "Salvar no Sistema".');
+      showToast('Novo prato adicionado! Altere os dados e clique em "Salvar no Supabase".');
 
       const lastIdx = localMenuCopy[adminCurrentDay].dishes.length - 1;
       setTimeout(() => {
@@ -559,7 +633,7 @@
 
     function saveAdminMenuChanges() {
       saveWeeklyMenu(localMenuCopy);
-      showToast('Cardápio atualizado no sistema com sucesso!');
+      showToast('Cardápio sincronizado no Supabase com sucesso!');
     }
 
     function resetMenuToDefault() {
@@ -571,12 +645,23 @@
       }
     }
 
-    // CONFIG FORM
+    // CONFIG FORM FOR DYNAMIC HOME PAGE
     function loadConfigForm() {
       const config = getConfig();
-      document.getElementById('config-wa').value = config.whatsappNumber;
-      document.getElementById('config-name').value = config.restaurantName;
-      document.getElementById('config-city').value = config.deliveryCity;
+      document.getElementById('config-wa').value = config.whatsappNumber || '5548988781598';
+      document.getElementById('config-name').value = config.restaurantName || 'Temperos do Brasil';
+      document.getElementById('config-city').value = config.deliveryCity || 'Tubarão e região';
+      document.getElementById('config-hours').value = config.openingHours || 'Segunda a Sexta: 10h30 às 14h';
+
+      document.getElementById('config-hero-title').value = config.heroTitle || 'Marmitas Caseiras com Sabor do Brasil';
+      document.getElementById('config-hero-subtitle').value = config.heroSubtitle || 'Comida de verdade, feita diariamente com ingredientes frescos e entregue quentinha em Tubarão e região.';
+      document.getElementById('config-promo-badge').value = config.promoBadge || '🔥 Marmita do Dia a partir de R$ 15,00';
+
+      document.getElementById('config-announcement-enabled').checked = config.announcementEnabled !== false;
+      document.getElementById('config-announcement-text').value = config.announcementText || '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.';
+
+      document.getElementById('config-banner-headline').value = config.bannerHeadline || 'Peça seu almoço quentinho hoje!';
+      document.getElementById('config-banner-subtext').value = config.bannerSubtext || 'Entrega rápida e grátis para Tubarão e região.';
     }
 
     function saveAdminConfig() {
@@ -584,8 +669,20 @@
       config.whatsappNumber = document.getElementById('config-wa').value.replace(/\D/g, '');
       config.restaurantName = document.getElementById('config-name').value;
       config.deliveryCity = document.getElementById('config-city').value;
+      config.openingHours = document.getElementById('config-hours').value;
+
+      config.heroTitle = document.getElementById('config-hero-title').value;
+      config.heroSubtitle = document.getElementById('config-hero-subtitle').value;
+      config.promoBadge = document.getElementById('config-promo-badge').value;
+
+      config.announcementEnabled = document.getElementById('config-announcement-enabled').checked;
+      config.announcementText = document.getElementById('config-announcement-text').value;
+
+      config.bannerHeadline = document.getElementById('config-banner-headline').value;
+      config.bannerSubtext = document.getElementById('config-banner-subtext').value;
+
       saveConfig(config);
-      showToast('Configurações salvas com sucesso!');
+      showToast('Configurações da Tela Inicial sincronizadas no Supabase!');
     }
 
     document.addEventListener('DOMContentLoaded', () => {

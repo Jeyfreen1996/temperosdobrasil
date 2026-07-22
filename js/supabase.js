@@ -58,13 +58,11 @@ async function syncOrderToSupabase(order) {
     items_json: order.items
   };
 
-  const result = await supabaseFetch('orders', {
+  return await supabaseFetch('orders', {
     method: 'POST',
     body: payload,
     prefer: 'resolution=merge-duplicates'
   });
-
-  return result;
 }
 
 // Sync Order Status Update to Supabase Database
@@ -95,6 +93,62 @@ async function syncDishToSupabase(dish, dayId) {
   });
 }
 
+// Fetch Config from Supabase (Dynamic Home Page Management)
+async function fetchConfigFromSupabase() {
+  const data = await supabaseFetch('restaurant_config', { query: 'id=eq.default' });
+  if (data && Array.isArray(data) && data[0]) {
+    const c = data[0];
+    const formatted = {
+      whatsappNumber: c.whatsapp_number || '5548988781598',
+      restaurantName: c.restaurant_name || 'Temperos do Brasil',
+      deliveryCity: c.delivery_city || 'Tubarão e região',
+      heroTitle: c.hero_title || 'Marmitas Caseiras com Sabor do Brasil',
+      heroSubtitle: c.hero_subtitle || 'Comida de verdade, feita diariamente com ingredientes frescos e entregue quentinha em Tubarão e região.',
+      promoBadge: c.promo_badge || '🔥 Marmita do Dia a partir de R$ 15,00',
+      bannerHeadline: c.banner_headline || 'Peça seu almoço quentinho hoje!',
+      bannerSubtext: c.banner_subtext || 'Entrega rápida e grátis para Tubarão e região.',
+      openingHours: c.opening_hours || 'Segunda a Sexta: 10h30 às 14h',
+      announcementText: c.announcement_text || '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.',
+      announcementEnabled: c.announcement_enabled !== false,
+      marmitaPrices: {
+        M: parseFloat(c.marmita_m_price || 15.00),
+        G: parseFloat(c.marmita_g_price || 20.00),
+        Executiva: parseFloat(c.marmita_executiva_price || 30.00)
+      },
+      accompaniments: c.accompaniments || ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada']
+    };
+
+    localStorage.setItem('temperos_config_v1', JSON.stringify(formatted));
+    return formatted;
+  }
+  return null;
+}
+
+// Sync Config Changes to Supabase
+async function syncConfigToSupabase(config) {
+  const payload = {
+    id: 'default',
+    whatsapp_number: config.whatsappNumber,
+    restaurant_name: config.restaurantName,
+    delivery_city: config.deliveryCity,
+    hero_title: config.heroTitle,
+    hero_subtitle: config.heroSubtitle,
+    promo_badge: config.promoBadge,
+    banner_headline: config.bannerHeadline,
+    banner_subtext: config.bannerSubtext,
+    opening_hours: config.openingHours,
+    announcement_text: config.announcementText,
+    announcement_enabled: config.announcementEnabled !== false,
+    updated_at: new Date().toISOString()
+  };
+
+  return await supabaseFetch('restaurant_config', {
+    method: 'POST',
+    body: payload,
+    prefer: 'resolution=merge-duplicates'
+  });
+}
+
 // Fetch Real-Time Orders from Supabase
 async function fetchOrdersFromSupabase() {
   const orders = await supabaseFetch('orders', { query: 'select=*&order=created_at.desc' });
@@ -119,7 +173,42 @@ async function fetchOrdersFromSupabase() {
   return null;
 }
 
+// Fetch Dishes from Supabase
+async function fetchDishesFromSupabase() {
+  const dishes = await supabaseFetch('dishes', { query: 'select=*' });
+  if (dishes && Array.isArray(dishes) && dishes.length > 0) {
+    const weeklyMenu = getWeeklyMenu();
+    dishes.forEach(d => {
+      const dayId = d.day_id || 2;
+      if (weeklyMenu[dayId]) {
+        if (!weeklyMenu[dayId].dishes) weeklyMenu[dayId].dishes = [];
+        const existingIdx = weeklyMenu[dayId].dishes.findIndex(item => item.id === d.id);
+        const formattedDish = {
+          id: d.id,
+          name: d.name,
+          price: parseFloat(d.price),
+          desc: d.description || '',
+          image: d.image_url || '',
+          available: d.available !== false
+        };
+
+        if (existingIdx >= 0) {
+          weeklyMenu[dayId].dishes[existingIdx] = formattedDish;
+        } else {
+          weeklyMenu[dayId].dishes.push(formattedDish);
+        }
+      }
+    });
+
+    localStorage.setItem('temperos_weekly_menu_v1', JSON.stringify(weeklyMenu));
+    return weeklyMenu;
+  }
+  return null;
+}
+
 // Auto sync on page load
 document.addEventListener('DOMContentLoaded', () => {
+  fetchConfigFromSupabase();
   fetchOrdersFromSupabase();
+  fetchDishesFromSupabase();
 });

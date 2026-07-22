@@ -17,6 +17,14 @@ const DEFAULT_CONFIG = {
   whatsappNumber: '5548988781598',
   restaurantName: 'Temperos do Brasil',
   deliveryCity: 'Tubarão e região',
+  heroTitle: 'Marmitas Caseiras com Sabor do Brasil',
+  heroSubtitle: 'Comida de verdade, feita diariamente com ingredientes frescos e entregue quentinha em Tubarão e região.',
+  promoBadge: '🔥 Marmita do Dia a partir de R$ 15,00',
+  bannerHeadline: 'Peça seu almoço quentinho hoje!',
+  bannerSubtext: 'Entrega rápida e grátis para Tubarão e região.',
+  openingHours: 'Segunda a Sexta: 10h30 às 14h',
+  announcementText: '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.',
+  announcementEnabled: true,
   marmitaPrices: {
     M: 15.00,
     G: 20.00,
@@ -36,6 +44,9 @@ function getConfig() {
 function saveConfig(config) {
   try {
     localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(config));
+    if (typeof syncConfigToSupabase === 'function') {
+      syncConfigToSupabase(config);
+    }
   } catch(e) {}
 }
 
