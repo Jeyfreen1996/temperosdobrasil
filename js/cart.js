@@ -421,11 +421,20 @@ async function deleteOrderAdmin(orderId) {
 }
 
 function getOrder() {
+  const deletedSet = (typeof getDeletedOrderIds === 'function') ? getDeletedOrderIds() : new Set();
   try {
     const raw = localStorage.getItem(ORDER_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.id && !deletedSet.has(parsed.id)) {
+        return parsed;
+      }
+    }
   } catch (e) {}
-  return getAllOrders()[0];
+
+  const orders = getAllOrders();
+  const active = orders.find(o => o.status !== 'entregue' && !deletedSet.has(o.id));
+  return active || null;
 }
 
 function getAdminMetrics() {
