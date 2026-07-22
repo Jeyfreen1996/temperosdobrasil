@@ -169,14 +169,15 @@
           </div>
         </div>
 
-        <!-- Add Custom Marmita Button -->
+        <!-- Fazer Pedido Button -->
         <div class="pt-3 border-t border-outline-variant/40 flex flex-col sm:flex-row justify-between items-center gap-3">
           <div>
             <span class="text-xs text-on-surface-variant block">Valor da Marmita Personalizada</span>
             <span id="custom-total-display" class="text-lg font-extrabold text-primary">R$ 15,00</span>
           </div>
-          <button type="submit" class="w-full sm:w-auto h-10 px-6 bg-secondary text-white font-extrabold text-xs rounded-xl shadow-md hover:bg-secondary/90 transition-all flex items-center justify-center gap-1.5">
-            <span class="material-symbols-outlined text-base">add_shopping_cart</span> Adicionar Marmita ao Pedido
+          <button type="submit" class="w-full sm:w-auto h-10 px-8 bg-secondary text-white font-extrabold text-xs rounded-xl shadow-md hover:bg-secondary/90 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+            Fazer pedido
+            <span class="material-symbols-outlined text-base">arrow_forward</span>
           </button>
         </div>
 
@@ -259,8 +260,9 @@
               </div>
             </div>
             <div class="p-3 pt-0 border-t border-outline-variant/20 flex justify-end">
-              <button type="button" onclick="addToCart({ id: '${dish.id}', name: '${dish.name.replace(/'/g, "\\'")}', detail: '${activeDay.dayName} (${activeDay.dateLabel})', price: ${dish.price}, image: '${dish.image}' })" class="h-8 px-4 bg-primary text-white font-bold text-xs rounded-lg hover:bg-primary/90 transition-all flex items-center gap-1">
-                <span class="material-symbols-outlined text-sm">add_shopping_cart</span> Pedir Marmita
+              <button type="button" onclick="handleFazerPedidoDirect('${dish.id}', '${dish.name.replace(/'/g, "\\'")}', '${activeDay.dayName} (${activeDay.dateLabel})', ${dish.price}, '${dish.image}')" class="h-9 px-5 bg-secondary text-white font-extrabold text-xs rounded-lg hover:bg-secondary/90 transition-all flex items-center gap-1 cursor-pointer">
+                Fazer pedido
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
               </button>
             </div>
           </div>
@@ -370,6 +372,11 @@
       renderCardapioPage();
     }
 
+    function handleFazerPedidoDirect(id, name, detail, price, image) {
+      addToCart({ id, name, detail, price, image, quantity: 1 });
+      window.location.href = 'entrega.html';
+    }
+
     function onMarmitaSizeChange() {
       const selectedSizeRadio = document.querySelector('input[name="marmita-size"]:checked');
       const maxProt = selectedSizeRadio ? parseInt(selectedSizeRadio.dataset.maxProt || '1', 10) : 1;
@@ -380,7 +387,6 @@
         badge.textContent = `Marmita ${sizeName}: Escolha até ${maxProt} proteína(s)`;
       }
 
-      // Enforce current check limits
       const checkedProteins = Array.from(document.querySelectorAll('input[name="custom-protein"]:checked'));
       if (checkedProteins.length > maxProt) {
         checkedProteins.slice(maxProt).forEach(cb => cb.checked = false);
@@ -457,6 +463,9 @@
         quantity: 1,
         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc'
       });
+
+      // Direct navigation to entrega.html (Página de frete/entrega)
+      window.location.href = 'entrega.html';
     });
 
     document.addEventListener('DOMContentLoaded', () => {

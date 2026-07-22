@@ -74,7 +74,7 @@
       <div class="flex justify-between items-start">
         <div>
           <span class="text-[10px] font-bold uppercase tracking-wider text-secondary bg-secondary-container px-2 py-0.5 rounded">
-            Pedido Registrado no Sistema
+            🟢 Registrado no Supabase Cloud
           </span>
           <h2 id="order-id-display" class="text-xl font-bold text-on-surface mt-1">Pedido #TB-849201</h2>
           <p id="order-date-display" class="text-xs text-on-surface-variant">Realizado hoje</p>
@@ -96,12 +96,17 @@
       </p>
     </div>
 
-    <!-- Status Progress Timeline -->
+    <!-- Status Progress Timeline (Synced in Real-Time with Supabase) -->
     <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-4">
-      <h3 class="font-bold text-sm text-on-surface flex items-center gap-1.5">
-        <span class="material-symbols-outlined text-primary text-base">timeline</span>
-        Status do Pedido em Tempo Real
-      </h3>
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-sm text-on-surface flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-primary text-base animate-pulse">timeline</span>
+          Status do Pedido em Tempo Real (Supabase)
+        </h3>
+        <span class="text-[10px] text-secondary font-bold flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span> Ao Vivo
+        </span>
+      </div>
 
       <div class="space-y-4 pl-2 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-outline-variant/40">
         
@@ -212,10 +217,8 @@
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('autoWa') === '1' || pendingUrl) {
         sessionStorage.removeItem('pending_wa_url');
-        // Remove param from URL without reload
         window.history.replaceState({}, document.title, window.location.pathname);
         
-        // Auto trigger window open or href
         setTimeout(() => {
           window.open(targetUrl, '_blank');
         }, 200);
@@ -260,7 +263,14 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       renderOrderTracker();
-      setInterval(renderOrderTracker, 3000);
+      // Real-time polling with Supabase database every 2 seconds
+      setInterval(() => {
+        if (typeof fetchOrdersFromSupabase === 'function') {
+          fetchOrdersFromSupabase().then(() => renderOrderTracker());
+        } else {
+          renderOrderTracker();
+        }
+      }, 2000);
     });
   </script>
 </body>
