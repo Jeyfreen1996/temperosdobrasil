@@ -25,12 +25,17 @@ const DEFAULT_CONFIG = {
   openingHours: 'Segunda a Sexta: 10h30 às 14h',
   announcementText: '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.',
   announcementEnabled: true,
+  customMarmitaEnabled: true,
   marmitaPrices: {
     M: 15.00,
     G: 20.00,
     Executiva: 30.00
   },
-  accompaniments: ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada']
+  accompaniments: ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada'],
+  extras: [
+    { id: 'ext-1', name: 'Guaraná Antarctica 2L', price: 10.00 },
+    { id: 'ext-2', name: 'Pudim Caseiro de Leite', price: 7.00 }
+  ]
 };
 
 function getConfig() {

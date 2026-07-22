@@ -115,8 +115,8 @@
       <div class="flex items-center gap-2">
         <span class="material-symbols-outlined text-primary text-lg">lightbulb</span>
         <div>
-          <span class="font-bold text-on-surface">Novo no Painel Gestor?</span>
-          <span class="text-on-surface-variant text-[11px] block sm:inline"> Clique no botão verde de tutorial para aprender como gerenciar a tela inicial, cardápio e pedidos.</span>
+          <span class="font-bold text-on-surface">Gerenciador de Cardápio & Loja Completo</span>
+          <span class="text-on-surface-variant text-[11px] block sm:inline"> Agora você pode editar os preços das marmitas M/G/Executiva, acompanhamentos e extras diretamente no Supabase.</span>
         </div>
       </div>
       <button onclick="openTutorialModal()" class="px-3 h-7 bg-primary text-white font-bold text-[11px] rounded-lg shadow-xs hover:bg-primary/90 transition-all whitespace-nowrap flex-shrink-0">
@@ -136,7 +136,7 @@
       </button>
       <button id="tab-btn-config" onclick="switchAdminTab('config')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5 whitespace-nowrap">
         <span class="material-symbols-outlined text-base">settings_suggest</span>
-        Gerenciador Completo da Tela Inicial & Supabase
+        Gerenciador da Loja, Tela Inicial & Supabase
       </button>
     </div>
 
@@ -220,28 +220,81 @@
       </div>
     </section>
 
-    <!-- TAB 3: COMPLETE HOME PAGE & RESTAURANT CONFIG -->
+    <!-- TAB 3: COMPLETE HOME PAGE, CARDAPIO BUILDER & RESTAURANT CONFIG -->
     <section id="section-admin-config" class="space-y-4 hidden">
       <div class="bg-surface border border-outline-variant/60 p-5 rounded-xl shadow-xs space-y-5">
         <div class="flex justify-between items-center border-b border-outline-variant/40 pb-3">
           <div>
             <h3 class="font-extrabold text-base text-on-surface flex items-center gap-1.5">
               <span class="material-symbols-outlined text-primary text-lg">tune</span>
-              Gerenciador Completo da Tela Inicial (index.html) & Supabase
+              Gerenciador da Loja, Montador de Marmitas & Supabase
             </h3>
-            <p class="text-xs text-on-surface-variant">Configure os textos, títulos, avisos e promoções que aparecem na tela inicial em tempo real</p>
+            <p class="text-xs text-on-surface-variant">Configure os preços das marmitas, acompanhamentos, extras e textos da loja em tempo real</p>
           </div>
           <span class="bg-secondary-container text-secondary text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
             🟢 Conectado ao Supabase
           </span>
         </div>
 
+        <!-- Section 1: Preços Base das Marmitas & Acompanhamentos -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           
-          <!-- Column 1: Configurações Gerais do Restaurante -->
           <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
             <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
-              <span class="material-symbols-outlined text-sm">store</span> Dados Principais
+              <span class="material-symbols-outlined text-sm">bento</span> Preços Base das Marmitas (cardapio.html)
+            </h4>
+
+            <div class="flex items-center gap-2 pb-1">
+              <input id="config-custom-marmita-enabled" type="checkbox" checked class="rounded text-primary focus:ring-primary h-4 w-4"/>
+              <label for="config-custom-marmita-enabled" class="text-xs font-bold text-on-surface cursor-pointer">Exibir Montador de Marmita Personalizada no Cardápio</label>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2">
+              <div class="space-y-1">
+                <label class="text-[11px] font-bold text-on-surface-variant" for="config-marmita-m">Marmita M (R$)</label>
+                <input id="config-marmita-m" type="number" step="0.50" value="15.00" class="w-full h-8 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+              </div>
+              <div class="space-y-1">
+                <label class="text-[11px] font-bold text-on-surface-variant" for="config-marmita-g">Marmita G (R$)</label>
+                <input id="config-marmita-g" type="number" step="0.50" value="20.00" class="w-full h-8 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+              </div>
+              <div class="space-y-1">
+                <label class="text-[11px] font-bold text-on-surface-variant" for="config-marmita-exec">Executiva (R$)</label>
+                <input id="config-marmita-exec" type="number" step="0.50" value="30.00" class="w-full h-8 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+              </div>
+            </div>
+
+            <div class="space-y-1 pt-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-accompaniments">Acompanhamentos (Separados por vírgula)</label>
+              <textarea id="config-accompaniments" rows="2" class="w-full p-2 bg-white border border-outline-variant/60 rounded-lg text-xs font-medium focus:ring-1 focus:ring-primary outline-none resize-none">Arroz, Feijão, Macarrão, Polenta, Farofa, Salada</textarea>
+              <span class="text-[10px] text-on-surface-variant">Estes acompanhamentos aparecem para o cliente escolher na marmita personalizada.</span>
+            </div>
+          </div>
+
+          <!-- Section 2: Bebidas e Sobremesas Extras -->
+          <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">local_bar</span> Bebidas & Extras (Cardápio)
+              </h4>
+              <button type="button" onclick="addNewExtraAdmin()" class="text-xs text-secondary font-bold hover:underline flex items-center gap-0.5">
+                <span class="material-symbols-outlined text-sm">add</span> + Adicionar Extra
+              </button>
+            </div>
+
+            <div id="admin-extras-editor" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Section 3: Configurações Gerais do Restaurante & Tela Inicial -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
+            <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">store</span> Dados do Restaurante
             </h4>
 
             <div class="space-y-1">
@@ -265,10 +318,9 @@
             </div>
           </div>
 
-          <!-- Column 2: Banner Hero da Tela de Início -->
           <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
             <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
-              <span class="material-symbols-outlined text-sm">home_app_logo</span> Banner Principal (Hero)
+              <span class="material-symbols-outlined text-sm">home_app_logo</span> Banner Principal (index.html)
             </h4>
 
             <div class="space-y-1">
@@ -278,7 +330,7 @@
 
             <div class="space-y-1">
               <label class="text-xs font-bold text-on-surface-variant" for="config-hero-subtitle">Subtítulo (Hero Subtitle)</label>
-              <textarea id="config-hero-subtitle" rows="2" class="w-full p-2.5 bg-white border border-outline-variant/60 rounded-lg text-xs focus:ring-1 focus:ring-primary outline-none resize-none">Comida de verdade, feita diariamente com ingredientes frescos e entregue quentinha em Tubarão e região.</textarea>
+              <textarea id="config-hero-subtitle" rows="2" class="w-full p-2 bg-white border border-outline-variant/60 rounded-lg text-xs focus:ring-1 focus:ring-primary outline-none resize-none">Comida de verdade, feita diariamente com ingredientes frescos e entregue quentinha em Tubarão e região.</textarea>
             </div>
 
             <div class="space-y-1">
@@ -289,8 +341,8 @@
 
         </div>
 
-        <!-- Banner Promocional & Barra de Avisos -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        <!-- Section 4: Avisos e Banners -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
             <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
@@ -373,54 +425,16 @@
             <li><strong class="text-blue-700">A Caminho:</strong> O entregador saiu com o pedido.</li>
             <li><strong class="text-emerald-700">Entregue:</strong> Pedido finalizado com sucesso!</li>
           </ul>
-          <p class="text-[11px] text-secondary font-semibold">💡 Dica: Clique no botão green "WhatsApp Cliente" para abrir um chat direto com o cliente referente àquele pedido.</p>
         </div>
 
         <!-- Chapter 2 -->
         <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-2">
           <div class="flex items-center gap-2 text-primary font-extrabold text-sm">
             <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs">2</span>
-            Gerenciador do Cardápio Semanal & Marmitas
+            Gerenciador de Cardápio, Preços & Acompanhamentos
           </div>
           <p class="text-xs text-on-surface-variant leading-relaxed">
-            Permite cadastrar e alterar os pratos de cada dia da semana (Segunda a Sexta):
-          </p>
-          <ul class="text-xs text-on-surface space-y-1 list-disc pl-5 font-medium">
-            <li>Selecione o dia desejado nas abas superiores (ex: <strong>TER</strong> para Terça-feira).</li>
-            <li>Clique no botão verde <strong class="text-secondary">+ Adicionar Novo Prato</strong> para criar uma nova marmita instantaneamente.</li>
-            <li>Edite o Nome, Preço R$, Descrição e a Foto do Prato nos campos da tarjeta.</li>
-            <li>Clique em <strong>"Salvar Alterações no Supabase"</strong> para publicar no site para todos os clientes.</li>
-          </ul>
-        </div>
-
-        <!-- Chapter 3 -->
-        <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-2">
-          <div class="flex items-center gap-2 text-primary font-extrabold text-sm">
-            <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs">3</span>
-            Gerenciador Completo da Tela Inicial (index.html)
-          </div>
-          <p class="text-xs text-on-surface-variant leading-relaxed">
-            Na 3ª aba, você gerencia tudo o que aparece na página inicial do site em tempo real:
-          </p>
-          <ul class="text-xs text-on-surface space-y-1 list-disc pl-5 font-medium">
-            <li><strong>Banner Principal (Hero):</strong> Título principal, subtítulo e o selo de promoção.</li>
-            <li><strong>Barra Superior de Anúncios:</strong> Marque ou desmarque para exibir a faixa amarela de aviso no topo da loja.</li>
-            <li><strong>Banner Oferta Rodapé:</strong> Mude o título e subtexto do card de chamada de entrega.</li>
-            <li><strong>WhatsApp do Restaurante:</strong> Atualize o número de atendimento caso precise trocar.</li>
-          </ul>
-        </div>
-
-        <!-- Chapter 4 -->
-        <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-2">
-          <div class="flex items-center gap-2 text-primary font-extrabold text-sm">
-            <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs">4</span>
-            Sincronização em Nuvem Supabase & RLS Anti-Hackeo
-          </div>
-          <p class="text-xs text-on-surface-variant leading-relaxed">
-            Toda vez que você altera um preço, edita um prato ou recebe um pedido, o sistema se conecta ao <strong>Supabase Cloud</strong> em milissegundos.
-          </p>
-          <p class="text-[11px] text-secondary font-bold">
-            🛡️ A base de dados conta com políticas de segurança Row Level Security (RLS), impedindo acessos não autorizados de terceiros.
+            Na 3ª aba, você gerencia todos os preços das marmitas M, G e Executiva, a lista de acompanhamentos e extras (bebidas/sobremesas) que aparecem em <code class="bg-white px-1 rounded">cardapio.html</code>.
           </p>
         </div>
 
@@ -447,6 +461,8 @@
     if (!localMenuCopy || !localMenuCopy[1]) {
       localMenuCopy = JSON.parse(JSON.stringify(DEFAULT_WEEKLY_MENU));
     }
+
+    let localExtrasCopy = [];
 
     let activeFilter = 'all';
 
@@ -766,7 +782,7 @@
       }
     }
 
-    // CONFIG FORM FOR DYNAMIC HOME PAGE
+    // CONFIG FORM FOR DYNAMIC HOME PAGE & CARDAPIO BUILDER
     function loadConfigForm() {
       const config = getConfig();
       document.getElementById('config-wa').value = config.whatsappNumber || '5548988781598';
@@ -783,6 +799,61 @@
 
       document.getElementById('config-banner-headline').value = config.bannerHeadline || 'Peça seu almoço quentinho hoje!';
       document.getElementById('config-banner-subtext').value = config.bannerSubtext || 'Entrega rápida e grátis para Tubarão e região.';
+
+      // Marmita Prices & Builder
+      document.getElementById('config-custom-marmita-enabled').checked = config.customMarmitaEnabled !== false;
+      document.getElementById('config-marmita-m').value = config.marmitaPrices ? config.marmitaPrices.M : 15.00;
+      document.getElementById('config-marmita-g').value = config.marmitaPrices ? config.marmitaPrices.G : 20.00;
+      document.getElementById('config-marmita-exec').value = config.marmitaPrices ? config.marmitaPrices.Executiva : 30.00;
+
+      const accs = config.accompaniments || ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada'];
+      document.getElementById('config-accompaniments').value = accs.join(', ');
+
+      localExtrasCopy = config.extras || [
+        { id: 'ext-1', name: 'Guaraná Antarctica 2L', price: 10.00 },
+        { id: 'ext-2', name: 'Pudim Caseiro de Leite', price: 7.00 }
+      ];
+      renderAdminExtrasEditor();
+    }
+
+    function renderAdminExtrasEditor() {
+      const container = document.getElementById('admin-extras-editor');
+      if (!container) return;
+
+      if (localExtrasCopy.length === 0) {
+        container.innerHTML = `<p class="text-xs text-on-surface-variant py-2">Nenhum extra cadastrado.</p>`;
+        return;
+      }
+
+      container.innerHTML = localExtrasCopy.map((ext, idx) => `
+        <div class="flex items-center gap-2 bg-white p-2 rounded-lg border border-outline-variant/60">
+          <input type="text" value="${ext.name}" onchange="updateExtraField(${idx}, 'name', this.value)" placeholder="Nome da Bebida/Sobremesa" class="flex-1 h-7 px-2 border border-outline-variant/40 rounded text-xs font-bold outline-none"/>
+          <input type="number" step="0.50" value="${ext.price}" onchange="updateExtraField(${idx}, 'price', parseFloat(this.value))" placeholder="R$" class="w-20 h-7 px-2 border border-outline-variant/40 rounded text-xs font-bold outline-none"/>
+          <button type="button" onclick="removeExtraAdmin(${idx})" class="text-error hover:text-red-700 p-1">
+            <span class="material-symbols-outlined text-base">delete</span>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function updateExtraField(idx, field, val) {
+      if (localExtrasCopy[idx]) {
+        localExtrasCopy[idx][field] = val;
+      }
+    }
+
+    function addNewExtraAdmin() {
+      localExtrasCopy.push({
+        id: 'ext-' + Date.now(),
+        name: 'Nova Bebida / Sobremesa',
+        price: 5.00
+      });
+      renderAdminExtrasEditor();
+    }
+
+    function removeExtraAdmin(idx) {
+      localExtrasCopy.splice(idx, 1);
+      renderAdminExtrasEditor();
     }
 
     function saveAdminConfig() {
@@ -802,8 +873,20 @@
       config.bannerHeadline = document.getElementById('config-banner-headline').value;
       config.bannerSubtext = document.getElementById('config-banner-subtext').value;
 
+      // Marmita Prices & Builder Sync
+      config.customMarmitaEnabled = document.getElementById('config-custom-marmita-enabled').checked;
+      config.marmitaPrices = {
+        M: parseFloat(document.getElementById('config-marmita-m').value || 15.00),
+        G: parseFloat(document.getElementById('config-marmita-g').value || 20.00),
+        Executiva: parseFloat(document.getElementById('config-marmita-exec').value || 30.00)
+      };
+
+      const rawAccs = document.getElementById('config-accompaniments').value;
+      config.accompaniments = rawAccs.split(',').map(s => s.trim()).filter(s => s.length > 0);
+      config.extras = localExtrasCopy;
+
       saveConfig(config);
-      showToast('Configurações da Tela Inicial sincronizadas no Supabase!');
+      showToast('Configurações do Cardápio & Loja sincronizadas no Supabase!');
     }
 
     document.addEventListener('DOMContentLoaded', () => {

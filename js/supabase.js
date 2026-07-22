@@ -93,7 +93,7 @@ async function syncDishToSupabase(dish, dayId) {
   });
 }
 
-// Fetch Config from Supabase (Dynamic Home Page Management)
+// Fetch Config & Cardapio Customization from Supabase
 async function fetchConfigFromSupabase() {
   const data = await supabaseFetch('restaurant_config', { query: 'id=eq.default' });
   if (data && Array.isArray(data) && data[0]) {
@@ -110,12 +110,17 @@ async function fetchConfigFromSupabase() {
       openingHours: c.opening_hours || 'Segunda a Sexta: 10h30 às 14h',
       announcementText: c.announcement_text || '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.',
       announcementEnabled: c.announcement_enabled !== false,
+      customMarmitaEnabled: c.custom_marmita_enabled !== false,
       marmitaPrices: {
         M: parseFloat(c.marmita_m_price || 15.00),
         G: parseFloat(c.marmita_g_price || 20.00),
         Executiva: parseFloat(c.marmita_executiva_price || 30.00)
       },
-      accompaniments: c.accompaniments || ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada']
+      accompaniments: c.accompaniments || ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada'],
+      extras: c.extras || [
+        { id: 'ext-1', name: 'Guaraná Antarctica 2L', price: 10.00 },
+        { id: 'ext-2', name: 'Pudim Caseiro de Leite', price: 7.00 }
+      ]
     };
 
     localStorage.setItem('temperos_config_v1', JSON.stringify(formatted));
@@ -139,6 +144,12 @@ async function syncConfigToSupabase(config) {
     opening_hours: config.openingHours,
     announcement_text: config.announcementText,
     announcement_enabled: config.announcementEnabled !== false,
+    custom_marmita_enabled: config.customMarmitaEnabled !== false,
+    marmita_m_price: config.marmitaPrices ? config.marmitaPrices.M : 15.00,
+    marmita_g_price: config.marmitaPrices ? config.marmitaPrices.G : 20.00,
+    marmita_executiva_price: config.marmitaPrices ? config.marmitaPrices.Executiva : 30.00,
+    accompaniments: config.accompaniments || ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada'],
+    extras: config.extras || [],
     updated_at: new Date().toISOString()
   };
 
