@@ -56,12 +56,15 @@
       height: 220px;
       border-radius: 0.75rem;
       z-index: 1;
-      background-color: #e2ded7;
+      background-color: #1a1a1a;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
     }
     .leaflet-container {
       width: 100% !important;
       height: 100% !important;
       font-family: inherit;
+      background-color: #141414 !important;
     }
     .leaflet-tile-container img {
       max-width: none !important;
@@ -129,17 +132,20 @@
           </select>
         </div>
 
-        <!-- Interactive Map Container (For New Address) -->
-        <div id="new-address-map-container" class="space-y-1 hidden">
+        <!-- Interactive Map Container (Dark Mode) -->
+        <div id="new-address-map-container" class="space-y-1">
           <div class="flex justify-between items-center">
-            <label class="font-semibold text-xs text-on-surface-variant">Mapa de Entrega (Clique ou arraste o marcador)</label>
+            <label class="font-semibold text-xs text-on-surface-variant flex items-center gap-1">
+              <span class="material-symbols-outlined text-primary text-sm">map</span>
+              Mapa de Entrega (Modo Escuro / Arraste o marcador)
+            </label>
             <span class="text-[10px] text-secondary font-bold flex items-center gap-0.5">
               <span class="material-symbols-outlined text-xs">pin_drop</span> Tubarão, SC
             </span>
           </div>
           <div id="map" class="border border-outline-variant/60 shadow-xs"></div>
           
-          <button id="gps-btn" type="button" onclick="useGpsMap()" class="w-full flex items-center justify-center gap-1.5 h-9 bg-secondary-container text-on-secondary-container rounded-lg font-bold text-xs hover:opacity-90 transition-all shadow-xs mt-2">
+          <button id="gps-btn" type="button" onclick="useGpsMap()" class="w-full flex items-center justify-center gap-1.5 h-9 bg-secondary-container text-on-secondary-container rounded-lg font-bold text-xs hover:opacity-90 transition-all shadow-xs mt-2 cursor-pointer">
             <span class="material-symbols-outlined text-sm">my_location</span>
             Usar minha localização atual (GPS)
           </button>
@@ -272,9 +278,10 @@
           attributionControl: false
         }).setView([defaultLat, defaultLng], 15);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
           maxZoom: 19,
-          subdomains: ['a', 'b', 'c']
+          subdomains: ['a', 'b', 'c', 'd'],
+          attribution: '&copy; OpenStreetMap &copy; CARTO'
         }).addTo(map);
 
         marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
