@@ -97,8 +97,29 @@
           <input required class="w-full h-9 px-3 bg-surface-container-low rounded-lg border border-outline-variant/50 focus:ring-1 focus:ring-primary outline-none text-xs" id="name" placeholder="Digite seu nome completo..." type="text"/>
         </div>
 
-        <!-- Interactive Map Container -->
-        <div class="space-y-1">
+        <!-- Address Selection Type: Saved vs New -->
+        <div class="space-y-1.5">
+          <label class="font-semibold text-xs text-on-surface-variant block">Escolha o Endereço de Entrega</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="btn-mode-saved" type="button" onclick="switchAddressMode('saved')" class="h-9 bg-primary text-white text-xs font-bold rounded-lg shadow-xs flex items-center justify-center gap-1 cursor-pointer">
+              <span class="material-symbols-outlined text-sm">home</span> Endereço Salvo
+            </button>
+            <button id="btn-mode-new" type="button" onclick="switchAddressMode('new')" class="h-9 bg-surface-container text-on-surface text-xs font-bold rounded-lg hover:bg-surface-container-highest flex items-center justify-center gap-1 cursor-pointer">
+              <span class="material-symbols-outlined text-sm">add_location_alt</span> Novo Endereço
+            </button>
+          </div>
+        </div>
+
+        <!-- Saved Addresses Dropdown Container -->
+        <div id="saved-address-container" class="space-y-1">
+          <label class="font-semibold text-xs text-on-surface-variant" for="saved-address-select">Seus Endereços Salvos</label>
+          <select id="saved-address-select" onchange="onSavedAddressSelect(this.value)" class="w-full h-9 px-2.5 bg-surface-container-low rounded-lg border border-outline-variant/50 focus:ring-1 focus:ring-primary outline-none text-xs font-medium cursor-pointer">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <!-- Interactive Map Container (For New Address) -->
+        <div id="new-address-map-container" class="space-y-1 hidden">
           <div class="flex justify-between items-center">
             <label class="font-semibold text-xs text-on-surface-variant">Mapa de Entrega (Clique ou arraste o marcador)</label>
             <span class="text-[10px] text-secondary font-bold flex items-center gap-0.5">
@@ -106,18 +127,17 @@
             </span>
           </div>
           <div id="map" class="border border-outline-variant/60 shadow-xs"></div>
+          
+          <button id="gps-btn" type="button" onclick="useGpsMap()" class="w-full flex items-center justify-center gap-1.5 h-9 bg-secondary-container text-on-secondary-container rounded-lg font-bold text-xs hover:opacity-90 transition-all shadow-xs mt-2">
+            <span class="material-symbols-outlined text-sm">my_location</span>
+            Usar minha localização atual (GPS)
+          </button>
         </div>
 
-        <!-- GPS Location Button -->
-        <button id="gps-btn" type="button" onclick="useGpsMap()" class="w-full flex items-center justify-center gap-1.5 h-9 bg-secondary-container text-on-secondary-container rounded-lg font-bold text-xs hover:opacity-90 transition-all shadow-xs">
-          <span class="material-symbols-outlined text-sm">my_location</span>
-          Usar minha localização atual (GPS)
-        </button>
-
-        <!-- Address Input -->
+        <!-- Address Textarea Input -->
         <div class="space-y-1">
-          <label class="font-semibold text-xs text-on-surface-variant" for="address">Endereço de Entrega Completo</label>
-          <textarea required class="w-full p-2.5 bg-surface-container-low rounded-lg border border-outline-variant/50 focus:ring-1 focus:ring-primary outline-none text-xs resize-none" id="address" placeholder="Preenchendo endereço..." rows="2">Av. Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC</textarea>
+          <label class="font-semibold text-xs text-on-surface-variant" for="address">Endereço Selecionado</label>
+          <textarea required class="w-full p-2.5 bg-surface-container-low rounded-lg border border-outline-variant/50 focus:ring-1 focus:ring-primary outline-none text-xs resize-none font-medium" id="address" placeholder="Preenchendo endereço..." rows="2"></textarea>
         </div>
 
         <!-- Payment Method -->
@@ -371,6 +391,55 @@
       window.location.href = 'pedido.html?autoWa=1';
     });
 
+    function loadSavedAddressesOptions() {
+      const addresses = (typeof getSavedAddresses === 'function') ? getSavedAddresses() : [];
+      const select = document.getElementById('saved-address-select');
+      const addrText = document.getElementById('address');
+      if (!select) return;
+
+      if (addresses.length === 0) {
+        select.innerHTML = `<option value="">Nenhum endereço salvo. Selecione "Novo Endereço".</option>`;
+        switchAddressMode('new');
+        return;
+      }
+
+      select.innerHTML = addresses.map((a, idx) => `
+        <option value="${a.address}" ${idx === 0 ? 'selected' : ''}>${a.label}: ${a.address}</option>
+      `).join('');
+
+      if (addresses[0] && addrText) {
+        addrText.value = addresses[0].address;
+      }
+    }
+
+    function onSavedAddressSelect(val) {
+      const addrText = document.getElementById('address');
+      if (val && addrText) {
+        addrText.value = val;
+      }
+    }
+
+    function switchAddressMode(mode) {
+      const btnSaved = document.getElementById('btn-mode-saved');
+      const btnNew = document.getElementById('btn-mode-new');
+      const savedContainer = document.getElementById('saved-address-container');
+      const mapContainer = document.getElementById('new-address-map-container');
+
+      if (mode === 'saved') {
+        btnSaved.className = 'h-9 bg-primary text-white text-xs font-bold rounded-lg shadow-xs flex items-center justify-center gap-1 cursor-pointer';
+        btnNew.className = 'h-9 bg-surface-container text-on-surface text-xs font-bold rounded-lg hover:bg-surface-container-highest flex items-center justify-center gap-1 cursor-pointer';
+        savedContainer.classList.remove('hidden');
+        mapContainer.classList.add('hidden');
+        loadSavedAddressesOptions();
+      } else {
+        btnNew.className = 'h-9 bg-primary text-white text-xs font-bold rounded-lg shadow-xs flex items-center justify-center gap-1 cursor-pointer';
+        btnSaved.className = 'h-9 bg-surface-container text-on-surface text-xs font-bold rounded-lg hover:bg-surface-container-highest flex items-center justify-center gap-1 cursor-pointer';
+        savedContainer.classList.add('hidden');
+        mapContainer.classList.remove('hidden');
+        useGpsMap();
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       if (!isUserLoggedIn()) {
         showToast('Por favor, faça login ou crie sua conta para finalizar o pedido.');
@@ -382,6 +451,7 @@
 
       initInteractiveMap();
       renderCheckoutSummary();
+      loadSavedAddressesOptions();
 
       // Pre-fill user session name if logged in
       const rawSession = localStorage.getItem('temperos_user_session_v1');
@@ -394,11 +464,6 @@
           }
         } catch(e) {}
       }
-
-      // Automatically trigger GPS Geolocation on load
-      setTimeout(() => {
-        useGpsMap();
-      }, 500);
     });
   </script>
 </body>

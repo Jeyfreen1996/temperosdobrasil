@@ -342,11 +342,45 @@ function buildWhatsAppMessage(order) {
   return msg;
 }
 
+// User Address Management Helpers
+function getSavedAddresses() {
+  try {
+    const raw = localStorage.getItem('temperos_user_addresses_v1');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  
+  const session = getUserSession();
+  if (session && session.isLoggedIn) {
+    return [
+      { id: 'addr-1', label: 'Casa (Principal)', address: 'Av. Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC' }
+    ];
+  }
+  return [];
+}
+
+function saveUserAddress(label, fullAddress) {
+  if (!fullAddress || fullAddress.trim().length < 5) return;
+  const addresses = getSavedAddresses();
+  const existingIdx = addresses.findIndex(a => a.address.toLowerCase() === fullAddress.toLowerCase());
+  
+  if (existingIdx >= 0) {
+    addresses[existingIdx].label = label || addresses[existingIdx].label;
+  } else {
+    addresses.push({
+      id: 'addr-' + Date.now(),
+      label: label || 'Endereço Salvo ' + (addresses.length + 1),
+      address: fullAddress.trim()
+    });
+  }
+  localStorage.setItem('temperos_user_addresses_v1', JSON.stringify(addresses));
+}
+
 // Save Order & Sync to Supabase Database
 function saveOrder(orderData) {
   const currentCart = getCart();
   const summary = getCartSummary();
   const config = getConfig();
+  const session = getUserSession();
 
   const order = {
     id: 'TB-' + Math.floor(100000 + Math.random() * 900000),
@@ -354,11 +388,16 @@ function saveOrder(orderData) {
     status: 'recebido',
     items: orderData.items || currentCart,
     address: orderData.address || 'Av. Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC',
-    name: orderData.name || 'Cliente Especial',
+    name: orderData.name || (session ? session.name : 'Cliente Especial'),
+    userEmail: session ? session.email : '',
     paymentMethod: orderData.paymentMethod || 'PIX',
     total: orderData.total || summary.total,
     notes: orderData.notes || ''
   };
+
+  if (order.address) {
+    saveUserAddress('Endereço Salvo', order.address);
+  }
 
   localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(order));
   
