@@ -359,7 +359,7 @@
 
         </div>
 
-        <!-- Section 3: Configurações Gerais do Restaurante & Tela Inicial -->
+        <!-- Section 3: Configurações Gerais do Restaurante, Anúncios & Tela Inicial -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
@@ -390,7 +390,7 @@
 
           <div class="space-y-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/40">
             <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
-              <span class="material-symbols-outlined text-sm">home_app_logo</span> Banner Principal (index.html)
+              <span class="material-symbols-outlined text-sm">home_app_logo</span> Banner Principal & Avisos (index.html)
             </h4>
 
             <div class="space-y-1">
@@ -407,13 +407,26 @@
               <label class="text-xs font-bold text-on-surface-variant" for="config-promo-badge">Selo Promocional (Hero Badge)</label>
               <input id="config-promo-badge" type="text" value="🔥 Marmita do Dia a partir de R$ 15,00" class="w-full h-9 px-3 bg-white border border-outline-variant/60 rounded-lg text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
             </div>
+
+            <div class="pt-2 border-t border-outline-variant/30 space-y-2">
+              <div class="flex items-center gap-2">
+                <input id="config-announcement-enabled" type="checkbox" checked class="rounded text-primary focus:ring-primary h-4 w-4"/>
+                <label for="config-announcement-enabled" class="text-xs font-bold text-on-surface cursor-pointer">Exibir Barra de Comunicados no Topo</label>
+              </div>
+              <input id="config-announcement-text" type="text" value="📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp." class="w-full h-8 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+
+            <div class="space-y-1">
+              <input id="config-banner-headline" type="hidden" value="Peça seu almoço quentinho hoje!"/>
+              <input id="config-banner-subtext" type="hidden" value="Entrega rápida e grátis para Tubarão e região."/>
+            </div>
           </div>
 
         </div>
 
         <div class="pt-3 border-t border-outline-variant/40 flex justify-end">
-          <button onclick="saveAdminConfig()" class="h-10 px-6 bg-primary text-white font-bold text-xs rounded-xl shadow-md hover:bg-primary/90 transition-all flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-sm">cloud_upload</span> Salvar Tudo e Sincronizar no Supabase
+          <button type="button" onclick="saveAdminConfig()" class="h-11 px-8 bg-primary text-white font-extrabold text-xs rounded-xl shadow-md hover:bg-primary/90 transition-all flex items-center gap-2 cursor-pointer">
+            <span class="material-symbols-outlined text-base">cloud_upload</span> Salvar Tudo e Sincronizar no Supabase
           </button>
         </div>
       </div>
@@ -484,6 +497,27 @@
     let audioCtx = null;
     let alarmTimer = null;
     let isAlarmPlaying = false;
+
+    // SAFE DOM HELPERS FOR BUG-FREE SAVING
+    function getElVal(id, fallback = '') {
+      const el = document.getElementById(id);
+      return el ? el.value : fallback;
+    }
+
+    function setElVal(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.value = value;
+    }
+
+    function getElCheck(id, fallback = false) {
+      const el = document.getElementById(id);
+      return el ? el.checked : fallback;
+    }
+
+    function setElCheck(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.checked = !!value;
+    }
 
     // WEB AUDIO API SOUND ALARM SYNTHESIZER
     function triggerChimeSound() {
@@ -617,7 +651,6 @@
       const orders = getAllOrders();
       const container = document.getElementById('admin-orders-list');
 
-      // Check for unconfirmed new orders (status: 'recebido')
       const unconfirmedOrder = orders.find(o => o.status === 'recebido' && !confirmedOrderIds.has(o.id));
       const alarmBanner = document.getElementById('new-order-alarm-banner');
       
@@ -682,7 +715,6 @@
             </div>
           </div>
 
-          <!-- UNCONFIRMED ALARM ACTION BUTTON -->
           ${isUnconfirmed ? `
             <div class="bg-amber-500/10 border border-amber-500/40 p-2.5 rounded-lg flex items-center justify-between gap-2">
               <span class="text-xs font-bold text-amber-800 flex items-center gap-1">
@@ -765,7 +797,7 @@
         <html>
         <head>
           <meta charset="utf-8"/>
-          <title>Comida #${order.id}</title>
+          <title>Comanda #${order.id}</title>
           <style>
             @page { margin: 0; }
             body {
@@ -1004,41 +1036,42 @@
     // CONFIG FORM FOR DYNAMIC HOME PAGE, CARDAPIO BUILDER & THERMAL PRINTER
     function loadConfigForm() {
       const config = getConfig();
-      document.getElementById('config-wa').value = config.whatsappNumber || '5548988781598';
-      document.getElementById('config-name').value = config.restaurantName || 'Temperos do Brasil';
-      document.getElementById('config-city').value = config.deliveryCity || 'Tubarão e região';
-      document.getElementById('config-hours').value = config.openingHours || 'Segunda a Sexta: 10h30 às 14h';
 
-      document.getElementById('config-hero-title').value = config.heroTitle || 'Marmitas Caseiras com Sabor do Brasil';
-      document.getElementById('config-hero-subtitle').value = config.heroSubtitle || 'Comida de verdade, feita diariamente com ingredientes frescos e entregue quentinha em Tubarão e região.';
-      document.getElementById('config-promo-badge').value = config.promoBadge || '🔥 Marmita do Dia a partir de R$ 15,00';
+      setElVal('config-wa', config.whatsappNumber || '5548988781598');
+      setElVal('config-name', config.restaurantName || 'Temperos do Brasil');
+      setElVal('config-city', config.deliveryCity || 'Tubarão e região');
+      setElVal('config-hours', config.openingHours || 'Segunda a Sexta: 10h30 às 14h');
 
-      document.getElementById('config-announcement-enabled').checked = config.announcementEnabled !== false;
-      document.getElementById('config-announcement-text').value = config.announcementText || '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.';
+      setElVal('config-hero-title', config.heroTitle || 'Marmitas Caseiras com Sabor do Brasil');
+      setElVal('config-hero-subtitle', config.heroSubtitle || 'Comida de verdade, feita diariamente com ingredientes frescos e entregue quentinha em Tubarão e região.');
+      setElVal('config-promo-badge', config.promoBadge || '🔥 Marmita do Dia a partir de R$ 15,00');
 
-      document.getElementById('config-banner-headline').value = config.bannerHeadline || 'Peça seu almoço quentinho hoje!';
-      document.getElementById('config-banner-subtext').value = config.bannerSubtext || 'Entrega rápida e grátis para Tubarão e região.';
+      setElCheck('config-announcement-enabled', config.announcementEnabled !== false);
+      setElVal('config-announcement-text', config.announcementText || '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.');
+
+      setElVal('config-banner-headline', config.bannerHeadline || 'Peça seu almoço quentinho hoje!');
+      setElVal('config-banner-subtext', config.bannerSubtext || 'Entrega rápida e grátis para Tubarão e região.');
 
       // Thermal Printer Settings
-      document.getElementById('config-thermal-header').value = config.thermalHeaderNote || 'Temperos do Brasil • Marmitas Caseiras';
-      document.getElementById('config-thermal-footer').value = config.thermalFooterNote || 'Obrigado pela preferência! Bom apetite! ♡';
-      document.getElementById('config-thermal-width').value = config.thermalPaperWidth || '80mm';
+      setElVal('config-thermal-header', config.thermalHeaderNote || 'Temperos do Brasil • Marmitas Caseiras');
+      setElVal('config-thermal-footer', config.thermalFooterNote || 'Obrigado pela preferência! Bom apetite! ♡');
+      setElVal('config-thermal-width', config.thermalPaperWidth || '80mm');
 
       // Marmita Prices & Limits
-      document.getElementById('config-custom-marmita-enabled').checked = config.customMarmitaEnabled !== false;
-      document.getElementById('config-marmita-m').value = config.marmitaPrices ? config.marmitaPrices.M : 15.00;
-      document.getElementById('config-marmita-g').value = config.marmitaPrices ? config.marmitaPrices.G : 20.00;
-      document.getElementById('config-marmita-exec').value = config.marmitaPrices ? config.marmitaPrices.Executiva : 30.00;
+      setElCheck('config-custom-marmita-enabled', config.customMarmitaEnabled !== false);
+      setElVal('config-marmita-m', config.marmitaPrices ? config.marmitaPrices.M : 15.00);
+      setElVal('config-marmita-g', config.marmitaPrices ? config.marmitaPrices.G : 20.00);
+      setElVal('config-marmita-exec', config.marmitaPrices ? config.marmitaPrices.Executiva : 30.00);
 
       const protLimits = config.proteinLimits || { M: 1, G: 2, Executiva: 3 };
-      document.getElementById('config-prot-m').value = protLimits.M;
-      document.getElementById('config-prot-g').value = protLimits.G;
-      document.getElementById('config-prot-exec').value = protLimits.Executiva;
+      setElVal('config-prot-m', protLimits.M);
+      setElVal('config-prot-g', protLimits.G);
+      setElVal('config-prot-exec', protLimits.Executiva);
 
-      document.getElementById('config-max-acc').value = config.maxAccompaniments || 3;
+      setElVal('config-max-acc', config.maxAccompaniments || 3);
 
       const accs = config.accompaniments || ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada'];
-      document.getElementById('config-accompaniments').value = accs.join(', ');
+      setElVal('config-accompaniments', accs.join(', '));
 
       localExtrasCopy = config.extras || [
         { id: 'ext-1', name: 'Guaraná Antarctica 2L', price: 10.00 },
@@ -1088,49 +1121,54 @@
     }
 
     function saveAdminConfig() {
-      const config = getConfig();
-      config.whatsappNumber = document.getElementById('config-wa').value.replace(/\D/g, '');
-      config.restaurantName = document.getElementById('config-name').value;
-      config.deliveryCity = document.getElementById('config-city').value;
-      config.openingHours = document.getElementById('config-hours').value;
+      try {
+        const config = getConfig();
+        config.whatsappNumber = getElVal('config-wa', '5548988781598').replace(/\D/g, '');
+        config.restaurantName = getElVal('config-name', 'Temperos do Brasil');
+        config.deliveryCity = getElVal('config-city', 'Tubarão e região');
+        config.openingHours = getElVal('config-hours', 'Segunda a Sexta: 10h30 às 14h');
 
-      config.heroTitle = document.getElementById('config-hero-title').value;
-      config.heroSubtitle = document.getElementById('config-hero-subtitle').value;
-      config.promoBadge = document.getElementById('config-promo-badge').value;
+        config.heroTitle = getElVal('config-hero-title', 'Marmitas Caseiras com Sabor do Brasil');
+        config.heroSubtitle = getElVal('config-hero-subtitle', 'Comida de verdade, feita diariamente com ingredientes frescos e entregue quentinha em Tubarão e região.');
+        config.promoBadge = getElVal('config-promo-badge', '🔥 Marmita do Dia a partir de R$ 15,00');
 
-      config.announcementEnabled = document.getElementById('config-announcement-enabled').checked;
-      config.announcementText = document.getElementById('config-announcement-text').value;
+        config.announcementEnabled = getElCheck('config-announcement-enabled', true);
+        config.announcementText = getElVal('config-announcement-text', '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.');
 
-      config.bannerHeadline = document.getElementById('config-banner-headline').value;
-      config.bannerSubtext = document.getElementById('config-banner-subtext').value;
+        config.bannerHeadline = getElVal('config-banner-headline', 'Peça seu almoço quentinho hoje!');
+        config.bannerSubtext = getElVal('config-banner-subtext', 'Entrega rápida e grátis para Tubarão e região.');
 
-      // Thermal Printer Settings
-      config.thermalHeaderNote = document.getElementById('config-thermal-header').value;
-      config.thermalFooterNote = document.getElementById('config-thermal-footer').value;
-      config.thermalPaperWidth = document.getElementById('config-thermal-width').value;
+        // Thermal Printer Settings
+        config.thermalHeaderNote = getElVal('config-thermal-header', 'Temperos do Brasil • Marmitas Caseiras');
+        config.thermalFooterNote = getElVal('config-thermal-footer', 'Obrigado pela preferência! Bom apetite! ♡');
+        config.thermalPaperWidth = getElVal('config-thermal-width', '80mm');
 
-      // Marmita Prices & Dynamic Limits Sync
-      config.customMarmitaEnabled = document.getElementById('config-custom-marmita-enabled').checked;
-      config.marmitaPrices = {
-        M: parseFloat(document.getElementById('config-marmita-m').value || 15.00),
-        G: parseFloat(document.getElementById('config-marmita-g').value || 20.00),
-        Executiva: parseFloat(document.getElementById('config-marmita-exec').value || 30.00)
-      };
+        // Marmita Prices & Dynamic Limits Sync
+        config.customMarmitaEnabled = getElCheck('config-custom-marmita-enabled', true);
+        config.marmitaPrices = {
+          M: parseFloat(getElVal('config-marmita-m', '15.00') || 15.00),
+          G: parseFloat(getElVal('config-marmita-g', '20.00') || 20.00),
+          Executiva: parseFloat(getElVal('config-marmita-exec', '30.00') || 30.00)
+        };
 
-      config.proteinLimits = {
-        M: parseInt(document.getElementById('config-prot-m').value || 1, 10),
-        G: parseInt(document.getElementById('config-prot-g').value || 2, 10),
-        Executiva: parseInt(document.getElementById('config-prot-exec').value || 3, 10)
-      };
+        config.proteinLimits = {
+          M: parseInt(getElVal('config-prot-m', '1'), 10),
+          G: parseInt(getElVal('config-prot-g', '2'), 10),
+          Executiva: parseInt(getElVal('config-prot-exec', '3'), 10)
+        };
 
-      config.maxAccompaniments = parseInt(document.getElementById('config-max-acc').value || 3, 10);
+        config.maxAccompaniments = parseInt(getElVal('config-max-acc', '3'), 10);
 
-      const rawAccs = document.getElementById('config-accompaniments').value;
-      config.accompaniments = rawAccs.split(',').map(s => s.trim()).filter(s => s.length > 0);
-      config.extras = localExtrasCopy;
+        const rawAccs = getElVal('config-accompaniments', 'Arroz, Feijão, Macarrão, Polenta, Farofa, Salada');
+        config.accompaniments = rawAccs.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        config.extras = localExtrasCopy;
 
-      saveConfig(config);
-      showToast('Configurações de Impressão & Loja salvas no Supabase!');
+        saveConfig(config);
+        showToast('✅ Configurações salvas e sincronizadas no Supabase com sucesso!');
+      } catch (err) {
+        console.error('Error saving config:', err);
+        showToast('⚠️ Erro ao salvar configurações. Verifique o console.');
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
