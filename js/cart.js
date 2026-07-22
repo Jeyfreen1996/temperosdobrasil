@@ -219,14 +219,9 @@ function formatBRL(value) {
 function getCart() {
   try {
     const raw = localStorage.getItem(CART_STORAGE_KEY);
-    if (!raw) {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(DEFAULT_CART));
-      return DEFAULT_CART;
-    }
-    return JSON.parse(raw);
-  } catch (e) {
-    return DEFAULT_CART;
-  }
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return [];
 }
 
 function saveCart(cart) {

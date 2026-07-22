@@ -294,15 +294,17 @@
 
     function useGpsMap() {
       const gpsBtn = document.getElementById('gps-btn');
-      gpsBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-xs">progress_activity</span> Localizando...`;
-      gpsBtn.disabled = true;
+      if (gpsBtn) {
+        gpsBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-xs">progress_activity</span> Localizando seu GPS...`;
+        gpsBtn.disabled = true;
+      }
 
       let resolved = false;
 
       const finishLocation = (lat, lng, label) => {
         if (resolved) return;
         resolved = true;
-        gpsBtn.disabled = false;
+        if (gpsBtn) gpsBtn.disabled = false;
 
         if (map && marker) {
           map.setView([lat, lng], 16);
@@ -310,12 +312,14 @@
         }
         
         fetchAddress(lat, lng);
-        gpsBtn.innerHTML = `<span class="material-symbols-outlined text-xs">check_circle</span> Localização Atualizada (${label})!`;
+        if (gpsBtn) {
+          gpsBtn.innerHTML = `<span class="material-symbols-outlined text-xs">check_circle</span> Localização Atualizada (${label})!`;
+        }
       };
 
       const guardTimer = setTimeout(() => {
         finishLocation(defaultLat, defaultLng, 'Tubarão, SC');
-      }, 2000);
+      }, 5000);
 
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -327,7 +331,7 @@
             clearTimeout(guardTimer);
             finishLocation(defaultLat, defaultLng, 'Tubarão, SC');
           },
-          { timeout: 1800, enableHighAccuracy: false }
+          { timeout: 4500, enableHighAccuracy: true, maximumAge: 0 }
         );
       } else {
         clearTimeout(guardTimer);
@@ -464,6 +468,11 @@
           }
         } catch(e) {}
       }
+
+      // Automatically trigger client GPS location on page load
+      setTimeout(() => {
+        useGpsMap();
+      }, 300);
     });
   </script>
 </body>
