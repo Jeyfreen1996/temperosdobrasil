@@ -60,9 +60,9 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <a href="https://wa.me/5548988781598" target="_blank" class="hidden sm:flex items-center gap-1 text-[11px] font-bold text-secondary bg-secondary-container px-2.5 py-1 rounded-lg">
-        <span class="material-symbols-outlined text-sm">call</span> (48) 98878-1598
-      </a>
+      <button onclick="openTutorialModal()" class="h-8 px-3 bg-secondary text-white font-bold text-xs rounded-lg shadow-xs hover:bg-secondary/90 transition-all flex items-center gap-1 cursor-pointer">
+        <span class="material-symbols-outlined text-sm">school</span> 🎓 Tutorial & Guia de Uso
+      </button>
       <a href="index.html" target="_blank" class="h-8 px-3 bg-surface-container text-on-surface hover:bg-surface-container-highest rounded-lg font-bold text-xs transition-colors flex items-center gap-1">
         <span class="material-symbols-outlined text-sm">storefront</span> Ver Loja
       </a>
@@ -73,7 +73,7 @@
     
     <!-- Top KPI Metrics Widgets -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
+      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1 relative group cursor-help" title="Mostra o faturamento total em reais acumulado hoje no sistema">
         <div class="flex justify-between items-center text-on-surface-variant">
           <span class="text-[11px] font-bold uppercase tracking-wider">Faturamento Hoje</span>
           <span class="material-symbols-outlined text-secondary text-base">payments</span>
@@ -82,7 +82,7 @@
         <span class="text-[10px] text-secondary font-semibold">Vendas registradas</span>
       </div>
 
-      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
+      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1 relative group cursor-help" title="Número total de pedidos efetuados pelos clientes">
         <div class="flex justify-between items-center text-on-surface-variant">
           <span class="text-[11px] font-bold uppercase tracking-wider">Total Pedidos</span>
           <span class="material-symbols-outlined text-primary text-base">receipt_long</span>
@@ -91,7 +91,7 @@
         <span class="text-[10px] text-on-surface-variant">Pedidos recebidos</span>
       </div>
 
-      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
+      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1 relative group cursor-help" title="Pedidos que estão atualmente em preparo na cozinha">
         <div class="flex justify-between items-center text-on-surface-variant">
           <span class="text-[11px] font-bold uppercase tracking-wider">Na Cozinha (No Fogo)</span>
           <span class="material-symbols-outlined text-amber-600 text-base">skillet</span>
@@ -100,7 +100,7 @@
         <span class="text-[10px] text-amber-700 font-semibold">Em preparação</span>
       </div>
 
-      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1">
+      <div class="bg-surface border border-outline-variant/60 p-3.5 rounded-xl shadow-xs space-y-1 relative group cursor-help" title="Pedidos já finalizados e entregues com sucesso">
         <div class="flex justify-between items-center text-on-surface-variant">
           <span class="text-[11px] font-bold uppercase tracking-wider">Concluídos</span>
           <span class="material-symbols-outlined text-secondary text-base">check_circle</span>
@@ -108,6 +108,20 @@
         <p id="kpi-delivered" class="text-xl font-extrabold text-secondary">0</p>
         <span class="text-[10px] text-secondary font-semibold">Entregas realizadas</span>
       </div>
+    </div>
+
+    <!-- Quick Help Announcement Banner -->
+    <div class="bg-primary-container/20 border border-primary-fixed/40 p-3 rounded-xl flex items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-lg">lightbulb</span>
+        <div>
+          <span class="font-bold text-on-surface">Novo no Painel Gestor?</span>
+          <span class="text-on-surface-variant text-[11px] block sm:inline"> Clique no botão verde de tutorial para aprender como gerenciar a tela inicial, cardápio e pedidos.</span>
+        </div>
+      </div>
+      <button onclick="openTutorialModal()" class="px-3 h-7 bg-primary text-white font-bold text-[11px] rounded-lg shadow-xs hover:bg-primary/90 transition-all whitespace-nowrap flex-shrink-0">
+        Abrir Tutorial
+      </button>
     </div>
 
     <!-- Navigation Tabs -->
@@ -322,6 +336,105 @@
 
   </main>
 
+  <!-- INTERACTIVE TUTORIAL MODAL -->
+  <div id="tutorial-modal" class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-surface border border-outline-variant/60 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-xl p-5 md:p-7 space-y-5 animate-fade-in relative">
+      
+      <div class="flex justify-between items-center border-b border-outline-variant/40 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-secondary text-white flex items-center justify-center font-bold">
+            <span class="material-symbols-outlined text-lg">school</span>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-base text-on-surface">Guia Interativo & Tutorial POS Pro</h3>
+            <p class="text-xs text-on-surface-variant">Aprenda a usar cada função do painel de administração em minutos</p>
+          </div>
+        </div>
+        <button onclick="closeTutorialModal()" class="text-on-surface-variant hover:text-on-surface p-1 rounded-lg hover:bg-surface-container">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Tutorial Chapters Grid -->
+      <div class="space-y-4">
+        
+        <!-- Chapter 1 -->
+        <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-2">
+          <div class="flex items-center gap-2 text-primary font-extrabold text-sm">
+            <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs">1</span>
+            Gestão de Pedidos em Tempo Real
+          </div>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            Aqui você visualiza todos os pedidos enviados pelos clientes. Use os botões de status para avançar o pedido:
+          </p>
+          <ul class="text-xs text-on-surface space-y-1 list-disc pl-5 font-medium">
+            <li><strong class="text-amber-700">Recebido:</strong> O pedido acabou de dar entrada.</li>
+            <li><strong class="text-orange-700">No Fogo:</strong> A marmita está sendo montada na cozinha.</li>
+            <li><strong class="text-blue-700">A Caminho:</strong> O entregador saiu com o pedido.</li>
+            <li><strong class="text-emerald-700">Entregue:</strong> Pedido finalizado com sucesso!</li>
+          </ul>
+          <p class="text-[11px] text-secondary font-semibold">💡 Dica: Clique no botão green "WhatsApp Cliente" para abrir um chat direto com o cliente referente àquele pedido.</p>
+        </div>
+
+        <!-- Chapter 2 -->
+        <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-2">
+          <div class="flex items-center gap-2 text-primary font-extrabold text-sm">
+            <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs">2</span>
+            Gerenciador do Cardápio Semanal & Marmitas
+          </div>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            Permite cadastrar e alterar os pratos de cada dia da semana (Segunda a Sexta):
+          </p>
+          <ul class="text-xs text-on-surface space-y-1 list-disc pl-5 font-medium">
+            <li>Selecione o dia desejado nas abas superiores (ex: <strong>TER</strong> para Terça-feira).</li>
+            <li>Clique no botão verde <strong class="text-secondary">+ Adicionar Novo Prato</strong> para criar uma nova marmita instantaneamente.</li>
+            <li>Edite o Nome, Preço R$, Descrição e a Foto do Prato nos campos da tarjeta.</li>
+            <li>Clique em <strong>"Salvar Alterações no Supabase"</strong> para publicar no site para todos os clientes.</li>
+          </ul>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-2">
+          <div class="flex items-center gap-2 text-primary font-extrabold text-sm">
+            <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs">3</span>
+            Gerenciador Completo da Tela Inicial (index.html)
+          </div>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            Na 3ª aba, você gerencia tudo o que aparece na página inicial do site em tempo real:
+          </p>
+          <ul class="text-xs text-on-surface space-y-1 list-disc pl-5 font-medium">
+            <li><strong>Banner Principal (Hero):</strong> Título principal, subtítulo e o selo de promoção.</li>
+            <li><strong>Barra Superior de Anúncios:</strong> Marque ou desmarque para exibir a faixa amarela de aviso no topo da loja.</li>
+            <li><strong>Banner Oferta Rodapé:</strong> Mude o título e subtexto do card de chamada de entrega.</li>
+            <li><strong>WhatsApp do Restaurante:</strong> Atualize o número de atendimento caso precise trocar.</li>
+          </ul>
+        </div>
+
+        <!-- Chapter 4 -->
+        <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-2">
+          <div class="flex items-center gap-2 text-primary font-extrabold text-sm">
+            <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs">4</span>
+            Sincronização em Nuvem Supabase & RLS Anti-Hackeo
+          </div>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            Toda vez que você altera um preço, edita um prato ou recebe um pedido, o sistema se conecta ao <strong>Supabase Cloud</strong> em milissegundos.
+          </p>
+          <p class="text-[11px] text-secondary font-bold">
+            🛡️ A base de dados conta com políticas de segurança Row Level Security (RLS), impedindo acessos não autorizados de terceiros.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="pt-3 border-t border-outline-variant/40 flex justify-end">
+        <button onclick="closeTutorialModal()" class="h-9 px-5 bg-primary text-white font-bold text-xs rounded-xl shadow-xs hover:bg-primary/90 transition-all">
+          Entendi! Fechar Tutorial
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <script src="js/supabase.js"></script>
   <script src="js/cart.js"></script>
   <script>
@@ -336,6 +449,14 @@
     }
 
     let activeFilter = 'all';
+
+    function openTutorialModal() {
+      document.getElementById('tutorial-modal').classList.remove('hidden');
+    }
+
+    function closeTutorialModal() {
+      document.getElementById('tutorial-modal').classList.add('hidden');
+    }
 
     function updateKPIs() {
       const metrics = getAdminMetrics();
