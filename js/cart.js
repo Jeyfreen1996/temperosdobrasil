@@ -200,17 +200,7 @@ function setSelectedDayIndex(dayIdx) {
   } catch(e) {}
 }
 
-const DEFAULT_CART = [
-  {
-    id: 'ter-carne-assada',
-    name: 'Marmita M - Carne Assada no Forno',
-    detail: 'Terça-feira (21 de Julho) • Carne assada no forno + Acompanhamentos',
-    targetDay: 'Terça-feira (21 de Julho)',
-    price: 15.00,
-    quantity: 1,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJGN1AVoTnCt_bHtcgU1lA3GN-ppywn1o1avK4mlJDL9yk0UnBpbRW6nf9JtJUEQnDUXQlurRqTDpzTXLi0u0j_NUzA-H_jKUbr1ASILn9_Ii07bpUna73xMMRYKEo5IUiT_3INgoDv4sgQIIWvOheN1-sx7PZDOG5E_VkePnW0UDVT8_iGovh4E9KVphfdNUeNPwxONcRffQpiZlfhtxPZ3yJty7pK7ih1jbmqxxCyyIIox6fUcvc'
-  }
-];
+const DEFAULT_CART = [];
 
 function formatBRL(value) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
@@ -219,7 +209,16 @@ function formatBRL(value) {
 function getCart() {
   try {
     const raw = localStorage.getItem(CART_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        const cleaned = parsed.filter(i => i && i.id !== 'ter-carne-assada');
+        if (cleaned.length !== parsed.length) {
+          localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cleaned));
+        }
+        return cleaned;
+      }
+    }
   } catch (e) {}
   return [];
 }
