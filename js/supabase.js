@@ -6,6 +6,21 @@
 const SUPABASE_URL = 'https://xqsqiiwkhiwvgbzfriek.supabase.co';
 const SUPABASE_ANON_KEY = ['eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9', 'eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhxc3FpaXdraGl3dmdiemZyaWVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5OTExMjAsImV4cCI6MjA5OTU2NzEyMH0', 'OBidiPNMgbXYwXJerpq1QGUiT4jaeLEAYpNtGs4Irx4'].join('.');
 
+// Helpers for Confirmed Order Persistence across Refresh & Reload
+function getConfirmedOrderIds() {
+  try {
+    const raw = localStorage.getItem('temperos_confirmed_orders_v1');
+    if (raw) return new Set(JSON.parse(raw));
+  } catch (e) {}
+  return new Set();
+}
+
+function markOrderConfirmedLocal(orderId) {
+  const set = getConfirmedOrderIds();
+  set.add(orderId);
+  localStorage.setItem('temperos_confirmed_orders_v1', JSON.stringify(Array.from(set)));
+}
+
 // Helper for Supabase REST API calls with RLS
 async function supabaseFetch(table, options = {}) {
   const method = options.method || 'GET';
@@ -68,6 +83,7 @@ async function syncOrderToSupabase(order) {
 
 // Sync Order Status Update to Supabase Database
 async function syncOrderStatusToSupabase(orderId, status) {
+  markOrderConfirmedLocal(orderId);
   return await supabaseFetch('orders', {
     method: 'PATCH',
     query: `id=eq.${orderId}`,
@@ -77,6 +93,7 @@ async function syncOrderStatusToSupabase(orderId, status) {
 
 // Delete Order from Supabase Database Permanently
 async function deleteOrderFromSupabase(orderId) {
+  markOrderConfirmedLocal(orderId);
   return await supabaseFetch('orders', {
     method: 'DELETE',
     query: `id=eq.${orderId}`
@@ -192,13 +209,19 @@ async function fetchOrdersFromSupabase() {
     const rawLocal = localStorage.getItem('temperos_all_orders_v1');
     const localOrders = rawLocal ? JSON.parse(rawLocal) : [];
     const localMap = new Map(localOrders.map(o => [o.id, o]));
+    const confirmedSet = getConfirmedOrderIds();
 
     const formatted = orders.map(o => {
       const local = localMap.get(o.id);
       let status = o.status;
-      if (local && local.status !== o.status && local.updatedAt && new Date(local.updatedAt) > new Date(o.updated_at || 0)) {
+
+      // Protection: if order is in local confirmed set, do NOT revert to recebido
+      if (confirmedSet.has(o.id) && status === 'recebido') {
+        status = (local && local.status !== 'recebido') ? local.status : 'preparando';
+      } else if (local && local.status !== o.status && local.updatedAt && new Date(local.updatedAt) > new Date(o.updated_at || 0)) {
         status = local.status;
       }
+
       return {
         id: o.id,
         timestamp: o.created_at,

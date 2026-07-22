@@ -493,7 +493,7 @@
 
     let localExtrasCopy = [];
     let activeFilter = 'all';
-    let confirmedOrderIds = new Set();
+    let confirmedOrderIds = (typeof getConfirmedOrderIds === 'function') ? getConfirmedOrderIds() : new Set();
     let audioCtx = null;
     let alarmTimer = null;
     let isAlarmPlaying = false;
@@ -630,7 +630,8 @@
 
     function silenceAlarmAndConfirmFirst() {
       const orders = getAllOrders();
-      const unconfirmed = orders.find(o => o.status === 'recebido' && !confirmedOrderIds.has(o.id));
+      const confirmedSet = (typeof getConfirmedOrderIds === 'function') ? getConfirmedOrderIds() : confirmedOrderIds;
+      const unconfirmed = orders.find(o => o.status === 'recebido' && !confirmedSet.has(o.id));
       if (unconfirmed) {
         confirmOrderAdmin(unconfirmed.id);
       } else {
@@ -638,9 +639,10 @@
       }
     }
 
-    function confirmOrderAdmin(orderId) {
+    async function confirmOrderAdmin(orderId) {
+      if (typeof markOrderConfirmedLocal === 'function') markOrderConfirmedLocal(orderId);
       confirmedOrderIds.add(orderId);
-      updateOrderStatus(orderId, 'preparando');
+      await updateOrderStatus(orderId, 'preparando');
       stopOrderAlarmLoop();
       renderAdminOrders();
       showToast(`Pedido #${orderId} CONFIRMADO! Alarme silenciado.`);
@@ -650,8 +652,9 @@
       updateKPIs();
       const orders = getAllOrders();
       const container = document.getElementById('admin-orders-list');
+      const confirmedSet = (typeof getConfirmedOrderIds === 'function') ? getConfirmedOrderIds() : confirmedOrderIds;
 
-      const unconfirmedOrder = orders.find(o => o.status === 'recebido' && !confirmedOrderIds.has(o.id));
+      const unconfirmedOrder = orders.find(o => o.status === 'recebido' && !confirmedSet.has(o.id));
       const alarmBanner = document.getElementById('new-order-alarm-banner');
       
       if (unconfirmedOrder) {
@@ -697,7 +700,7 @@
       };
 
       container.innerHTML = filtered.map(order => {
-        const isUnconfirmed = order.status === 'recebido' && !confirmedOrderIds.has(order.id);
+        const isUnconfirmed = order.status === 'recebido' && !confirmedSet.has(order.id);
 
         return `
         <div class="bg-surface border ${isUnconfirmed ? 'border-amber-500 ring-2 ring-amber-400/50' : 'border-outline-variant/60'} p-4 rounded-xl shadow-xs space-y-3">
@@ -873,17 +876,20 @@
       }, 300);
     }
 
-    function changeOrderStatusAdmin(orderId, status) {
+    async function changeOrderStatusAdmin(orderId, status) {
+      if (typeof markOrderConfirmedLocal === 'function') markOrderConfirmedLocal(orderId);
       confirmedOrderIds.add(orderId);
-      updateOrderStatus(orderId, status);
+      await updateOrderStatus(orderId, status);
       stopOrderAlarmLoop();
       renderAdminOrders();
       showToast(`Status do Pedido #${orderId} alterado no Supabase!`);
     }
 
-    function deleteOrderConfirm(orderId) {
+    async function deleteOrderConfirm(orderId) {
       if (confirm(`Tem certeza que deseja excluir o pedido #${orderId}?`)) {
-        deleteOrderAdmin(orderId);
+        if (typeof markOrderConfirmedLocal === 'function') markOrderConfirmedLocal(orderId);
+        confirmedOrderIds.add(orderId);
+        await deleteOrderAdmin(orderId);
         renderAdminOrders();
         showToast(`Pedido #${orderId} excluído.`);
       }
