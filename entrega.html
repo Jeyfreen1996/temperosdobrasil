@@ -372,6 +372,14 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
+      if (!isUserLoggedIn()) {
+        showToast('Por favor, faça login ou crie sua conta para finalizar o pedido.');
+        setTimeout(() => {
+          window.location.href = 'login.html?required=1';
+        }, 500);
+        return;
+      }
+
       initInteractiveMap();
       renderCheckoutSummary();
 

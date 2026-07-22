@@ -373,6 +373,7 @@
     }
 
     function handleFazerPedidoDirect(id, name, detail, price, image) {
+      if (!requireUserLogin('Por favor, faça login ou crie sua conta para fazer o pedido.')) return;
       addToCart({ id, name, detail, price, image, quantity: 1 });
       window.location.href = 'entrega.html';
     }
@@ -434,6 +435,8 @@
 
     document.getElementById('custom-marmita-form').addEventListener('submit', (e) => {
       e.preventDefault();
+      
+      if (!requireUserLogin('Por favor, faça login ou crie sua conta para fazer o pedido.')) return;
       
       const sizeRadio = document.querySelector('input[name="marmita-size"]:checked');
       const sizeName = sizeRadio ? sizeRadio.value : 'M';

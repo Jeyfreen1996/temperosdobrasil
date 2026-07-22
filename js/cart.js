@@ -47,6 +47,31 @@ const DEFAULT_CONFIG = {
   ]
 };
 
+// User Session Authentication Helpers
+function getUserSession() {
+  try {
+    const raw = localStorage.getItem('temperos_user_session_v1');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return null;
+}
+
+function isUserLoggedIn() {
+  const session = getUserSession();
+  return !!(session && session.isLoggedIn);
+}
+
+function requireUserLogin(msg = 'Por favor, faça login ou crie sua conta para finalizar o pedido.') {
+  if (!isUserLoggedIn()) {
+    showToast(msg);
+    setTimeout(() => {
+      window.location.href = 'login.html?required=1';
+    }, 600);
+    return false;
+  }
+  return true;
+}
+
 function getConfig() {
   try {
     const raw = localStorage.getItem(CONFIG_STORAGE_KEY);

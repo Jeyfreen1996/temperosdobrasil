@@ -75,6 +75,14 @@
         <p id="auth-subtitle" class="text-xs text-on-surface-variant">Acesse seus pedidos e histórico de marmitas caseiras</p>
       </div>
 
+      <!-- Required Login Banner -->
+      <div id="required-login-banner" class="hidden bg-amber-500/10 border border-amber-500/40 p-3 rounded-xl text-center">
+        <p class="text-xs font-extrabold text-amber-900 flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-base">lock</span>
+          Faça login ou crie sua conta para finalizar o pedido!
+        </p>
+      </div>
+
       <!-- Auth Form -->
       <form id="auth-form" class="space-y-4">
         
@@ -167,6 +175,14 @@
       }
     }
 
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('required') === '1') {
+        const banner = document.getElementById('required-login-banner');
+        if (banner) banner.classList.remove('hidden');
+      }
+    });
+
     document.getElementById('auth-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('auth-email').value;
@@ -181,8 +197,11 @@
       localStorage.setItem('temperos_user_session_v1', JSON.stringify(userSession));
       showToast(isRegisterMode ? 'Conta criada com sucesso!' : 'Login efetuado!');
       
+      const params = new URLSearchParams(window.location.search);
+      const dest = (params.get('required') === '1') ? 'entrega.html' : 'perfil.html';
+
       setTimeout(() => {
-        window.location.href = 'perfil.html';
+        window.location.href = dest;
       }, 500);
     });
   </script>
