@@ -271,26 +271,18 @@ function updateCartBadges() {
 }
 
 function getAllOrders() {
+  const deletedSet = (typeof getDeletedOrderIds === 'function') ? getDeletedOrderIds() : new Set();
   try {
     const raw = localStorage.getItem(ORDERS_LIST_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed.filter(o => !deletedSet.has(o.id));
+      }
+    }
   } catch(e) {}
   
-  return [
-    {
-      id: 'TB-849201',
-      timestamp: new Date().toISOString(),
-      status: 'preparando',
-      name: 'Maria Silva',
-      address: 'Av. Padre Geraldo Spettmann, 280 - Centro, Tubarão - SC',
-      paymentMethod: 'PIX',
-      items: DEFAULT_CART,
-      subtotal: 15.00,
-      deliveryFee: 0.00,
-      total: 15.00,
-      notes: 'Sem cebola, por favor.'
-    }
-  ];
+  return [];
 }
 
 // Build Clean WhatsApp Message
@@ -361,7 +353,11 @@ function saveOrder(orderData) {
   return order;
 }
 
-function updateOrderStatus(orderId, newStatus) {
+async function updateOrderStatus(orderId, newStatus) {
+  if (typeof markOrderConfirmedLocal === 'function') {
+    markOrderConfirmedLocal(orderId);
+  }
+
   const ordersList = getAllOrders();
   const target = ordersList.find(o => o.id === orderId);
   if (target) {
@@ -376,20 +372,24 @@ function updateOrderStatus(orderId, newStatus) {
       localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(active));
     }
 
-    // Sync status change to Supabase Database
+    // Await status change to Supabase Database
     if (typeof syncOrderStatusToSupabase === 'function') {
-      syncOrderStatusToSupabase(orderId, newStatus);
+      await syncOrderStatusToSupabase(orderId, newStatus);
     }
   }
 }
 
-function deleteOrderAdmin(orderId) {
+async function deleteOrderAdmin(orderId) {
+  if (typeof markOrderDeletedLocal === 'function') {
+    markOrderDeletedLocal(orderId);
+  }
+
   let ordersList = getAllOrders();
   ordersList = ordersList.filter(o => o.id !== orderId);
   localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
 
   if (typeof deleteOrderFromSupabase === 'function') {
-    deleteOrderFromSupabase(orderId);
+    await deleteOrderFromSupabase(orderId);
   }
 }
 

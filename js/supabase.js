@@ -218,7 +218,7 @@ async function syncConfigToSupabase(config) {
   });
 }
 
-// Fetch Real-Time Orders from Supabase with Ironclad Status Protection
+// Fetch Real-Time Orders from Supabase with Ironclad Status & Deletion Protection
 async function fetchOrdersFromSupabase() {
   const orders = await supabaseFetch('orders', { query: 'select=*&order=created_at.desc' });
   if (orders && Array.isArray(orders)) {
@@ -234,11 +234,13 @@ async function fetchOrdersFromSupabase() {
         const local = localMap.get(o.id);
         let status = o.status;
 
-        // IRONCLAD PROTECTION:
-        // If an order has been confirmed or moved past 'recebido' locally, NEVER revert it back to 'recebido'!
+        // IRONCLAD STATUS PROTECTION:
+        // If an order was confirmed locally or has moved past 'recebido', NEVER allow status to revert to 'recebido'!
         if (confirmedSet.has(o.id) || (local && local.status && local.status !== 'recebido')) {
           if (status === 'recebido') {
             status = (local && local.status && local.status !== 'recebido') ? local.status : 'preparando';
+            // Sync forward status to DB in background if DB is behind
+            syncOrderStatusToSupabase(o.id, status);
           }
         }
 
