@@ -53,18 +53,17 @@
   <style>
     #map {
       width: 100%;
-      height: 220px;
+      height: 240px;
       border-radius: 0.75rem;
       z-index: 1;
-      background-color: #1a1a1a;
+      background-color: #e5e3de;
       border: 1px solid rgba(0, 0, 0, 0.15);
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     .leaflet-container {
       width: 100% !important;
       height: 100% !important;
       font-family: inherit;
-      background-color: #141414 !important;
     }
     .leaflet-tile-container img {
       max-width: none !important;
@@ -132,12 +131,12 @@
           </select>
         </div>
 
-        <!-- Interactive Map Container (Dark Mode) -->
+        <!-- Interactive Map Container -->
         <div id="new-address-map-container" class="space-y-1">
           <div class="flex justify-between items-center">
             <label class="font-semibold text-xs text-on-surface-variant flex items-center gap-1">
               <span class="material-symbols-outlined text-primary text-sm">map</span>
-              Mapa de Entrega (Modo Escuro / Arraste o marcador)
+              Mapa de Entrega (Clique ou arraste o pino vermelho)
             </label>
             <span class="text-[10px] text-secondary font-bold flex items-center gap-0.5">
               <span class="material-symbols-outlined text-xs">pin_drop</span> Tubarão, SC
@@ -278,13 +277,22 @@
           attributionControl: false
         }).setView([defaultLat, defaultLng], 15);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
-          subdomains: ['a', 'b', 'c', 'd'],
-          attribution: '&copy; OpenStreetMap &copy; CARTO'
+          subdomains: ['a', 'b', 'c'],
+          attribution: '&copy; OpenStreetMap'
         }).addTo(map);
 
-        marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+        const redIcon = L.icon({
+          iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+        });
+
+        marker = L.marker([defaultLat, defaultLng], { draggable: true, icon: redIcon }).addTo(map);
 
         marker.on('dragend', function () {
           const coords = marker.getLatLng();
