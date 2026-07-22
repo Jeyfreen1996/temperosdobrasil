@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Entrar ou Criar Conta - Temperos do Brasil</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed": "#261a00",
+            "secondary": "#006e1c",
+            "tertiary-container": "#ebc2b6",
+            "background": "#fbf9f6",
+            "tertiary": "#77574d",
+            "error": "#ba1a1a",
+            "surface-container-low": "#f7f5f2",
+            "surface-container": "#f0eee9",
+            "surface-container-highest": "#e5e3de",
+            "on-surface": "#1c1b18",
+            "primary": "#785900",
+            "on-surface-variant": "#504635",
+            "surface": "#fbf9f6",
+            "on-primary": "#ffffff",
+            "primary-container": "#ffc107",
+            "secondary-container": "#e8f5e9",
+            "on-secondary-container": "#1b5e20",
+            "outline-variant": "#e2ded7"
+          },
+          "fontFamily": {
+            "sans": ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-background text-on-surface font-sans text-sm selection:bg-primary-container">
+
+  <!-- TopAppBar -->
+  <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-14 bg-surface/95 backdrop-blur-md border-b border-outline-variant/60 shadow-xs">
+    <div class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+      <span class="material-symbols-outlined text-primary text-base">location_on</span>
+      <span class="font-medium">Tubarão, SC</span>
+    </div>
+    <a href="index.html" class="font-bold text-base text-primary absolute left-1/2 -translate-x-1/2 tracking-tight">
+      Temperos do Brasil
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="perfil.html" class="relative p-1.5 rounded-lg hover:bg-surface-container transition-colors text-on-surface-variant">
+        <span class="material-symbols-outlined">account_circle</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="pt-20 pb-24 max-w-md mx-auto px-4">
+    
+    <div class="bg-surface border border-outline-variant/60 p-6 rounded-2xl shadow-sm space-y-6">
+      
+      <div class="text-center space-y-1">
+        <div class="w-12 h-12 rounded-2xl bg-primary-container/40 text-primary flex items-center justify-center font-black text-lg mx-auto mb-2">
+          <span class="material-symbols-outlined text-2xl">person</span>
+        </div>
+        <h2 id="auth-title" class="text-xl font-extrabold text-on-surface">Entrar na Sua Conta</h2>
+        <p id="auth-subtitle" class="text-xs text-on-surface-variant">Acesse seus pedidos e histórico de marmitas caseiras</p>
+      </div>
+
+      <!-- Auth Form -->
+      <form id="auth-form" class="space-y-4">
+        
+        <div id="name-field-group" class="space-y-1 hidden">
+          <label class="font-bold text-xs text-on-surface-variant" for="auth-name">Nome Completo</label>
+          <input class="w-full h-10 px-3 bg-surface-container-low rounded-xl border border-outline-variant/60 focus:ring-1 focus:ring-primary outline-none text-xs font-medium" id="auth-name" placeholder="Ex: João da Silva" type="text"/>
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-xs text-on-surface-variant" for="auth-email">E-mail</label>
+          <input required class="w-full h-10 px-3 bg-surface-container-low rounded-xl border border-outline-variant/60 focus:ring-1 focus:ring-primary outline-none text-xs font-medium" id="auth-email" placeholder="seu@email.com" type="email"/>
+        </div>
+
+        <div class="space-y-1">
+          <label class="font-bold text-xs text-on-surface-variant" for="auth-password">Senha</label>
+          <input required class="w-full h-10 px-3 bg-surface-container-low rounded-xl border border-outline-variant/60 focus:ring-1 focus:ring-primary outline-none text-xs font-medium" id="auth-password" placeholder="••••••••" type="password"/>
+        </div>
+
+        <button id="auth-submit-btn" type="submit" class="w-full h-11 bg-primary text-white rounded-xl font-extrabold text-xs shadow-md hover:bg-primary/90 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+          Entrar na Conta
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </button>
+      </form>
+
+      <div class="border-t border-outline-variant/40 pt-4 text-center space-y-3">
+        <p class="text-xs text-on-surface-variant">
+          <span id="toggle-text">Ainda não tem conta?</span>
+          <button type="button" onclick="toggleAuthMode()" id="toggle-btn" class="font-bold text-primary hover:underline cursor-pointer">
+            Criar Nova Conta
+          </button>
+        </p>
+
+        <a href="cardapio.html" class="block text-xs font-bold text-secondary hover:underline">
+          Continuar como Visitante →
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- BottomNavBar -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-14 bg-surface/95 backdrop-blur-md border-t border-outline-variant/50">
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors" href="index.html">
+      <span class="material-symbols-outlined text-base">home</span>
+      Início
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors" href="cardapio.html">
+      <span class="material-symbols-outlined text-base">restaurant_menu</span>
+      Cardápio
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors" href="entrega.html">
+      <span class="material-symbols-outlined text-base">local_shipping</span>
+      Entrega
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant text-[11px] hover:text-primary transition-colors relative" href="pedido.html">
+      <span class="material-symbols-outlined text-base">shopping_basket</span>
+      Pedido
+    </a>
+  </nav>
+
+  <script src="js/supabase.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+    let isRegisterMode = false;
+
+    function toggleAuthMode() {
+      isRegisterMode = !isRegisterMode;
+      const title = document.getElementById('auth-title');
+      const subtitle = document.getElementById('auth-subtitle');
+      const nameGroup = document.getElementById('name-field-group');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const toggleText = document.getElementById('toggle-text');
+      const toggleBtn = document.getElementById('toggle-btn');
+
+      if (isRegisterMode) {
+        title.textContent = 'Criar Sua Conta';
+        subtitle.textContent = 'Cadastre-se para acompanhar pedidos em tempo real';
+        nameGroup.classList.remove('hidden');
+        submitBtn.innerHTML = `Criar Minha Conta <span class="material-symbols-outlined text-base">arrow_forward</span>`;
+        toggleText.textContent = 'Já tem uma conta?';
+        toggleBtn.textContent = 'Fazer Login';
+      } else {
+        title.textContent = 'Entrar na Sua Conta';
+        subtitle.textContent = 'Acesse seus pedidos e histórico de marmitas caseiras';
+        nameGroup.classList.add('hidden');
+        submitBtn.innerHTML = `Entrar na Conta <span class="material-symbols-outlined text-base">arrow_forward</span>`;
+        toggleText.textContent = 'Ainda não tem conta?';
+        toggleBtn.textContent = 'Criar Nova Conta';
+      }
+    }
+
+    document.getElementById('auth-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      const name = document.getElementById('auth-name').value || email.split('@')[0];
+
+      const userSession = {
+        email: email,
+        name: isRegisterMode ? name : (email.split('@')[0]),
+        isLoggedIn: true
+      };
+
+      localStorage.setItem('temperos_user_session_v1', JSON.stringify(userSession));
+      showToast(isRegisterMode ? 'Conta criada com sucesso!' : 'Login efetuado!');
+      
+      setTimeout(() => {
+        window.location.href = 'perfil.html';
+      }, 500);
+    });
+  </script>
+</body>
+</html>

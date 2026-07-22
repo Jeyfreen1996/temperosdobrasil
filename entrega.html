@@ -93,8 +93,8 @@
         
         <!-- Name Input -->
         <div class="space-y-1">
-          <label class="font-semibold text-xs text-on-surface-variant" for="name">Seu Nome</label>
-          <input required class="w-full h-9 px-3 bg-surface-container-low rounded-lg border border-outline-variant/50 focus:ring-1 focus:ring-primary outline-none text-xs" id="name" placeholder="Ex: Maria Silva" type="text" value="Maria Silva"/>
+          <label class="font-semibold text-xs text-on-surface-variant" for="name">Seu Nome *</label>
+          <input required class="w-full h-9 px-3 bg-surface-container-low rounded-lg border border-outline-variant/50 focus:ring-1 focus:ring-primary outline-none text-xs" id="name" placeholder="Digite seu nome completo..." type="text"/>
         </div>
 
         <!-- Interactive Map Container -->
@@ -374,6 +374,23 @@
     document.addEventListener('DOMContentLoaded', () => {
       initInteractiveMap();
       renderCheckoutSummary();
+
+      // Pre-fill user session name if logged in
+      const rawSession = localStorage.getItem('temperos_user_session_v1');
+      if (rawSession) {
+        try {
+          const session = JSON.parse(rawSession);
+          if (session && session.name) {
+            const nameEl = document.getElementById('name');
+            if (nameEl) nameEl.value = session.name;
+          }
+        } catch(e) {}
+      }
+
+      // Automatically trigger GPS Geolocation on load
+      setTimeout(() => {
+        useGpsMap();
+      }, 500);
     });
   </script>
 </body>
