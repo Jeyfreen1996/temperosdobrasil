@@ -1,5 +1,5 @@
 /**
- * Temperos do Brasil - Shared Cart, Weekly Menu, Configs, Orders, WhatsApp & SaaS POS Admin
+ * Temperos do Brasil - Shared Cart, Weekly Menu, Configs, Orders, WhatsApp, Supabase & SaaS POS Admin
  */
 
 const CART_STORAGE_KEY = 'temperos_cart_v1';
@@ -39,7 +39,7 @@ function saveConfig(config) {
   } catch(e) {}
 }
 
-// Default Weekly Menu Data (Official July 21st Flyer Integrated)
+// Default Weekly Menu Data
 const DEFAULT_WEEKLY_MENU = {
   1: {
     dayName: 'Segunda-feira',
@@ -95,7 +95,6 @@ const DEFAULT_WEEKLY_MENU = {
   }
 };
 
-// Bulletproof Weekly Menu Fetching
 function getWeeklyMenu() {
   try {
     const raw = localStorage.getItem(WEEKLY_MENU_KEY);
@@ -107,7 +106,6 @@ function getWeeklyMenu() {
     }
   } catch(e) {}
 
-  // Fallback and re-save valid menu
   localStorage.setItem(WEEKLY_MENU_KEY, JSON.stringify(DEFAULT_WEEKLY_MENU));
   return DEFAULT_WEEKLY_MENU;
 }
@@ -115,6 +113,15 @@ function getWeeklyMenu() {
 function saveWeeklyMenu(menu) {
   try {
     localStorage.setItem(WEEKLY_MENU_KEY, JSON.stringify(menu));
+    // Sync all dishes to Supabase
+    if (typeof syncDishToSupabase === 'function') {
+      Object.keys(menu).forEach(dayId => {
+        const day = menu[dayId];
+        if (day && day.dishes) {
+          day.dishes.forEach(d => syncDishToSupabase(d, parseInt(dayId, 10)));
+        }
+      });
+    }
   } catch(e) {}
 }
 
@@ -291,7 +298,7 @@ function buildWhatsAppMessage(order) {
   return msg;
 }
 
-// Save Order & Generate Direct WhatsApp URL for +5548988781598
+// Save Order & Sync to Supabase Database
 function saveOrder(orderData) {
   const currentCart = getCart();
   const summary = getCartSummary();
@@ -315,6 +322,11 @@ function saveOrder(orderData) {
   ordersList.unshift(order);
   localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
 
+  // Sync with Supabase Database
+  if (typeof syncOrderToSupabase === 'function') {
+    syncOrderToSupabase(order);
+  }
+
   const phone = (config.whatsappNumber || RESTAURANT_WHATSAPP).replace(/\D/g, '');
   const waText = encodeURIComponent(buildWhatsAppMessage(order));
   
@@ -335,6 +347,11 @@ function updateOrderStatus(orderId, newStatus) {
     if (active && active.id === orderId) {
       active.status = newStatus;
       localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(active));
+    }
+
+    // Sync status change to Supabase Database
+    if (typeof syncOrderStatusToSupabase === 'function') {
+      syncOrderStatusToSupabase(orderId, newStatus);
     }
   }
 }
