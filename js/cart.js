@@ -26,6 +26,9 @@ const DEFAULT_CONFIG = {
   announcementText: '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.',
   announcementEnabled: true,
   customMarmitaEnabled: true,
+  thermalHeaderNote: 'Temperos do Brasil • Marmitas Caseiras',
+  thermalFooterNote: 'Obrigado pela preferência! Bom apetite! ♡',
+  thermalPaperWidth: '80mm',
   marmitaPrices: {
     M: 15.00,
     G: 20.00,

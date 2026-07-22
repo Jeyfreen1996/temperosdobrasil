@@ -47,8 +47,17 @@
 </head>
 <body class="bg-background text-on-surface font-sans text-sm selection:bg-primary-container pb-20">
 
+  <!-- Sticky New Order Sound Alarm Notification Banner -->
+  <div id="new-order-alarm-banner" class="hidden bg-amber-500 text-white font-extrabold text-xs py-2 px-4 text-center shadow-lg animate-bounce flex justify-center items-center gap-2 z-50 sticky top-0">
+    <span class="material-symbols-outlined text-lg animate-spin">notifications_active</span>
+    <span id="alarm-banner-text">🔔 NOVO PEDIDO RECEBIDO! Clique para Confirmar e Silenciar o Alarme</span>
+    <button onclick="silenceAlarmAndConfirmFirst()" class="ml-3 px-3 py-1 bg-white text-amber-900 rounded-lg text-xs font-black hover:bg-amber-100 transition-all shadow-xs cursor-pointer">
+      Confirmar & Silenciar 🔕
+    </button>
+  </div>
+
   <!-- SaaS Header -->
-  <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-14 bg-surface/95 backdrop-blur-md border-b border-outline-variant/60 shadow-xs">
+  <header class="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-4 md:px-8 h-14 bg-surface/95 backdrop-blur-md border-b border-outline-variant/60 shadow-xs">
     <div class="flex items-center gap-2">
       <div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-black text-xs shadow-xs">
         TB
@@ -113,10 +122,10 @@
     <!-- Quick Help Announcement Banner -->
     <div class="bg-primary-container/20 border border-primary-fixed/40 p-3 rounded-xl flex items-center justify-between gap-3 text-xs">
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-primary text-lg">lightbulb</span>
+        <span class="material-symbols-outlined text-primary text-lg">print</span>
         <div>
-          <span class="font-bold text-on-surface">Regras de Proteínas & Acompanhamentos Ativadas</span>
-          <span class="text-on-surface-variant text-[11px] block sm:inline"> Agora você pode definir o limite exato de proteínas para Marmita M, G e Executiva e o limite de acompanhamentos.</span>
+          <span class="font-bold text-on-surface">Alarme Sonoro & Impressão Térmica Ativados!</span>
+          <span class="text-on-surface-variant text-[11px] block sm:inline"> Pedidos novos tocam alarme até a confirmação e podem ser impressos na impressora térmica em 58mm ou 80mm.</span>
         </div>
       </div>
       <button onclick="openTutorialModal()" class="px-3 h-7 bg-primary text-white font-bold text-[11px] rounded-lg shadow-xs hover:bg-primary/90 transition-all whitespace-nowrap flex-shrink-0">
@@ -136,7 +145,7 @@
       </button>
       <button id="tab-btn-config" onclick="switchAdminTab('config')" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-primary flex items-center gap-1.5 whitespace-nowrap">
         <span class="material-symbols-outlined text-base">settings_suggest</span>
-        Gerenciador da Loja, Regras & Supabase
+        Gerenciador da Loja, Impressora & Supabase
       </button>
     </div>
 
@@ -220,20 +229,47 @@
       </div>
     </section>
 
-    <!-- TAB 3: COMPLETE HOME PAGE, CARDAPIO BUILDER, LIMITS & RESTAURANT CONFIG -->
+    <!-- TAB 3: COMPLETE HOME PAGE, CARDAPIO BUILDER, THERMAL PRINTER & RESTAURANT CONFIG -->
     <section id="section-admin-config" class="space-y-4 hidden">
       <div class="bg-surface border border-outline-variant/60 p-5 rounded-xl shadow-xs space-y-5">
         <div class="flex justify-between items-center border-b border-outline-variant/40 pb-3">
           <div>
             <h3 class="font-extrabold text-base text-on-surface flex items-center gap-1.5">
               <span class="material-symbols-outlined text-primary text-lg">tune</span>
-              Gerenciador da Loja, Regras de Escolha & Supabase
+              Gerenciador da Loja, Impressora Térmica & Supabase
             </h3>
-            <p class="text-xs text-on-surface-variant">Configure os preços, limite de proteínas (M, G, Executiva) e limite de acompanhamentos em tempo real</p>
+            <p class="text-xs text-on-surface-variant">Configure os dados do recibo de impressão, preços e regras em tempo real</p>
           </div>
           <span class="bg-secondary-container text-secondary text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
             🟢 Conectado ao Supabase
           </span>
+        </div>
+
+        <!-- Section 0: Impressora Térmica Configuração -->
+        <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-3">
+          <h4 class="font-bold text-xs text-primary uppercase tracking-wider flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">print</span> Configuração da Comanda / Recibo Térmico (Epson / Elgin / Xprinter)
+          </h4>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-thermal-header">Cabeçalho do Recibo</label>
+              <input id="config-thermal-header" type="text" value="Temperos do Brasil • Marmitas Caseiras" class="w-full h-8 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-thermal-footer">Mensagem de Rodapé</label>
+              <input id="config-thermal-footer" type="text" value="Obrigado pela preferência! Bom apetite! ♡" class="w-full h-8 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none"/>
+            </div>
+
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-on-surface-variant" for="config-thermal-width">Largura do Papel Térmico</label>
+              <select id="config-thermal-width" class="w-full h-8 px-2 bg-white border border-outline-variant/60 rounded text-xs font-bold focus:ring-1 focus:ring-primary outline-none">
+                <option value="80mm">80mm (Bobina Padrão G)</option>
+                <option value="58mm">58mm (Bobina Compacta M)</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <!-- Section 1: Preços Base & Limites de Proteínas das Marmitas -->
@@ -411,27 +447,10 @@
         <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-2">
           <div class="flex items-center gap-2 text-primary font-extrabold text-sm">
             <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs">1</span>
-            Gestão de Pedidos em Tempo Real
+            Alarme Sonoro de Novos Pedidos & Impressão Térmica
           </div>
           <p class="text-xs text-on-surface-variant leading-relaxed">
-            Aqui você visualiza todos os pedidos enviados pelos clientes. Use os botões de status para avançar o pedido:
-          </p>
-          <ul class="text-xs text-on-surface space-y-1 list-disc pl-5 font-medium">
-            <li><strong class="text-amber-700">Recebido:</strong> O pedido acabou de dar entrada.</li>
-            <li><strong class="text-orange-700">No Fogo:</strong> A marmita está sendo montada na cozinha.</li>
-            <li><strong class="text-blue-700">A Caminho:</strong> O entregador saiu com o pedido.</li>
-            <li><strong class="text-emerald-700">Entregue:</strong> Pedido finalizado com sucesso!</li>
-          </ul>
-        </div>
-
-        <!-- Chapter 2 -->
-        <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/40 space-y-2">
-          <div class="flex items-center gap-2 text-primary font-extrabold text-sm">
-            <span class="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-xs">2</span>
-            Regras de Escolha: Proteínas & Acompanhamentos
-          </div>
-          <p class="text-xs text-on-surface-variant leading-relaxed">
-            Na 3ª aba, você define quantas proteínas o cliente pode marcar em cada tamanho de marmita (M, G, Executiva) e o limite máximo de acompanhamentos (ex: 3).
+            Quando um cliente envia um novo pedido, o sistema toca um alarme sonoro contínuo e exibe o botão <strong>"Confirmar Pedido & Silenciar Alarme"</strong>. Além disso, cada pedido possui o botão <strong>"🖨️ Imprimir Comanda Térmica"</strong> pronto para impressoras de bobina (58mm / 80mm).
           </p>
         </div>
 
@@ -460,8 +479,58 @@
     }
 
     let localExtrasCopy = [];
-
     let activeFilter = 'all';
+    let confirmedOrderIds = new Set();
+    let audioCtx = null;
+    let alarmTimer = null;
+    let isAlarmPlaying = false;
+
+    // WEB AUDIO API SOUND ALARM SYNTHESIZER
+    function triggerChimeSound() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Note A5
+        osc.frequency.exponentialRampToValueAtTime(1046.5, audioCtx.currentTime + 0.15); // Note C6
+
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.45);
+      } catch (e) {
+        console.warn('Audio alarm error:', e);
+      }
+    }
+
+    function startOrderAlarmLoop() {
+      if (isAlarmPlaying) return;
+      isAlarmPlaying = true;
+      triggerChimeSound();
+      alarmTimer = setInterval(triggerChimeSound, 1500);
+    }
+
+    function stopOrderAlarmLoop() {
+      if (alarmTimer) {
+        clearInterval(alarmTimer);
+        alarmTimer = null;
+      }
+      isAlarmPlaying = false;
+      const banner = document.getElementById('new-order-alarm-banner');
+      if (banner) banner.classList.add('hidden');
+    }
 
     function openTutorialModal() {
       document.getElementById('tutorial-modal').classList.remove('hidden');
@@ -525,10 +594,42 @@
       renderAdminOrders(query.toLowerCase());
     }
 
+    function silenceAlarmAndConfirmFirst() {
+      const orders = getAllOrders();
+      const unconfirmed = orders.find(o => o.status === 'recebido' && !confirmedOrderIds.has(o.id));
+      if (unconfirmed) {
+        confirmOrderAdmin(unconfirmed.id);
+      } else {
+        stopOrderAlarmLoop();
+      }
+    }
+
+    function confirmOrderAdmin(orderId) {
+      confirmedOrderIds.add(orderId);
+      updateOrderStatus(orderId, 'preparando');
+      stopOrderAlarmLoop();
+      renderAdminOrders();
+      showToast(`Pedido #${orderId} CONFIRMADO! Alarme silenciado.`);
+    }
+
     function renderAdminOrders(searchQuery = '') {
       updateKPIs();
       const orders = getAllOrders();
       const container = document.getElementById('admin-orders-list');
+
+      // Check for unconfirmed new orders (status: 'recebido')
+      const unconfirmedOrder = orders.find(o => o.status === 'recebido' && !confirmedOrderIds.has(o.id));
+      const alarmBanner = document.getElementById('new-order-alarm-banner');
+      
+      if (unconfirmedOrder) {
+        if (alarmBanner) {
+          alarmBanner.classList.remove('hidden');
+          document.getElementById('alarm-banner-text').textContent = `🔔 NOVO PEDIDO RECEBIDO! [#${unconfirmedOrder.id} - ${unconfirmedOrder.name}] - Clique para Confirmar e Silenciar o Alarme`;
+        }
+        startOrderAlarmLoop();
+      } else {
+        stopOrderAlarmLoop();
+      }
 
       let filtered = orders;
       if (activeFilter !== 'all') {
@@ -556,14 +657,17 @@
       };
 
       const statusLabels = {
-        'recebido': '1. Recebido',
-        'preparando': '2. No Fogo',
+        'recebido': '1. Recebido (Aguardando)',
+        'preparando': '2. No Fogo (Confirmado)',
         'saiu': '3. A Caminho',
         'entregue': '4. Entregue'
       };
 
-      container.innerHTML = filtered.map(order => `
-        <div class="bg-surface border border-outline-variant/60 p-4 rounded-xl shadow-xs space-y-3">
+      container.innerHTML = filtered.map(order => {
+        const isUnconfirmed = order.status === 'recebido' && !confirmedOrderIds.has(order.id);
+
+        return `
+        <div class="bg-surface border ${isUnconfirmed ? 'border-amber-500 ring-2 ring-amber-400/50' : 'border-outline-variant/60'} p-4 rounded-xl shadow-xs space-y-3">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2 border-b border-outline-variant/30">
             <div class="flex items-center gap-2">
               <span class="font-extrabold text-sm text-primary">Pedido #${order.id}</span>
@@ -577,6 +681,18 @@
               <span class="text-[11px] text-on-surface-variant font-medium">(${order.paymentMethod})</span>
             </div>
           </div>
+
+          <!-- UNCONFIRMED ALARM ACTION BUTTON -->
+          ${isUnconfirmed ? `
+            <div class="bg-amber-500/10 border border-amber-500/40 p-2.5 rounded-lg flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-amber-800 flex items-center gap-1">
+                <span class="material-symbols-outlined text-base animate-spin">notifications_active</span> Novo pedido aguardando sua confirmação!
+              </span>
+              <button onclick="confirmOrderAdmin('${order.id}')" class="h-8 px-4 bg-secondary text-white font-extrabold text-xs rounded-lg shadow-sm hover:bg-secondary/90 transition-all flex items-center gap-1 cursor-pointer">
+                <span class="material-symbols-outlined text-sm">check_circle</span> Confirmar Pedido & Silenciar
+              </button>
+            </div>
+          ` : ''}
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
@@ -609,20 +725,126 @@
           <div class="flex justify-between items-center pt-1">
             <span class="text-[10px] text-on-surface-variant">${new Date(order.timestamp).toLocaleString('pt-BR')}</span>
             <div class="flex items-center gap-2">
+              <button onclick="printThermalReceiptAdmin('${order.id}')" class="h-7 px-3 bg-surface-container text-on-surface font-bold text-xs rounded-md border border-outline-variant/60 flex items-center gap-1 hover:bg-surface-container-highest cursor-pointer">
+                <span class="material-symbols-outlined text-sm">print</span> Imprimir Comanda Térmica
+              </button>
               <button onclick="deleteOrderConfirm('${order.id}')" class="text-xs text-error font-semibold hover:underline">
                 Excluir
               </button>
               <button onclick="contactCustomerWhatsApp('${order.name}', '${order.id}')" class="h-7 px-3 bg-[#25D366] text-white font-bold text-xs rounded-md shadow-xs flex items-center gap-1 hover:brightness-105">
-                <span class="material-symbols-outlined text-sm">chat</span> WhatsApp Cliente
+                <span class="material-symbols-outlined text-sm">chat</span> WhatsApp
               </button>
             </div>
           </div>
         </div>
+      `;
+      }).join('');
+    }
+
+    // THERMAL RECEIPT PRINTER FOR EPSON / ELGIN / XPRINTER
+    function printThermalReceiptAdmin(orderId) {
+      const orders = getAllOrders();
+      const order = orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      const config = getConfig();
+      const paperWidth = config.thermalPaperWidth || '80mm';
+      const headerNote = config.thermalHeaderNote || 'Temperos do Brasil • Marmitas Caseiras';
+      const footerNote = config.thermalFooterNote || 'Obrigado pela preferência! Bom apetite! ♡';
+
+      const itemsHtml = order.items.map(i => `
+        <div style="display:flex; justify-between; margin-bottom: 2px;">
+          <span>${i.quantity}x ${i.name}</span>
+          <span style="font-weight:bold;">${formatBRL(i.price * i.quantity)}</span>
+        </div>
+        ${i.detail ? `<div style="font-size: 10px; color: #444; margin-bottom: 4px; padding-left: 6px;">${i.detail}</div>` : ''}
       `).join('');
+
+      const ticketHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8"/>
+          <title>Comida #${order.id}</title>
+          <style>
+            @page { margin: 0; }
+            body {
+              font-family: 'Courier New', Courier, monospace;
+              width: ${paperWidth};
+              margin: 0 auto;
+              padding: 8px;
+              color: #000;
+              background: #fff;
+              font-size: 12px;
+              line-height: 1.2;
+            }
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            .font-bold { font-weight: bold; }
+            .border-line { border-bottom: 1px dashed #000; margin: 6px 0; }
+            .title { font-size: 16px; font-weight: bold; margin-bottom: 2px; }
+          </style>
+        </head>
+        <body>
+          <div class="text-center">
+            <div class="title">${config.restaurantName || 'Temperos do Brasil'}</div>
+            <div>${headerNote}</div>
+            <div>WhatsApp: ${config.whatsappNumber || '(48) 98878-1598'}</div>
+          </div>
+
+          <div class="border-line"></div>
+
+          <div>
+            <div><strong>PEDIDO #${order.id}</strong></div>
+            <div>Data: ${new Date(order.timestamp).toLocaleString('pt-BR')}</div>
+            <div>Cliente: <strong>${order.name}</strong></div>
+            <div>Endereço: ${order.address}</div>
+            <div>Pagamento: <strong>${order.paymentMethod}</strong></div>
+          </div>
+
+          <div class="border-line"></div>
+
+          <div>
+            <div style="font-weight:bold; margin-bottom: 4px;">ITENS SOLICITADOS:</div>
+            ${itemsHtml}
+          </div>
+
+          <div class="border-line"></div>
+
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:bold;">
+            <span>TOTAL:</span>
+            <span>${formatBRL(order.total)}</span>
+          </div>
+
+          ${order.notes ? `
+            <div class="border-line"></div>
+            <div><strong>Obs:</strong> ${order.notes}</div>
+          ` : ''}
+
+          <div class="border-line"></div>
+
+          <div class="text-center" style="margin-top: 8px;">
+            ${footerNote}
+          </div>
+        </body>
+        </html>
+      `;
+
+      const printWin = window.open('', '_blank', 'width=400,height=600');
+      printWin.document.write(ticketHtml);
+      printWin.document.close();
+
+      setTimeout(() => {
+        printWin.focus();
+        printWin.print();
+        printWin.close();
+      }, 300);
     }
 
     function changeOrderStatusAdmin(orderId, status) {
+      confirmedOrderIds.add(orderId);
       updateOrderStatus(orderId, status);
+      stopOrderAlarmLoop();
       renderAdminOrders();
       showToast(`Status do Pedido #${orderId} alterado no Supabase!`);
     }
@@ -779,7 +1001,7 @@
       }
     }
 
-    // CONFIG FORM FOR DYNAMIC HOME PAGE & CARDAPIO BUILDER
+    // CONFIG FORM FOR DYNAMIC HOME PAGE, CARDAPIO BUILDER & THERMAL PRINTER
     function loadConfigForm() {
       const config = getConfig();
       document.getElementById('config-wa').value = config.whatsappNumber || '5548988781598';
@@ -796,6 +1018,11 @@
 
       document.getElementById('config-banner-headline').value = config.bannerHeadline || 'Peça seu almoço quentinho hoje!';
       document.getElementById('config-banner-subtext').value = config.bannerSubtext || 'Entrega rápida e grátis para Tubarão e região.';
+
+      // Thermal Printer Settings
+      document.getElementById('config-thermal-header').value = config.thermalHeaderNote || 'Temperos do Brasil • Marmitas Caseiras';
+      document.getElementById('config-thermal-footer').value = config.thermalFooterNote || 'Obrigado pela preferência! Bom apetite! ♡';
+      document.getElementById('config-thermal-width').value = config.thermalPaperWidth || '80mm';
 
       // Marmita Prices & Limits
       document.getElementById('config-custom-marmita-enabled').checked = config.customMarmitaEnabled !== false;
@@ -877,6 +1104,11 @@
       config.bannerHeadline = document.getElementById('config-banner-headline').value;
       config.bannerSubtext = document.getElementById('config-banner-subtext').value;
 
+      // Thermal Printer Settings
+      config.thermalHeaderNote = document.getElementById('config-thermal-header').value;
+      config.thermalFooterNote = document.getElementById('config-thermal-footer').value;
+      config.thermalPaperWidth = document.getElementById('config-thermal-width').value;
+
       // Marmita Prices & Dynamic Limits Sync
       config.customMarmitaEnabled = document.getElementById('config-custom-marmita-enabled').checked;
       config.marmitaPrices = {
@@ -898,11 +1130,18 @@
       config.extras = localExtrasCopy;
 
       saveConfig(config);
-      showToast('Regras de Escolha & Configurações salvas no Supabase!');
+      showToast('Configurações de Impressão & Loja salvas no Supabase!');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       renderAdminOrders();
+      setInterval(() => {
+        if (typeof fetchOrdersFromSupabase === 'function') {
+          fetchOrdersFromSupabase().then(() => renderAdminOrders());
+        } else {
+          renderAdminOrders();
+        }
+      }, 3000);
     });
   </script>
 </body>

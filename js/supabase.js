@@ -93,7 +93,7 @@ async function syncDishToSupabase(dish, dayId) {
   });
 }
 
-// Fetch Config & Marmita Limits from Supabase
+// Fetch Config & Thermal Printer Settings from Supabase
 async function fetchConfigFromSupabase() {
   const data = await supabaseFetch('restaurant_config', { query: 'id=eq.default' });
   if (data && Array.isArray(data) && data[0]) {
@@ -111,6 +111,9 @@ async function fetchConfigFromSupabase() {
       announcementText: c.announcement_text || '📢 Cardápio de hoje atualizado! Faça seu pedido pelo WhatsApp.',
       announcementEnabled: c.announcement_enabled !== false,
       customMarmitaEnabled: c.custom_marmita_enabled !== false,
+      thermalHeaderNote: c.thermal_header_note || 'Temperos do Brasil • Marmitas Caseiras',
+      thermalFooterNote: c.thermal_footer_note || 'Obrigado pela preferência! Bom apetite! ♡',
+      thermalPaperWidth: c.thermal_paper_width || '80mm',
       marmitaPrices: {
         M: parseFloat(c.marmita_m_price || 15.00),
         G: parseFloat(c.marmita_g_price || 20.00),
@@ -151,6 +154,9 @@ async function syncConfigToSupabase(config) {
     announcement_text: config.announcementText,
     announcement_enabled: config.announcementEnabled !== false,
     custom_marmita_enabled: config.customMarmitaEnabled !== false,
+    thermal_header_note: config.thermalHeaderNote || 'Temperos do Brasil • Marmitas Caseiras',
+    thermal_footer_note: config.thermalFooterNote || 'Obrigado pela preferência! Bom apetite! ♡',
+    thermal_paper_width: config.thermalPaperWidth || '80mm',
     marmita_m_price: config.marmitaPrices ? config.marmitaPrices.M : 15.00,
     marmita_g_price: config.marmitaPrices ? config.marmitaPrices.G : 20.00,
     marmita_executiva_price: config.marmitaPrices ? config.marmitaPrices.Executiva : 30.00,
