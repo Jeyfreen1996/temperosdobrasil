@@ -363,19 +363,21 @@ async function updateOrderStatus(orderId, newStatus) {
   if (target) {
     target.status = newStatus;
     target.updatedAt = new Date().toISOString();
-    localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
-    
-    const active = getOrder();
-    if (active && active.id === orderId) {
-      active.status = newStatus;
-      active.updatedAt = new Date().toISOString();
-      localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(active));
-    }
+  } else {
+    ordersList.push({ id: orderId, status: newStatus, updatedAt: new Date().toISOString() });
+  }
+  localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
+  
+  const active = getOrder();
+  if (active && active.id === orderId) {
+    active.status = newStatus;
+    active.updatedAt = new Date().toISOString();
+    localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(active));
+  }
 
-    // Await status change to Supabase Database
-    if (typeof syncOrderStatusToSupabase === 'function') {
-      await syncOrderStatusToSupabase(orderId, newStatus);
-    }
+  // Await status change to Supabase Database
+  if (typeof syncOrderStatusToSupabase === 'function') {
+    await syncOrderStatusToSupabase(orderId, newStatus);
   }
 }
 

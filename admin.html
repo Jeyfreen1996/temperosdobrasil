@@ -876,20 +876,39 @@
       }, 300);
     }
 
+    async function confirmOrderAdmin(orderId) {
+      if (typeof markOrderConfirmedLocal === 'function') markOrderConfirmedLocal(orderId);
+      confirmedOrderIds.add(orderId);
+      await updateOrderStatus(orderId, 'preparando');
+      stopOrderAlarmLoop();
+      if (typeof fetchOrdersFromSupabase === 'function') {
+        await fetchOrdersFromSupabase();
+      }
+      renderAdminOrders();
+      showToast(`Pedido #${orderId} CONFIRMADO! Alarme silenciado.`);
+    }
+
     async function changeOrderStatusAdmin(orderId, status) {
       if (typeof markOrderConfirmedLocal === 'function') markOrderConfirmedLocal(orderId);
       confirmedOrderIds.add(orderId);
       await updateOrderStatus(orderId, status);
       stopOrderAlarmLoop();
+      if (typeof fetchOrdersFromSupabase === 'function') {
+        await fetchOrdersFromSupabase();
+      }
       renderAdminOrders();
       showToast(`Status do Pedido #${orderId} alterado no Supabase!`);
     }
 
     async function deleteOrderConfirm(orderId) {
       if (confirm(`Tem certeza que deseja excluir o pedido #${orderId}?`)) {
-        if (typeof markOrderConfirmedLocal === 'function') markOrderConfirmedLocal(orderId);
+        if (typeof markOrderDeletedLocal === 'function') markOrderDeletedLocal(orderId);
         confirmedOrderIds.add(orderId);
         await deleteOrderAdmin(orderId);
+        stopOrderAlarmLoop();
+        if (typeof fetchOrdersFromSupabase === 'function') {
+          await fetchOrdersFromSupabase();
+        }
         renderAdminOrders();
         showToast(`Pedido #${orderId} excluído.`);
       }
