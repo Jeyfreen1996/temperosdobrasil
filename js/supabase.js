@@ -21,6 +21,21 @@ function markOrderConfirmedLocal(orderId) {
   localStorage.setItem('temperos_confirmed_orders_v1', JSON.stringify(Array.from(set)));
 }
 
+// Helpers for Deleted Order Persistence
+function getDeletedOrderIds() {
+  try {
+    const raw = localStorage.getItem('temperos_deleted_orders_v1');
+    if (raw) return new Set(JSON.parse(raw));
+  } catch (e) {}
+  return new Set();
+}
+
+function markOrderDeletedLocal(orderId) {
+  const set = getDeletedOrderIds();
+  set.add(orderId);
+  localStorage.setItem('temperos_deleted_orders_v1', JSON.stringify(Array.from(set)));
+}
+
 // Helper for Supabase REST API calls with RLS
 async function supabaseFetch(table, options = {}) {
   const method = options.method || 'GET';
@@ -94,6 +109,7 @@ async function syncOrderStatusToSupabase(orderId, status) {
 // Delete Order from Supabase Database Permanently
 async function deleteOrderFromSupabase(orderId) {
   markOrderConfirmedLocal(orderId);
+  markOrderDeletedLocal(orderId);
   return await supabaseFetch('orders', {
     method: 'DELETE',
     query: `id=eq.${orderId}`
@@ -202,7 +218,7 @@ async function syncConfigToSupabase(config) {
   });
 }
 
-// Fetch Real-Time Orders from Supabase with Smart Local Merge
+// Fetch Real-Time Orders from Supabase with Ironclad Status Protection
 async function fetchOrdersFromSupabase() {
   const orders = await supabaseFetch('orders', { query: 'select=*&order=created_at.desc' });
   if (orders && Array.isArray(orders)) {
@@ -210,33 +226,37 @@ async function fetchOrdersFromSupabase() {
     const localOrders = rawLocal ? JSON.parse(rawLocal) : [];
     const localMap = new Map(localOrders.map(o => [o.id, o]));
     const confirmedSet = getConfirmedOrderIds();
+    const deletedSet = getDeletedOrderIds();
 
-    const formatted = orders.map(o => {
-      const local = localMap.get(o.id);
-      let status = o.status;
+    const formatted = orders
+      .filter(o => !deletedSet.has(o.id))
+      .map(o => {
+        const local = localMap.get(o.id);
+        let status = o.status;
 
-      // Protection: if order is in local confirmed set, do NOT revert to recebido
-      if (confirmedSet.has(o.id) && status === 'recebido') {
-        status = (local && local.status !== 'recebido') ? local.status : 'preparando';
-      } else if (local && local.status !== o.status && local.updatedAt && new Date(local.updatedAt) > new Date(o.updated_at || 0)) {
-        status = local.status;
-      }
+        // IRONCLAD PROTECTION:
+        // If an order has been confirmed or moved past 'recebido' locally, NEVER revert it back to 'recebido'!
+        if (confirmedSet.has(o.id) || (local && local.status && local.status !== 'recebido')) {
+          if (status === 'recebido') {
+            status = (local && local.status && local.status !== 'recebido') ? local.status : 'preparando';
+          }
+        }
 
-      return {
-        id: o.id,
-        timestamp: o.created_at,
-        status: status,
-        name: o.customer_name,
-        address: o.address,
-        paymentMethod: o.payment_method,
-        items: o.items_json || [],
-        subtotal: parseFloat(o.subtotal || 0),
-        deliveryFee: parseFloat(o.delivery_fee || 0),
-        total: parseFloat(o.total || 0),
-        notes: o.notes || '',
-        updatedAt: o.updated_at
-      };
-    });
+        return {
+          id: o.id,
+          timestamp: o.created_at,
+          status: status,
+          name: o.customer_name,
+          address: o.address,
+          paymentMethod: o.payment_method,
+          items: o.items_json || [],
+          subtotal: parseFloat(o.subtotal || 0),
+          deliveryFee: parseFloat(o.delivery_fee || 0),
+          total: parseFloat(o.total || 0),
+          notes: o.notes || '',
+          updatedAt: o.updated_at
+        };
+      });
 
     localStorage.setItem('temperos_all_orders_v1', JSON.stringify(formatted));
     return formatted;
