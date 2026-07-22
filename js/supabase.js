@@ -55,7 +55,8 @@ async function syncOrderToSupabase(order) {
     subtotal: order.subtotal || order.total,
     delivery_fee: order.deliveryFee || 0.00,
     total: order.total,
-    items_json: order.items
+    items_json: order.items,
+    updated_at: new Date().toISOString()
   };
 
   return await supabaseFetch('orders', {
@@ -71,6 +72,14 @@ async function syncOrderStatusToSupabase(orderId, status) {
     method: 'PATCH',
     query: `id=eq.${orderId}`,
     body: { status, updated_at: new Date().toISOString() }
+  });
+}
+
+// Delete Order from Supabase Database Permanently
+async function deleteOrderFromSupabase(orderId) {
+  return await supabaseFetch('orders', {
+    method: 'DELETE',
+    query: `id=eq.${orderId}`
   });
 }
 
@@ -176,23 +185,35 @@ async function syncConfigToSupabase(config) {
   });
 }
 
-// Fetch Real-Time Orders from Supabase
+// Fetch Real-Time Orders from Supabase with Smart Local Merge
 async function fetchOrdersFromSupabase() {
   const orders = await supabaseFetch('orders', { query: 'select=*&order=created_at.desc' });
-  if (orders && Array.isArray(orders) && orders.length > 0) {
-    const formatted = orders.map(o => ({
-      id: o.id,
-      timestamp: o.created_at,
-      status: o.status,
-      name: o.customer_name,
-      address: o.address,
-      paymentMethod: o.payment_method,
-      items: o.items_json || [],
-      subtotal: parseFloat(o.subtotal || 0),
-      deliveryFee: parseFloat(o.delivery_fee || 0),
-      total: parseFloat(o.total || 0),
-      notes: o.notes || ''
-    }));
+  if (orders && Array.isArray(orders)) {
+    const rawLocal = localStorage.getItem('temperos_all_orders_v1');
+    const localOrders = rawLocal ? JSON.parse(rawLocal) : [];
+    const localMap = new Map(localOrders.map(o => [o.id, o]));
+
+    const formatted = orders.map(o => {
+      const local = localMap.get(o.id);
+      let status = o.status;
+      if (local && local.status !== o.status && local.updatedAt && new Date(local.updatedAt) > new Date(o.updated_at || 0)) {
+        status = local.status;
+      }
+      return {
+        id: o.id,
+        timestamp: o.created_at,
+        status: status,
+        name: o.customer_name,
+        address: o.address,
+        paymentMethod: o.payment_method,
+        items: o.items_json || [],
+        subtotal: parseFloat(o.subtotal || 0),
+        deliveryFee: parseFloat(o.delivery_fee || 0),
+        total: parseFloat(o.total || 0),
+        notes: o.notes || '',
+        updatedAt: o.updated_at
+      };
+    });
 
     localStorage.setItem('temperos_all_orders_v1', JSON.stringify(formatted));
     return formatted;

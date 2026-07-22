@@ -366,11 +366,13 @@ function updateOrderStatus(orderId, newStatus) {
   const target = ordersList.find(o => o.id === orderId);
   if (target) {
     target.status = newStatus;
+    target.updatedAt = new Date().toISOString();
     localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
     
     const active = getOrder();
     if (active && active.id === orderId) {
       active.status = newStatus;
+      active.updatedAt = new Date().toISOString();
       localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify(active));
     }
 
@@ -385,6 +387,10 @@ function deleteOrderAdmin(orderId) {
   let ordersList = getAllOrders();
   ordersList = ordersList.filter(o => o.id !== orderId);
   localStorage.setItem(ORDERS_LIST_KEY, JSON.stringify(ordersList));
+
+  if (typeof deleteOrderFromSupabase === 'function') {
+    deleteOrderFromSupabase(orderId);
+  }
 }
 
 function getOrder() {
