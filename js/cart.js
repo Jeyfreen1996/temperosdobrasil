@@ -31,6 +31,12 @@ const DEFAULT_CONFIG = {
     G: 20.00,
     Executiva: 30.00
   },
+  proteinLimits: {
+    M: 1,
+    G: 2,
+    Executiva: 3
+  },
+  maxAccompaniments: 3,
   accompaniments: ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada'],
   extras: [
     { id: 'ext-1', name: 'Guaraná Antarctica 2L', price: 10.00 },

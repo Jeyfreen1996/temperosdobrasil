@@ -126,23 +126,33 @@
           </div>
         </div>
 
-        <!-- Step 2: Main Protein -->
+        <!-- Step 2: Main Protein (With Dynamic Limits) -->
         <div class="space-y-2">
-          <span class="font-bold text-xs text-on-surface flex items-center gap-1.5">
-            <span class="w-5 h-5 rounded-full bg-primary text-white text-[10px] flex items-center justify-center font-bold">2</span>
-            Escolha a Proteína Principal:
-          </span>
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-xs text-on-surface flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-primary text-white text-[10px] flex items-center justify-center font-bold">2</span>
+              Escolha a Proteína Principal:
+            </span>
+            <span id="protein-limit-badge" class="text-[10px] font-bold text-secondary bg-secondary-container px-2 py-0.5 rounded">
+              Permitido: 1 Proteína
+            </span>
+          </div>
           <div id="protein-options" class="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <!-- Rendered by JS based on selected day -->
           </div>
         </div>
 
-        <!-- Step 3: Accompaniments (Dynamic List from Supabase) -->
+        <!-- Step 3: Accompaniments (With Dynamic Limits) -->
         <div class="space-y-2">
-          <span class="font-bold text-xs text-on-surface flex items-center gap-1.5">
-            <span class="w-5 h-5 rounded-full bg-primary text-white text-[10px] flex items-center justify-center font-bold">3</span>
-            Escolha os Acompanhamentos (Marque o que desejar):
-          </span>
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-xs text-on-surface flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-primary text-white text-[10px] flex items-center justify-center font-bold">3</span>
+              Escolha os Acompanhamentos:
+            </span>
+            <span id="acc-limit-badge" class="text-[10px] font-bold text-primary bg-primary-container/40 px-2 py-0.5 rounded">
+              Permitido: até 3 acompanhamentos
+            </span>
+          </div>
           <div id="accompaniments-list" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
             <!-- Rendered dynamically from Supabase config -->
           </div>
@@ -272,14 +282,16 @@
       const gPrice = config.marmitaPrices ? config.marmitaPrices.G : 20.00;
       const execPrice = config.marmitaPrices ? config.marmitaPrices.Executiva : 30.00;
 
+      const protLimits = config.proteinLimits || { M: 1, G: 2, Executiva: 3 };
+
       sizesContainer.innerHTML = `
         <label class="flex items-center justify-between p-3 bg-surface-container-low rounded-xl border border-primary cursor-pointer hover:bg-surface-container transition-all">
           <div>
             <div class="flex items-center gap-1.5">
-              <input checked type="radio" name="marmita-size" value="M" data-price="${mPrice}" onchange="calculateCustomMarmitaTotal()" class="text-primary focus:ring-primary"/>
+              <input checked type="radio" name="marmita-size" value="M" data-price="${mPrice}" data-max-prot="${protLimits.M}" onchange="onMarmitaSizeChange()" class="text-primary focus:ring-primary"/>
               <span class="font-extrabold text-xs text-on-surface">Marmita M</span>
             </div>
-            <span class="text-[10px] text-on-surface-variant block mt-0.5">1 Proteína Principal</span>
+            <span class="text-[10px] text-on-surface-variant block mt-0.5">Até ${protLimits.M} Proteína(s)</span>
           </div>
           <span class="font-extrabold text-xs text-primary">${formatBRL(mPrice)}</span>
         </label>
@@ -287,10 +299,10 @@
         <label class="flex items-center justify-between p-3 bg-surface-container-low rounded-xl border border-outline-variant/60 cursor-pointer hover:bg-surface-container transition-all">
           <div>
             <div class="flex items-center gap-1.5">
-              <input type="radio" name="marmita-size" value="G" data-price="${gPrice}" onchange="calculateCustomMarmitaTotal()" class="text-primary focus:ring-primary"/>
+              <input type="radio" name="marmita-size" value="G" data-price="${gPrice}" data-max-prot="${protLimits.G}" onchange="onMarmitaSizeChange()" class="text-primary focus:ring-primary"/>
               <span class="font-extrabold text-xs text-on-surface">Marmita G</span>
             </div>
-            <span class="text-[10px] text-on-surface-variant block mt-0.5">2 Proteínas Principais</span>
+            <span class="text-[10px] text-on-surface-variant block mt-0.5">Até ${protLimits.G} Proteínas</span>
           </div>
           <span class="font-extrabold text-xs text-primary">${formatBRL(gPrice)}</span>
         </label>
@@ -298,22 +310,22 @@
         <label class="flex items-center justify-between p-3 bg-surface-container-low rounded-xl border border-outline-variant/60 cursor-pointer hover:bg-surface-container transition-all">
           <div>
             <div class="flex items-center gap-1.5">
-              <input type="radio" name="marmita-size" value="Executiva" data-price="${execPrice}" onchange="calculateCustomMarmitaTotal()" class="text-primary focus:ring-primary"/>
+              <input type="radio" name="marmita-size" value="Executiva" data-price="${execPrice}" data-max-prot="${protLimits.Executiva}" onchange="onMarmitaSizeChange()" class="text-primary focus:ring-primary"/>
               <span class="font-extrabold text-xs text-on-surface">Executiva</span>
             </div>
-            <span class="text-[10px] text-on-surface-variant block mt-0.5">Completa + Salada Separada</span>
+            <span class="text-[10px] text-on-surface-variant block mt-0.5">Completa (Até ${protLimits.Executiva} Proteínas)</span>
           </div>
           <span class="font-extrabold text-xs text-primary">${formatBRL(execPrice)}</span>
         </label>
       `;
 
-      // Step 2: Main Protein Options from today's active day
+      // Step 2: Main Protein Options
       const proteinContainer = document.getElementById('protein-options');
       const proteinList = dishes.length > 0 ? dishes.map(d => d.name) : ['Carne Assada no Forno', 'Linguiça Assada', 'Frango Ensopado'];
 
       proteinContainer.innerHTML = proteinList.map((prot, idx) => `
         <label class="flex items-center gap-2 p-2.5 bg-surface-container-low rounded-lg border border-outline-variant/50 cursor-pointer hover:bg-surface-container">
-          <input ${idx === 0 ? 'checked' : ''} type="checkbox" name="custom-protein" value="${prot}" class="rounded text-primary focus:ring-primary"/>
+          <input ${idx === 0 ? 'checked' : ''} type="checkbox" name="custom-protein" value="${prot}" onchange="enforceProteinLimit(this)" class="rounded text-primary focus:ring-primary"/>
           <span class="text-xs font-semibold text-on-surface">${prot}</span>
         </label>
       `).join('');
@@ -321,10 +333,13 @@
       // Step 3: Accompaniments from Supabase Config
       const accContainer = document.getElementById('accompaniments-list');
       const accList = config.accompaniments || ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada'];
+      const maxAcc = config.maxAccompaniments || 3;
 
-      accContainer.innerHTML = accList.map(acc => `
+      document.getElementById('acc-limit-badge').textContent = `Permitido: até ${maxAcc} acompanhamentos`;
+
+      accContainer.innerHTML = accList.map((acc, idx) => `
         <label class="flex items-center gap-2 p-2 bg-surface-container-low rounded-lg border border-outline-variant/40 cursor-pointer hover:bg-surface-container">
-          <input checked type="checkbox" name="custom-acc" value="${acc}" class="rounded text-primary focus:ring-primary"/>
+          <input ${idx < maxAcc ? 'checked' : ''} type="checkbox" name="custom-acc" value="${acc}" onchange="enforceAccLimit(this)" class="rounded text-primary focus:ring-primary"/>
           <span class="text-xs font-medium text-on-surface">${acc}</span>
         </label>
       `).join('');
@@ -346,13 +361,55 @@
         </label>
       `).join('');
 
-      calculateCustomMarmitaTotal();
+      onMarmitaSizeChange();
     }
 
     function selectDayTab(dayNum) {
       activeDayIdx = dayNum;
       setSelectedDayIndex(dayNum);
       renderCardapioPage();
+    }
+
+    function onMarmitaSizeChange() {
+      const selectedSizeRadio = document.querySelector('input[name="marmita-size"]:checked');
+      const maxProt = selectedSizeRadio ? parseInt(selectedSizeRadio.dataset.maxProt || '1', 10) : 1;
+      const sizeName = selectedSizeRadio ? selectedSizeRadio.value : 'M';
+
+      const badge = document.getElementById('protein-limit-badge');
+      if (badge) {
+        badge.textContent = `Marmita ${sizeName}: Escolha até ${maxProt} proteína(s)`;
+      }
+
+      // Enforce current check limits
+      const checkedProteins = Array.from(document.querySelectorAll('input[name="custom-protein"]:checked'));
+      if (checkedProteins.length > maxProt) {
+        checkedProteins.slice(maxProt).forEach(cb => cb.checked = false);
+      }
+
+      calculateCustomMarmitaTotal();
+    }
+
+    function enforceProteinLimit(changedCheckbox) {
+      const selectedSizeRadio = document.querySelector('input[name="marmita-size"]:checked');
+      const maxProt = selectedSizeRadio ? parseInt(selectedSizeRadio.dataset.maxProt || '1', 10) : 1;
+      const sizeName = selectedSizeRadio ? selectedSizeRadio.value : 'M';
+
+      const checked = document.querySelectorAll('input[name="custom-protein"]:checked');
+      if (checked.length > maxProt) {
+        changedCheckbox.checked = false;
+        showToast(`A Marmita ${sizeName} permite no máximo ${maxProt} proteína(s).`);
+      }
+    }
+
+    function enforceAccLimit(changedCheckbox) {
+      const config = getConfig();
+      const maxAcc = config.maxAccompaniments || 3;
+
+      const checked = document.querySelectorAll('input[name="custom-acc"]:checked');
+      if (checked.length > maxAcc) {
+        changedCheckbox.checked = false;
+        showToast(`Limite máximo de ${maxAcc} acompanhamento(s) atingido.`);
+      }
     }
 
     function calculateCustomMarmitaTotal() {
@@ -379,11 +436,16 @@
       const accs = Array.from(document.querySelectorAll('input[name="custom-acc"]:checked')).map(cb => cb.value);
       const extras = Array.from(document.querySelectorAll('input[name="custom-extra"]:checked')).map(cb => cb.value);
 
+      if (prots.length === 0) {
+        showToast('Por favor, selecione ao menos 1 proteína principal.');
+        return;
+      }
+
       const totalPrice = calculateCustomMarmitaTotal();
       const weeklyMenu = getWeeklyMenu();
       const activeDay = weeklyMenu[activeDayIdx] || weeklyMenu[2];
 
-      let detailStr = `Proteínas: ${prots.join(', ') || 'Tradicional'}`;
+      let detailStr = `Proteínas: ${prots.join(', ')}`;
       if (accs.length > 0) detailStr += ` • Acomp: ${accs.join(', ')}`;
       if (extras.length > 0) detailStr += ` • Extras: ${extras.join(', ')}`;
 

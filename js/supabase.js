@@ -93,7 +93,7 @@ async function syncDishToSupabase(dish, dayId) {
   });
 }
 
-// Fetch Config & Cardapio Customization from Supabase
+// Fetch Config & Marmita Limits from Supabase
 async function fetchConfigFromSupabase() {
   const data = await supabaseFetch('restaurant_config', { query: 'id=eq.default' });
   if (data && Array.isArray(data) && data[0]) {
@@ -116,6 +116,12 @@ async function fetchConfigFromSupabase() {
         G: parseFloat(c.marmita_g_price || 20.00),
         Executiva: parseFloat(c.marmita_executiva_price || 30.00)
       },
+      proteinLimits: {
+        M: parseInt(c.marmita_m_max_proteins || 1, 10),
+        G: parseInt(c.marmita_g_max_proteins || 2, 10),
+        Executiva: parseInt(c.marmita_exec_max_proteins || 3, 10)
+      },
+      maxAccompaniments: parseInt(c.max_accompaniments || 3, 10),
       accompaniments: c.accompaniments || ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada'],
       extras: c.extras || [
         { id: 'ext-1', name: 'Guaraná Antarctica 2L', price: 10.00 },
@@ -148,6 +154,10 @@ async function syncConfigToSupabase(config) {
     marmita_m_price: config.marmitaPrices ? config.marmitaPrices.M : 15.00,
     marmita_g_price: config.marmitaPrices ? config.marmitaPrices.G : 20.00,
     marmita_executiva_price: config.marmitaPrices ? config.marmitaPrices.Executiva : 30.00,
+    marmita_m_max_proteins: config.proteinLimits ? config.proteinLimits.M : 1,
+    marmita_g_max_proteins: config.proteinLimits ? config.proteinLimits.G : 2,
+    marmita_exec_max_proteins: config.proteinLimits ? config.proteinLimits.Executiva : 3,
+    max_accompaniments: config.maxAccompaniments || 3,
     accompaniments: config.accompaniments || ['Arroz', 'Feijão', 'Macarrão', 'Polenta', 'Farofa', 'Salada'],
     extras: config.extras || [],
     updated_at: new Date().toISOString()
