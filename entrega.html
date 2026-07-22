@@ -383,40 +383,83 @@
       const listEl = document.getElementById('cart-summary-list');
       const subtotalEl = document.getElementById('summary-subtotal');
       const totalEl = document.getElementById('summary-total');
+      const submitBtn = document.getElementById('submit-btn');
 
       if (!summary.cart || summary.cart.length === 0) {
-        listEl.innerHTML = `<p class="text-xs text-on-surface-variant text-center py-2">Seu carrinho está vazio.</p>`;
-        subtotalEl.textContent = formatBRL(0);
-        totalEl.textContent = formatBRL(0);
+        listEl.innerHTML = `
+          <div class="p-3 bg-error/10 border border-error/20 rounded-xl text-center space-y-2 my-1">
+            <span class="material-symbols-outlined text-error text-2xl">shopping_cart_off</span>
+            <p class="font-extrabold text-xs text-error">Seu carrinho está vazio!</p>
+            <p class="text-[11px] text-on-surface-variant leading-tight">Escolha uma marmita ou prato no cardápio antes de continuar.</p>
+            <a href="cardapio.html" class="inline-flex items-center justify-center h-8 px-4 bg-primary text-white font-extrabold text-xs rounded-lg shadow-xs hover:bg-primary/90 transition-all mt-1 cursor-pointer">
+              🍱 Ir para o Cardápio
+            </a>
+          </div>
+        `;
+        if (subtotalEl) subtotalEl.textContent = formatBRL(0);
+        if (totalEl) totalEl.textContent = formatBRL(0);
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          submitBtn.classList.remove('hover:bg-primary/90', 'cursor-pointer');
+        }
         return;
       }
 
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        submitBtn.classList.add('hover:bg-primary/90', 'cursor-pointer');
+      }
+
       listEl.innerHTML = summary.cart.map(item => `
-        <div class="pt-1.5 flex justify-between items-start">
-          <div class="flex-1 pr-2">
-            <p class="font-semibold text-xs text-on-surface">${item.quantity}x ${item.name}</p>
-            ${item.detail ? `<p class="text-[10px] text-on-surface-variant truncate max-w-[160px]">${item.detail}</p>` : ''}
+        <div class="py-2 border-b border-outline-variant/30 flex justify-between items-center gap-2">
+          <div class="flex-1 min-w-0">
+            <p class="font-extrabold text-xs text-on-surface truncate">${item.quantity}x ${item.name}</p>
+            ${item.detail ? `<p class="text-[10px] text-on-surface-variant truncate max-w-[170px]">${item.detail}</p>` : ''}
+            <span class="font-extrabold text-xs text-primary block mt-0.5">${formatBRL(item.price * item.quantity)}</span>
           </div>
-          <span class="font-bold text-xs text-primary">${formatBRL(item.price * item.quantity)}</span>
+
+          <button type="button" onclick="removeItemFromCheckout('${item.id}')" title="Excluir este prato do pedido" class="w-7 h-7 rounded-lg bg-error/10 text-error hover:bg-error/20 flex items-center justify-center transition-all cursor-pointer flex-shrink-0">
+            <span class="material-symbols-outlined text-sm">delete</span>
+          </button>
         </div>
       `).join('');
 
-      subtotalEl.textContent = formatBRL(summary.subtotal);
-      totalEl.textContent = formatBRL(summary.total);
+      if (subtotalEl) subtotalEl.textContent = formatBRL(summary.subtotal);
+      if (totalEl) totalEl.textContent = formatBRL(summary.total);
+    }
+
+    function removeItemFromCheckout(itemId) {
+      removeFromCart(itemId);
+      renderCheckoutSummary();
+      showToast('Prato removido do carrinho.');
     }
 
     // REAL-TIME CHECKOUT SUBMIT & NAVIGATION TO PEDIDO.HTML
     document.getElementById('checkout-form').addEventListener('submit', (e) => {
       e.preventDefault();
+
+      const summary = getCartSummary();
+      if (!summary.cart || summary.cart.length === 0) {
+        showToast('❌ Não é possível avançar com o carrinho vazio! Escolha um prato no cardápio.');
+        return;
+      }
       
       const nameInput = document.getElementById('name');
       const addressInput = document.getElementById('address');
       const notesInput = document.getElementById('notes');
       const paymentInput = document.querySelector('input[name="payment"]:checked');
 
+      if (!nameInput || !nameInput.value.trim()) {
+        showToast('Por favor, informe seu nome completo para a entrega.');
+        return;
+      }
+
       // 1. Save order into database (localStorage & Supabase cloud)
       const newOrder = saveOrder({
-        name: nameInput ? nameInput.value : 'Cliente',
+        name: nameInput.value.trim(),
         address: addressInput ? addressInput.value : 'Tubarão, SC',
         notes: notesInput ? notesInput.value : '',
         paymentMethod: paymentInput ? paymentInput.value : 'PIX'
@@ -442,7 +485,6 @@
 
       if (addresses.length === 0) {
         select.innerHTML = `<option value="">Nenhum endereço salvo. Selecione "Novo Endereço".</option>`;
-        switchAddressMode('new');
         return;
       }
 
@@ -450,7 +492,7 @@
         <option value="${a.address}" ${idx === 0 ? 'selected' : ''}>${a.label}: ${a.address}</option>
       `).join('');
 
-      if (addresses[0] && addrText) {
+      if (addresses[0] && addrText && !addrText.value) {
         addrText.value = addresses[0].address;
       }
     }
@@ -466,22 +508,19 @@
       const btnSaved = document.getElementById('btn-mode-saved');
       const btnNew = document.getElementById('btn-mode-new');
       const savedContainer = document.getElementById('saved-address-container');
-      const mapContainer = document.getElementById('new-address-map-container');
 
       if (mode === 'saved') {
         btnSaved.className = 'h-9 bg-primary text-white text-xs font-bold rounded-lg shadow-xs flex items-center justify-center gap-1 cursor-pointer';
         btnNew.className = 'h-9 bg-surface-container text-on-surface text-xs font-bold rounded-lg hover:bg-surface-container-highest flex items-center justify-center gap-1 cursor-pointer';
-        savedContainer.classList.remove('hidden');
-        mapContainer.classList.add('hidden');
+        if (savedContainer) savedContainer.classList.remove('hidden');
         loadSavedAddressesOptions();
       } else {
         btnNew.className = 'h-9 bg-primary text-white text-xs font-bold rounded-lg shadow-xs flex items-center justify-center gap-1 cursor-pointer';
         btnSaved.className = 'h-9 bg-surface-container text-on-surface text-xs font-bold rounded-lg hover:bg-surface-container-highest flex items-center justify-center gap-1 cursor-pointer';
-        savedContainer.classList.add('hidden');
-        mapContainer.classList.remove('hidden');
-        refreshMapSize();
+        if (savedContainer) savedContainer.classList.add('hidden');
         useGpsMap();
       }
+      refreshMapSize();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
